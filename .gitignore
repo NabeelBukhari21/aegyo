@@ -1,0 +1,21 @@
+# Build output
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode user state
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# Local tooling
+tools/.venv/
+__pycache__/
+
+# Raw design captures (curated copies live in docs/screenshots)
+design/shots/
+
+# macOS
+.DS_Store

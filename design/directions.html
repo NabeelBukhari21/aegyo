@@ -1,0 +1,718 @@
+<title>Aegyo Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Layout: a presentation board, one section per direction, three phones per row (scrolls sideways on narrow screens). */
+:root{
+  --board:#0d0d10; --ink:#ecebf0; --muted:#8d8b98; --line:#24232b; --chip:#17161c;
+  --f-ui:"Geist",-apple-system,system-ui,sans-serif;
+  --f-ios:-apple-system,"SF Pro Text","SF Pro Display",system-ui,sans-serif;
+  --f-moon:"Fraunces",Georgia,serif;
+  --f-aurora:"Instrument Serif",Georgia,serif;
+  --f-pearl:"DM Serif Display",Georgia,serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --p{syntax:"<number>";inherits:false;initial-value:0}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--board);color:var(--ink);font-family:var(--f-ui);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 80px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:72px}
+header.top{display:flex;flex-direction:column;gap:14px;max-width:680px}
+header.top h1{font:600 clamp(28px,4vw,40px)/1.1 var(--f-ui);letter-spacing:-.02em;margin:0;text-wrap:balance}
+header.top p{color:var(--muted);font-size:15px;line-height:1.6;margin:0}
+nav.jump{display:flex;flex-wrap:wrap;gap:8px}
+nav.jump a{color:var(--ink);text-decoration:none;font-size:13px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--chip)}
+nav.jump a:hover,nav.jump a:focus-visible{border-color:#55536a;outline:none}
+section.dir{display:flex;flex-direction:column;gap:22px;scroll-margin-top:24px}
+.dir-head{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:baseline}
+.dir-num{font:500 13px var(--f-mono);color:var(--muted)}
+.dir-head h2{font:600 24px/1.2 var(--f-ui);margin:0;letter-spacing:-.01em}
+.dir-head p{grid-column:2;margin:0;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:72ch}
+.rail{display:flex;gap:40px;overflow-x:auto;padding:16px 14px 28px;margin-inline:-14px;scrollbar-width:thin}
+figure{margin:0;display:flex;flex-direction:column;gap:14px;align-items:center;flex:none}
+figcaption{font-size:12.5px;color:var(--muted);text-align:center;max-width:280px;line-height:1.5}
+figcaption b{color:var(--ink);font-weight:500;display:block;margin-bottom:2px}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.note{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--chip);font-size:13.5px;line-height:1.55;color:#c9c7d3;min-width:0}
+.note h3{margin:0 0 6px;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+footer.fine{color:var(--muted);font-size:13px;line-height:1.6;max-width:72ch}
+
+/* ---------- Phone chrome ---------- */
+.phone{width:280px;height:606px;border-radius:48px;position:relative;overflow:hidden;flex:none;isolation:isolate;
+  box-shadow:0 0 0 9px #141417,0 0 0 10px #2c2c33,0 40px 80px -20px rgba(0,0,0,.8);font-family:var(--f-ios);-webkit-font-smoothing:antialiased}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:94px;height:28px;background:#000;border-radius:20px;z-index:30}
+.status{position:absolute;top:14px;left:30px;right:24px;display:flex;justify-content:space-between;align-items:center;font:600 14px var(--f-ios);z-index:29;letter-spacing:-.01em}
+.status i{display:flex;gap:5px;align-items:center}
+.status svg{display:block}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:104px;height:4px;border-radius:3px;z-index:29}
+.screen{position:absolute;inset:0;padding:54px 18px 22px;display:flex;flex-direction:column}
+.light .status,.light .status svg{color:#111;fill:#111}
+.dark .status,.dark .status svg{color:#fff;fill:#fff}
+.dark .homebar{background:rgba(255,255,255,.85)}
+.light .homebar{background:rgba(0,0,0,.8)}
+
+/* Lock screen common */
+.lock-time{font:600 76px/1 var(--f-ios);letter-spacing:-.03em;text-align:center;margin-top:178px}
+.lock-date{text-align:center;font:600 15px var(--f-ios);opacity:.85;margin-top:2px}
+.di-x{position:absolute;top:8px;left:8px;right:8px;background:#000;border-radius:42px;padding:14px 16px 14px;z-index:31;color:#fff;
+  animation:diIn 1.1s cubic-bezier(.2,.9,.25,1.05) .3s both;transform-origin:50% 0}
+@keyframes diIn{0%{transform:scale(.36,.2);border-radius:20px;opacity:.9}70%{transform:scale(1.02);border-radius:42px;opacity:1}100%{transform:scale(1)}}
+.di-x .row{display:flex;align-items:center;gap:12px}
+.di-x .t1{font:600 15px/1.25 var(--f-ios);letter-spacing:-.01em}
+.di-x .t2{font:400 12.5px/1.3 var(--f-ios);color:rgba(255,255,255,.55);margin-top:2px}
+.di-x .cta{margin-top:12px;height:38px;border-radius:19px;display:flex;align-items:center;justify-content:center;gap:6px;font:600 14px var(--f-ios)}
+.la{position:absolute;left:12px;right:12px;bottom:34px;border-radius:24px;padding:14px 14px;display:flex;gap:12px;align-items:center}
+.la .t1{font:600 14px/1.25 var(--f-ios)}
+.la .t2{font:400 12px/1.35 var(--f-ios);opacity:.65;margin-top:2px}
+.la .grow{flex:1;min-width:0}
+
+/* ================= 1 · OPAL GEM ================= */
+.d1{background:#000;color:#fff}
+.d1 .bgglow{position:absolute;inset:0;background:radial-gradient(60% 34% at 50% 34%,rgba(80,200,190,.22),transparent 70%),radial-gradient(40% 30% at 70% 30%,rgba(150,110,255,.16),transparent 70%);animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.6;transform:scale(1.06)}}
+.d1 .hdr{display:flex;justify-content:space-between;align-items:center;position:relative}
+.d1 .word{font:600 25px var(--f-ios);letter-spacing:-.04em}
+.d1 .streak{font:600 12px var(--f-ios);padding:5px 10px;border-radius:12px;background:rgba(255,255,255,.08);display:flex;gap:5px;align-items:center}
+.d1 .streak b{color:#9ff5d8}
+.gem-stage{position:relative;height:250px;display:flex;justify-content:center;align-items:center;margin-top:6px}
+.gem{width:150px;height:136px;position:relative;cursor:pointer;animation:float 5s ease-in-out infinite;border:0;padding:0;background:none}
+.gem:focus-visible{outline:2px solid #9ff5d8;outline-offset:8px;border-radius:20px}
+@keyframes float{50%{transform:translateY(-9px) rotate(-2deg)}}
+.heart-clip{clip-path:path("M75 132 C 30 100, 0 70, 2 40 C 4 14, 24 0, 44 0 C 58 0, 70 8, 75 20 C 80 8, 92 0, 106 0 C 126 0, 146 14, 148 40 C 150 70, 120 100, 75 132 Z")}
+.gem .core{position:absolute;inset:0;background:
+   radial-gradient(40% 30% at 32% 26%,rgba(255,255,255,.95),transparent 60%),
+   radial-gradient(60% 50% at 70% 80%,rgba(20,10,60,.55),transparent 70%),
+   conic-gradient(from var(--a) at 45% 55%,#7ff7e8,#b38cff,#ff9ed2,#ffe6a1,#9dffb8,#7fd0ff,#7ff7e8);
+   animation:spin 9s linear infinite;filter:saturate(1.15)}
+.gem .facet{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.6) 50%,transparent 60%);background-size:300% 100%;mix-blend-mode:overlay;animation:sweep 4.5s ease-in-out infinite}
+@keyframes sweep{0%,100%{background-position:100% 0}50%{background-position:0 0}}
+@keyframes spin{to{--a:360deg}}
+.gem .glow{position:absolute;inset:-30px;filter:blur(34px);opacity:.55;z-index:-1;background:conic-gradient(from var(--a),#7ff7e8,#b38cff,#ff9ed2,#7ff7e8);border-radius:50%;animation:spin 9s linear infinite}
+.gem.pop{animation:gemPop .7s cubic-bezier(.3,1.6,.4,1)}
+@keyframes gemPop{0%{transform:scale(1)}25%{transform:scale(.86)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+.pedestal{position:absolute;bottom:22px;width:110px;height:18px;border-radius:50%;background:radial-gradient(#2a2a30,#0b0b0e 70%);box-shadow:0 -2px 10px rgba(127,247,232,.25)}
+.shock{position:absolute;left:50%;top:50%;width:160px;height:160px;margin:-80px 0 0 -80px;border-radius:50%;border:1.5px solid rgba(160,255,235,.7);opacity:0;pointer-events:none}
+.shock.go{animation:shock .9s ease-out}
+@keyframes shock{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2);opacity:0}}
+.d1 .side-gem{position:absolute;right:-48px;top:92px;width:70px;height:64px;opacity:.55;filter:blur(.3px)}
+.d1 .side-gem .core{animation-duration:14s}
+.d1 .stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;gap:4px;padding:10px 0 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.d1 .stats small{display:block;font:500 9.5px var(--f-ios);letter-spacing:.09em;color:rgba(255,255,255,.55)}
+.d1 .stats b{display:block;font:600 18px var(--f-ios);margin-top:4px;font-variant-numeric:tabular-nums}
+.d1 .hint{font:400 12.5px var(--f-ios);color:rgba(255,255,255,.5);text-align:center;margin-top:12px}
+.d1 .dock{margin-top:auto;border-radius:22px;padding:12px 12px 12px 14px;display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(14px)}
+.d1 .dock .who{flex:1;min-width:0}
+.d1 .dock .who b{font:600 14px var(--f-ios);display:flex;gap:6px;align-items:center}
+.d1 .dock .who b::before{content:"";width:7px;height:7px;border-radius:50%;background:#9ff5d8;box-shadow:0 0 8px #9ff5d8;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.35}}
+.d1 .dock .who span{font:400 11.5px var(--f-ios);color:rgba(255,255,255,.55)}
+.pill-w{background:#fff;color:#000;border-radius:18px;height:36px;padding:0 16px;display:flex;align-items:center;gap:6px;font:600 13.5px var(--f-ios)}
+.mini-gem{width:38px;height:35px;position:relative;flex:none}
+.mini-gem .core{position:absolute;inset:0;background:radial-gradient(40% 30% at 32% 26%,#fff,transparent 60%),conic-gradient(from var(--a) at 45% 55%,#7ff7e8,#b38cff,#ff9ed2,#ffe6a1,#9dffb8,#7fd0ff,#7ff7e8);animation:spin 6s linear infinite}
+.d1-lock{background:radial-gradient(70% 45% at 50% 70%,rgba(120,90,255,.35),transparent 70%),radial-gradient(60% 40% at 30% 85%,rgba(60,220,200,.3),transparent 70%),#030305;color:#fff}
+.d1-lock .la{background:rgba(30,30,36,.72);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08)}
+.circ-w{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.d1-ring{background:#000;color:#fff;text-align:center}
+.ripples{position:absolute;left:50%;top:188px;width:0;height:0}
+.ripples span{position:absolute;left:-90px;top:-90px;width:180px;height:180px;border-radius:50%;border:1px solid rgba(160,255,235,.5);animation:rip 3.6s cubic-bezier(.2,.6,.3,1) infinite;opacity:0}
+.ripples span:nth-child(2){animation-delay:1.2s}.ripples span:nth-child(3){animation-delay:2.4s}
+@keyframes rip{0%{transform:scale(.7);opacity:.8}100%{transform:scale(2.1);opacity:0}}
+.d1-ring .gem{margin:120px auto 0;animation:float 3s ease-in-out infinite,throb 1.2s ease-in-out infinite}
+@keyframes throb{0%,100%{scale:1}15%{scale:1.06}30%{scale:1}45%{scale:1.04}}
+.ring-name{font:600 30px var(--f-ios);letter-spacing:-.02em;margin-top:60px}
+.ring-sub{font:400 14px var(--f-ios);opacity:.6;margin-top:6px}
+.ring-btns{position:absolute;left:24px;right:24px;bottom:44px;display:flex;gap:12px}
+.ring-btns>div{flex:1;height:52px;border-radius:26px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 15px var(--f-ios)}
+
+/* ================= 2 · MOONLIT ================= */
+.d2{background:linear-gradient(180deg,#060a1c 0%,#0e1636 45%,#1b1a4a 100%);color:#fff}
+canvas.stars{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.d2 .screen{z-index:1}
+.d2 .eyebrow{font:500 11px var(--f-ios);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.d2 h3{font:700 34px/1 var(--f-moon);margin:4px 0 0;letter-spacing:-.01em}
+.d2 .datechip{display:inline-flex;gap:6px;align-items:center;margin-top:10px;font:500 12px var(--f-ios);padding:6px 11px;border-radius:12px;border:1px solid rgba(255,255,255,.18);width:max-content}
+.week{display:flex;justify-content:space-between;margin-top:16px;padding:8px 6px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
+.week .d{display:flex;flex-direction:column;align-items:center;gap:5px;font:500 9px var(--f-ios);color:rgba(255,255,255,.55);padding:5px 4px;border-radius:12px;position:relative;width:30px}
+.week .d b{font:600 11px var(--f-ios);color:#fff}
+.week .d.today{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)}
+.week .d.today::before{content:"✦";position:absolute;top:-9px;color:#ffc35c;font-size:10px;animation:twinkle 2s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.3;transform:scale(.7)}}
+.moon{border-radius:50%;background:radial-gradient(circle at 35% 30%,#f4f1ff,#b9c0dc 45%,#6f7698 100%);position:relative;overflow:hidden}
+.moon::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at calc(50% + var(--ph,0%)) 50%,transparent 49%,rgba(8,12,34,.92) 51%)}
+.week .moon{width:18px;height:18px}
+.d2 .card{margin-top:14px;border-radius:24px;overflow:hidden;position:relative;height:214px;border:1px solid rgba(255,255,255,.1)}
+.scape{position:absolute;inset:0;background:linear-gradient(180deg,#2a2f7a 0%,#5b4fb0 55%,#8a73c9 70%,#1c2050 70.5%,#2b2f6b 100%)}
+.scape .mt{position:absolute;left:-10%;right:-10%;bottom:30%;height:46%;background:linear-gradient(180deg,#ece9ff,#8f86c8 25%,#3d3f86 70%);clip-path:polygon(0 100%,18% 55%,30% 70%,52% 0,64% 38%,78% 22%,100% 100%)}
+.scape .mt2{bottom:30%;height:30%;background:#262a63;clip-path:polygon(0 100%,12% 50%,26% 80%,40% 40%,60% 85%,82% 35%,100% 100%)}
+.scape .refl{position:absolute;left:0;right:0;bottom:0;height:30%;background:repeating-linear-gradient(180deg,rgba(255,255,255,.07) 0 2px,transparent 2px 7px);animation:shimmer 4s linear infinite}
+@keyframes shimmer{to{background-position:0 14px}}
+.d2 .card .txt{position:absolute;left:16px;right:16px;top:14px}
+.d2 .card .q{font:500 19px/1.2 var(--f-moon);margin-top:8px;text-wrap:balance}
+.bigmoon{position:absolute;right:16px;bottom:14px;width:60px;height:60px;cursor:pointer;border:0;padding:0}
+.bigmoon::after{display:none}
+.bigmoon{box-shadow:0 0 0 0 rgba(255,236,190,.0),0 0 30px rgba(220,225,255,.5);animation:moonGlow 3.5s ease-in-out infinite}
+@keyframes moonGlow{50%{box-shadow:0 0 0 6px rgba(255,236,190,.08),0 0 46px rgba(255,236,190,.7)}}
+.bigmoon:focus-visible{outline:2px solid #ffc35c;outline-offset:4px}
+.tapme{position:absolute;right:84px;bottom:32px;font:500 11px var(--f-ios);color:rgba(255,255,255,.8)}
+.spark{position:absolute;color:#ffc35c;font-size:12px;pointer-events:none;animation:sparkUp 1.6s ease-out forwards}
+@keyframes sparkUp{to{transform:translate(var(--dx),-120px) scale(.4) rotate(90deg);opacity:0}}
+.d2 .quick{display:flex;gap:8px;margin-top:12px}
+.d2 .quick span{flex:1;text-align:center;font:600 12.5px var(--f-ios);padding:11px 0;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
+.d2 .quick span i{color:#ffc35c;font-style:normal;margin-right:4px}
+.tabbar{margin-top:auto;display:flex;justify-content:space-around;padding:6px;border-radius:28px;background:rgba(30,32,70,.65);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1)}
+.tabbar span{font:500 9.5px var(--f-ios);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:22px;color:rgba(255,255,255,.55)}
+.tabbar span.on{background:rgba(255,255,255,.12);color:#ffc35c}
+.tabbar svg{width:18px;height:18px}
+.d2-lock{background:linear-gradient(180deg,#0a0f2c,#272466 60%,#4b3c8f);color:#fff}
+.d2-lock .scape{opacity:.9;top:auto;height:44%}
+.d2-lock .la{background:rgba(18,22,58,.7);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.1)}
+.goldpill{background:linear-gradient(180deg,#ffd27a,#f2a93b);color:#2a1a00}
+.d2-ring{background:radial-gradient(80% 50% at 50% 100%,#3a2f86,transparent 70%),linear-gradient(180deg,#05081a,#121a45);color:#fff;text-align:center}
+.d2-ring .rise{position:absolute;left:50%;top:150px;width:150px;height:150px;margin-left:-75px;animation:rise 6s ease-in-out infinite}
+.d2-ring .rise .moon{width:100%;height:100%;box-shadow:0 0 60px rgba(230,225,255,.55),0 0 140px rgba(140,120,255,.4)}
+.d2-ring .rise .moon::after{display:none}
+@keyframes rise{0%,100%{transform:translateY(16px)}50%{transform:translateY(-6px)}}
+.d2-ring .ring-name{font:700 34px var(--f-moon);margin-top:330px}
+.circbtn{width:62px;height:62px;border-radius:50%;display:grid;place-items:center}
+.d2-ring .ring-btns{justify-content:space-between;padding:0 18px}
+.d2-ring .ring-btns>div{flex:none}
+.d2-ring .lbl{font:500 11px var(--f-ios);opacity:.7;margin-top:6px}
+
+/* ================= 3 · AURORA ================= */
+.d3{background:#03060a;color:#fff}
+.aur{position:absolute;inset:-20%;filter:blur(36px);opacity:.9;z-index:0}
+.aur i{position:absolute;border-radius:50%;mix-blend-mode:screen}
+.aur i:nth-child(1){width:70%;height:30%;left:5%;top:12%;background:#1fd6b4;animation:drift1 12s ease-in-out infinite}
+.aur i:nth-child(2){width:60%;height:34%;right:0;top:22%;background:#6b4dff;animation:drift2 14s ease-in-out infinite}
+.aur i:nth-child(3){width:50%;height:24%;left:20%;top:40%;background:#ff5f9e;opacity:.55;animation:drift3 10s ease-in-out infinite}
+@keyframes drift1{50%{transform:translate(18%,6%) scale(1.15) rotate(8deg)}}
+@keyframes drift2{50%{transform:translate(-20%,-8%) scale(.9) rotate(-10deg)}}
+@keyframes drift3{50%{transform:translate(10%,-14%) scale(1.25)}}
+.d3 .screen{z-index:1}
+.d3 .hdr{display:flex;justify-content:space-between;align-items:center}
+.d3 .word{font:italic 400 32px var(--f-aurora)}
+.duo{display:flex}
+.duo span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 11px var(--f-ios);border:1.5px solid #03060a}
+.duo span+span{margin-left:-9px}
+.orbwrap{position:relative;width:206px;height:206px;margin:44px auto 0}
+.orb{position:absolute;inset:16px;border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.55),rgba(255,255,255,.08) 40%,rgba(255,255,255,.03) 70%);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(12px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  box-shadow:inset 0 0 40px rgba(255,255,255,.08),0 20px 60px rgba(31,214,180,.18);animation:orbPress 5s ease-in-out infinite}
+@keyframes orbPress{0%{transform:scale(1)}8%,46%{transform:scale(.93)}54%{transform:scale(1.08);box-shadow:inset 0 0 60px rgba(255,255,255,.3),0 0 80px rgba(255,255,255,.4)}70%,100%{transform:scale(1)}}
+.orb small{font:500 10px var(--f-ios);letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+.orb b{font:italic 400 26px var(--f-aurora)}
+.orbwrap svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.orbwrap .prog{stroke-dasharray:597;stroke-dashoffset:calc(597 - 597 * var(--p));animation:fill 5s ease-in-out infinite}
+@keyframes fill{0%,6%{--p:0}46%{--p:1}54%{--p:1;opacity:1}66%,100%{--p:1;opacity:0}}
+.bloom{position:absolute;inset:16px;border-radius:50%;border:1px solid rgba(255,255,255,.6);animation:bloom 5s ease-out infinite;opacity:0}
+@keyframes bloom{0%,48%{transform:scale(1);opacity:0}52%{opacity:.9}80%,100%{transform:scale(1.9);opacity:0}}
+.d3 .felt{text-align:center;font:400 13px var(--f-ios);color:rgba(255,255,255,.65);margin-top:18px;display:flex;justify-content:center;gap:7px;align-items:center}
+.d3 .felt::before{content:"";width:6px;height:6px;border-radius:50%;background:#1fd6b4;box-shadow:0 0 10px #1fd6b4}
+.d3 .tiles{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.d3 .tiles div{border-radius:20px;padding:14px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:10px;font:500 12px var(--f-ios)}
+.d3 .tiles svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.5}
+.d3-lock{background:#02040a;color:#fff}
+.d3-lock .aur{opacity:.6;top:30%}
+.d3-lock .la{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12)}
+.auroraline{position:absolute;left:24px;right:24px;bottom:0;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#1fd6b4,#6b4dff,#ff5f9e,transparent);background-size:200% 100%;animation:slide 3s linear infinite}
+@keyframes slide{to{background-position:-200% 0}}
+.miniorb{width:40px;height:40px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.7),rgba(31,214,180,.4) 45%,rgba(107,77,255,.5));box-shadow:0 0 16px rgba(31,214,180,.5);animation:breathOrb 4s ease-in-out infinite}
+@keyframes breathOrb{50%{transform:scale(.88);box-shadow:0 0 26px rgba(107,77,255,.7)}}
+.glasspill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18)}
+.d3-ring{background:#02040a;color:#fff;text-align:center}
+.d3-ring .aur{opacity:1}
+.d3-ring .breath{position:absolute;left:50%;top:120px;width:200px;height:200px;margin-left:-100px;border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.6),rgba(255,255,255,.08) 45%,transparent 72%);border:1px solid rgba(255,255,255,.3);animation:breatheBig 8s ease-in-out infinite}
+@keyframes breatheBig{0%,100%{transform:scale(.72)}50%{transform:scale(1.05)}}
+.d3-ring .cue{position:absolute;left:0;right:0;top:206px;font:italic 400 22px var(--f-aurora)}
+.d3-ring .cue span{position:absolute;left:0;right:0;animation:cueA 8s ease-in-out infinite}
+.d3-ring .cue span+span{animation-name:cueB}
+@keyframes cueA{0%,40%{opacity:1}50%,90%{opacity:0}100%{opacity:1}}
+@keyframes cueB{0%,40%{opacity:0}50%,90%{opacity:1}100%{opacity:0}}
+.d3-ring .ring-name{font:italic 400 40px var(--f-aurora);margin-top:330px}
+
+/* ================= 4 · TWO LIGHTS ================= */
+.d4{background:#060606;color:#f2f0ea}
+.grain{position:absolute;inset:0;opacity:.13;z-index:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");animation:grain .8s steps(4) infinite}
+@keyframes grain{25%{transform:translate(-4px,3px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,-4px)}}
+.d4 .screen{z-index:1}
+.mono{font-family:var(--f-mono)}
+.d4 .meta{display:flex;justify-content:space-between;font:500 10px var(--f-mono);letter-spacing:.08em;color:rgba(242,240,234,.55);text-transform:uppercase}
+.d4 .km{font:300 64px/1 var(--f-ios);letter-spacing:-.04em;margin-top:26px;font-variant-numeric:tabular-nums}
+.d4 .km small{font:500 10px var(--f-mono);letter-spacing:.1em;display:block;color:rgba(242,240,234,.55);margin-top:8px;text-transform:uppercase}
+.arc{display:block;margin:18px -18px 0;width:calc(100% + 36px)}
+.d4 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.d4 .stats div{border-top:1px solid rgba(255,255,255,.12);padding-top:8px}
+.d4 .stats small{font:500 9px var(--f-mono);letter-spacing:.08em;color:rgba(242,240,234,.5);text-transform:uppercase;display:block}
+.d4 .stats b{font:500 17px var(--f-ios);display:block;margin-top:3px;font-variant-numeric:tabular-nums}
+.d4 .ctas{margin-top:auto;display:flex;gap:8px}
+.d4 .ctas div{height:50px;border-radius:25px;display:flex;align-items:center;justify-content:center;font:600 14.5px var(--f-ios);gap:8px}
+.d4 .ctas .primary{flex:1;background:#f2f0ea;color:#060606}
+.d4 .ctas .sec{width:50px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.d4-lock{background:radial-gradient(60% 40% at 50% 60%,rgba(255,200,140,.12),transparent 70%),#050505;color:#f2f0ea}
+.d4-lock .la{background:rgba(30,28,26,.75);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08)}
+.d4-ring{background:#040404;color:#f2f0ea;text-align:center}
+.orbit{position:absolute;left:50%;top:230px;width:0;height:0}
+.orbit .o{position:absolute;width:150px;height:150px;left:-75px;top:-75px;animation:orbit 4s linear infinite}
+.orbit .o i{position:absolute;width:12px;height:12px;border-radius:50%;background:#fff6e6;box-shadow:0 0 14px 4px rgba(255,214,160,.8),0 0 40px 10px rgba(255,180,120,.35)}
+.orbit .o i:first-child{left:-6px;top:69px}
+.orbit .o i:last-child{right:-6px;top:69px;background:#ffd9e6;box-shadow:0 0 14px 4px rgba(255,170,200,.8),0 0 40px 10px rgba(255,120,170,.35)}
+.orbit .trail{position:absolute;width:150px;height:150px;left:-75px;top:-75px;border-radius:50%;border:1px dashed rgba(255,255,255,.12)}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.d4-ring .ring-name{font:300 34px var(--f-ios);letter-spacing:-.02em;margin-top:330px}
+
+/* ================= 5 · PEARL ================= */
+.d5{background:#f2f0f6;color:#16141c}
+.d5 .wash{position:absolute;inset:0;background:radial-gradient(50% 30% at 80% 18%,rgba(196,180,255,.45),transparent 70%),radial-gradient(50% 30% at 10% 60%,rgba(255,196,220,.45),transparent 70%),radial-gradient(40% 25% at 70% 85%,rgba(170,235,230,.45),transparent 70%);animation:breathe 9s ease-in-out infinite}
+.d5 .screen{z-index:1}
+.d5 .hello{font:500 12.5px var(--f-ios);color:#6e6a7c}
+.d5 h3{font:400 33px/1.05 var(--f-pearl);margin:6px 0 0;letter-spacing:-.01em}
+.d5 h3 em{font-style:italic;color:#7a5cc4}
+.pearl{width:140px;height:127px;margin:26px auto 0;position:relative;animation:float 5.5s ease-in-out infinite;cursor:pointer;border:0;padding:0;background:none;display:block}
+.pearl .core{position:absolute;inset:0;background:
+  radial-gradient(35% 28% at 30% 24%,#fff,rgba(255,255,255,0) 70%),
+  radial-gradient(70% 60% at 70% 85%,rgba(120,100,160,.35),transparent 70%),
+  conic-gradient(from var(--a) at 50% 55%,#fbf7ff,#e7dcff,#ffe1ef,#fff3df,#dcf7f1,#e2ecff,#fbf7ff);animation:spin 12s linear infinite}
+.pearl .sh{position:absolute;inset:auto 10% -18px;height:22px;border-radius:50%;background:radial-gradient(rgba(80,60,120,.28),transparent 70%);filter:blur(4px);z-index:-1}
+.pearl:focus-visible{outline:2px solid #7a5cc4;outline-offset:8px;border-radius:20px}
+.water{position:absolute;left:50%;top:50%;width:0;height:0}
+.water span{position:absolute;width:150px;height:150px;left:-75px;top:-75px;border-radius:50%;border:1px solid rgba(122,92,196,.35);animation:rip 4.5s ease-out infinite;opacity:0}
+.water span:nth-child(2){animation-delay:1.5s}.water span:nth-child(3){animation-delay:3s}
+.d5 .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:30px}
+.d5 .cards div{background:rgba(255,255,255,.75);border-radius:20px;padding:13px 14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 10px 30px -14px rgba(60,40,110,.25)}
+.d5 .cards small{font:500 10px var(--f-ios);letter-spacing:.08em;text-transform:uppercase;color:#8a8598}
+.d5 .cards b{display:block;font:400 26px var(--f-pearl);margin-top:2px}
+.d5 .cards span{font:400 11.5px var(--f-ios);color:#6e6a7c}
+.d5 .ctas{margin-top:auto;display:flex;gap:10px}
+.d5 .ctas div{height:52px;border-radius:26px;display:flex;align-items:center;justify-content:center;font:600 14.5px var(--f-ios);gap:8px}
+.d5 .ctas .primary{flex:1;background:#16141c;color:#fff}
+.d5 .ctas .sec{width:52px;background:#fff;box-shadow:0 8px 20px -10px rgba(60,40,110,.35)}
+.d5-lock{background:linear-gradient(170deg,#e9e2fb,#f9e6ef 50%,#e3f4f2);color:#16141c}
+.d5-lock .lock-time{color:#2b2440}
+.d5-lock .la{background:rgba(255,255,255,.7);backdrop-filter:blur(20px);box-shadow:0 10px 30px -12px rgba(60,40,110,.3)}
+.minipearl{width:40px;height:37px;position:relative;flex:none}
+.minipearl .core{position:absolute;inset:0;background:radial-gradient(35% 28% at 30% 24%,#fff,transparent 70%),conic-gradient(from var(--a) at 50% 55%,#fbf7ff,#e7dcff,#ffe1ef,#fff3df,#dcf7f1,#e2ecff,#fbf7ff);animation:spin 8s linear infinite}
+.d5-ring{background:linear-gradient(180deg,#f4f1fa,#ece6f7);color:#16141c;text-align:center}
+.d5-ring .pearl{margin-top:118px;width:150px;height:136px;animation:float 3s ease-in-out infinite,throb 1.4s ease-in-out infinite}
+.d5-ring .ring-name{font:400 31px var(--f-pearl);margin-top:58px}
+.d5-ring .ring-name em{color:#7a5cc4}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Aegyo: five design directions</h1>
+    <p>Each direction redesigns the whole app: the home screen, the Dynamic Island and Lock Screen card she sees when you miss her, the Ring screen, the type, the motion and the sound. Everything here is animated. Tap the gem, moon or pearl to try the main interaction. Pick one, or mix parts, and I'll build it.</p>
+    <nav class="jump" aria-label="Directions">
+      <a href="#opal">1 · Opal Gem</a><a href="#moonlit">2 · Moonlit</a><a href="#aurora">3 · Aurora Hold</a><a href="#lights">4 · Two Lights</a><a href="#pearl">5 · Pearl</a>
+    </nav>
+  </header>
+
+  <!-- ===================== 1 ===================== -->
+  <section class="dir" id="opal">
+    <div class="dir-head"><span class="dir-num">01</span><h2>Opal Gem</h2>
+      <p>Pure black, with a slowly refracting opal heart standing on a pedestal. It's quiet, premium and close to Opal: small all-caps stats and a white pill for the main action. The heart is the button.</p></div>
+    <div class="rail">
+      <figure>
+        <div class="phone dark d1">
+          <div class="bgglow"></div>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="screen">
+            <div class="hdr"><span class="word">aegyo</span><span class="streak">♡ <b>47</b> days</span></div>
+            <div class="gem-stage">
+              <div class="shock" id="shock1"></div>
+              <button class="gem" id="gem1" aria-label="Send I miss you"><span class="glow"></span><span class="core heart-clip"></span><span class="facet heart-clip"></span></button>
+              <div class="pedestal"></div>
+              <div class="gem side-gem" aria-hidden="true"><span class="core heart-clip" style="transform:scale(.467);transform-origin:0 0;width:150px;height:136px"></span></div>
+            </div>
+            <div class="stats">
+              <div><small>MISSED HER</small><b id="cnt1">14</b></div>
+              <div><small>LAST TOUCH</small><b>4m ago</b></div>
+              <div><small>TOGETHER</small><b>1y 47d</b></div>
+            </div>
+            <p class="hint">Tap the gem to tell Jagi you miss her</p>
+            <div class="dock">
+              <div class="who"><b>Jagi</b><span>11:41 PM there</span></div>
+              <div class="pill-w">${PHONE_B} Ring</div>
+            </div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Home</b>The heart's colours shift slowly as if light moves through it, and it floats over its pedestal. Tapping it squeezes the heart, sends out a ring of light and rolls the counter up.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d1-lock">
+          <div class="di-x">
+            <div class="row"><div class="mini-gem"><span class="core heart-clip" style="transform:scale(.253);transform-origin:0 0;width:150px;height:136px;position:absolute"></span></div>
+              <div><div class="t1">Nabeel misses you</div><div class="t2">3rd time today · now</div></div></div>
+            <div class="cta" style="background:#fff;color:#000">${HEART_B} Miss you too</div>
+          </div>
+          <div class="status" style="opacity:0"><span>9:41</span></div>
+          <div class="lock-time">9:41</div><div class="lock-date">Saturday, November 8</div>
+          <div class="la">
+            <div class="mini-gem"><span class="core heart-clip" style="transform:scale(.253);transform-origin:0 0;width:150px;height:136px;position:absolute"></span></div>
+            <div class="grow"><div class="t1">Nabeel misses you</div><div class="t2">Tap to send one back</div></div>
+            <div class="circ-w">${HEART_B}</div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Her Dynamic Island + Lock Screen</b>The island grows out of the pill with a soft spring. A tiny gem refracts inside it. "Miss you too" is right there.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d1-ring">
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="ripples"><span></span><span></span><span></span></div>
+          <div class="gem" aria-hidden="true"><span class="glow"></span><span class="core heart-clip"></span><span class="facet heart-clip"></span></div>
+          <div class="ring-name">Nabeel</div>
+          <div class="ring-sub">is ringing to hear your voice</div>
+          <div class="ring-btns"><div style="background:rgba(255,255,255,.1)">Later</div><div style="background:#fff;color:#000">${PHONE_B} Answer</div></div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Ring</b>The gem beats like a heart (lub-dub) while rings of light spread out to match the ringtone.</figcaption>
+      </figure>
+    </div>
+    <div class="notes">
+      <div class="note"><h3>Type</h3>SF Pro only, tight tracking, tiny all-caps labels. Its calm comes from spacing.</div>
+      <div class="note"><h3>Sound</h3>A crystal singing bowl struck once, with a long, shimmering tail. The ringtone is three slow bowl tones over a soft hum.</div>
+      <div class="note"><h3>Haptics</h3>Lub-dub on tap. The Ring buzzes in time with the gem's heartbeat.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 ===================== -->
+  <section class="dir" id="moonlit">
+    <div class="dir-head"><span class="dir-num">02</span><h2>Moonlit</h2>
+      <p>Moonly's night sky turned into a love letter: a bold serif headline, twinkling stars, frosted-glass cards and gold ✦ accents. The week strip is a row of moons that fill up the more you two sent love that day. You tap the moon to send love.</p></div>
+    <div class="rail">
+      <figure>
+        <div class="phone dark d2">
+          <canvas class="stars" data-density="70"></canvas>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="screen">
+            <span class="eyebrow">Tonight</span>
+            <h3>Missing you</h3>
+            <span class="datechip">${CAL} Sat, November 8</span>
+            <div class="week">
+              <div class="d">SUN<span class="moon" style="--ph:-30%"></span><b>2</b></div>
+              <div class="d">MON<span class="moon" style="--ph:-55%"></span><b>3</b></div>
+              <div class="d">TUE<span class="moon" style="--ph:-80%"></span><b>4</b></div>
+              <div class="d">WED<span class="moon" style="--ph:-100%"></span><b>5</b></div>
+              <div class="d">THU<span class="moon" style="--ph:60%"></span><b>6</b></div>
+              <div class="d">FRI<span class="moon" style="--ph:40%"></span><b>7</b></div>
+              <div class="d today">SAT<span class="moon" style="--ph:-100%"></span><b>8</b></div>
+            </div>
+            <div class="card">
+              <div class="scape"><div class="mt"></div><div class="mt mt2"></div><div class="refl"></div></div>
+              <div class="txt"><span class="eyebrow">Same sky · 2,140 km</span><div class="q" id="q2">Wherever you are tonight, the same moon is watching you both.</div></div>
+              <span class="tapme">Tap the moon ✦</span>
+              <button class="moon bigmoon" id="moon2" aria-label="Send I miss you"></button>
+            </div>
+            <div class="quick"><span><i>✦</i>Thinking of you</span><span><i>☾</i>Goodnight</span></div>
+            <div class="tabbar">
+              <span class="on">${HEART_S}Us</span><span>${NOTE}Notes</span><span>${PHOTO}Moments</span><span>${USER}You</span>
+            </div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Home</b>The stars twinkle, the moon glows softly and the lake below shimmers. Tapping the moon makes it flare, sends gold sparkles drifting up and swaps the line on the card to "Sent under the same moon".</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d2-lock">
+          <canvas class="stars" data-density="50"></canvas>
+          <div class="scape" style="position:absolute;inset:auto 0 0 0;height:42%"><div class="mt"></div><div class="mt mt2"></div><div class="refl"></div></div>
+          <div class="di-x">
+            <div class="row"><span class="moon" style="width:40px;height:40px;flex:none;box-shadow:0 0 18px rgba(230,225,255,.5)"></span>
+              <div><div class="t1" style="font-family:var(--f-moon);font-size:15px">Nabeel is thinking of you</div><div class="t2">under the same moon · now</div></div></div>
+            <div class="cta goldpill">✦ Send one back</div>
+          </div>
+          <div class="lock-time" style="font-family:var(--f-moon);font-weight:700;position:relative">9:41</div><div class="lock-date" style="position:relative">Saturday, November 8</div>
+          <div class="la">
+            <span class="moon" style="width:38px;height:38px;flex:none"></span>
+            <div class="grow"><div class="t1" style="font-family:var(--f-moon);font-size:14px">Nabeel misses you</div><div class="t2">✦ ✦ ✦ three tonight</div></div>
+            <div class="circbtn goldpill" style="width:38px;height:38px">${HEART_D}</div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Her Dynamic Island + Lock Screen</b>A small glowing moon and a serif headline. Every extra tap adds a gold ✦ to the card.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d2-ring">
+          <canvas class="stars" data-density="90"></canvas>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="rise"><span class="moon" style="display:block"></span></div>
+          <div class="ring-name" style="position:relative">Nabeel</div>
+          <div class="ring-sub" style="position:relative">is calling you under the same moon</div>
+          <div class="ring-btns">
+            <div><div class="circbtn glasspill">${X}</div><div class="lbl">Later</div></div>
+            <div><div class="circbtn goldpill">${PHONE_D}</div><div class="lbl">Answer</div></div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Ring</b>The moon rises and falls slowly with a halo that breathes. The stars brighten with each ring.</figcaption>
+      </figure>
+    </div>
+    <div class="notes">
+      <div class="note"><h3>Type</h3>Fraunces (bold serif) for headlines and the time, SF Pro for everything else, small all-caps labels.</div>
+      <div class="note"><h3>Sound</h3>A music box playing four notes over a warm pad, with a little wind-chime sparkle at the end. The ringtone is a slow lullaby phrase.</div>
+      <div class="note"><h3>Extra</h3>The moon strip is your real history: a full moon means you both sent love that day.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 3 ===================== -->
+  <section class="dir" id="aurora">
+    <div class="dir-head"><span class="dir-num">03</span><h2>Aurora Hold</h2>
+      <p>Northern lights drift across black glass. You press and hold the orb instead of tapping: the longer you hold, the stronger the "miss you" she receives ("held for 4 seconds"). The Ring becomes a shared breathing moment.</p></div>
+    <div class="rail">
+      <figure>
+        <div class="phone dark d3">
+          <div class="aur"><i></i><i></i><i></i></div>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="screen">
+            <div class="hdr"><span class="word">Aegyo</span><span class="duo"><span style="background:#1fd6b4;color:#03060a">N</span><span style="background:#ff8fb8;color:#03060a">J</span></span></div>
+            <div class="orbwrap">
+              <svg viewBox="0 0 206 206"><circle cx="103" cy="103" r="95" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2"/><circle class="prog" cx="103" cy="103" r="95" fill="none" stroke="url(#ag)" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="ag"><stop offset="0" stop-color="#1fd6b4"/><stop offset=".5" stop-color="#6b4dff"/><stop offset="1" stop-color="#ff5f9e"/></linearGradient></defs></svg>
+              <div class="bloom"></div>
+              <div class="orb"><small>Hold</small><b>to miss her</b></div>
+            </div>
+            <div class="felt">Jagi felt it 2 min ago</div>
+            <div class="tiles">
+              <div><svg viewBox="0 0 24 24"><path d="M7 11c-2-2-2-5 0-6s4 1 5 3c1-2 3-4 5-3s2 4 0 6l-5 6z"/></svg>Hug</div>
+              <div><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Ring</div>
+              <div><svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/></svg>Goodnight</div>
+            </div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Home</b>The aurora drifts slowly. Holding the orb sinks it, and a gradient ring fills around it. When the ring is full, the orb blooms outward in a flash of light.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d3-lock">
+          <div class="aur"><i></i><i></i><i></i></div>
+          <div class="di-x">
+            <div class="row"><div class="miniorb"></div>
+              <div><div class="t1">Nabeel misses you</div><div class="t2">held for 4.2 seconds · now</div></div></div>
+            <div class="cta glasspill">Hold to send it back</div>
+            <div class="auroraline"></div>
+          </div>
+          <div class="lock-time" style="position:relative;font-family:var(--f-aurora);font-weight:400;font-size:92px">9:41</div><div class="lock-date" style="position:relative">Saturday, November 8</div>
+          <div class="la">
+            <div class="miniorb"></div>
+            <div class="grow"><div class="t1">Nabeel misses you</div><div class="t2">A long one. 4.2 seconds.</div></div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Her Dynamic Island + Lock Screen</b>A breathing orb and a thin strip of aurora sliding along the bottom of the island. It tells her how long you held.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d3-ring">
+          <div class="aur"><i></i><i></i><i></i></div>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="breath"></div>
+          <div class="cue"><span>breathe in…</span><span>and out</span></div>
+          <div class="ring-name" style="position:relative">Nabeel</div>
+          <div class="ring-sub" style="position:relative">wants to breathe with you</div>
+          <div class="ring-btns"><div class="glasspill">Later</div><div style="background:#fff;color:#000">${PHONE_B} Answer</div></div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Ring</b>The orb breathes in and out on an 8-second cycle, with the aurora at full strength. The ringtone swells and fades with each breath.</figcaption>
+      </figure>
+    </div>
+    <div class="notes">
+      <div class="note"><h3>Type</h3>Instrument Serif in italics for feeling-words, SF Pro for small details.</div>
+      <div class="note"><h3>Sound</h3>A warm analogue pad chord that swells in like a breath, with a soft felt-piano note on top. The ringtone breathes in time with the screen.</div>
+      <div class="note"><h3>Haptics</h3>While holding, a continuous buzz that grows stronger, then one deep thump when it sends.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 4 ===================== -->
+  <section class="dir" id="lights">
+    <div class="dir-head"><span class="dir-num">04</span><h2>Two Lights</h2>
+      <p>Two warm points of light (you and her) joined by an arc across a grainy black screen, with the distance between you shown big like an Opal stat. Every "miss you" is a spark that travels along the arc, including inside the small Dynamic Island.</p></div>
+    <div class="rail">
+      <figure>
+        <div class="phone dark d4">
+          <div class="grain"></div>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="screen">
+            <div class="meta"><span>Aegyo</span><span>Her time 11:41 PM</span></div>
+            <div class="km">2,140<small>Kilometres between you</small></div>
+            <svg class="arc" viewBox="0 0 280 150" aria-hidden="true">
+              <defs><radialGradient id="lg"><stop offset="0" stop-color="#fff6e6"/><stop offset=".35" stop-color="#ffd6a0" stop-opacity=".8"/><stop offset="1" stop-color="#ffb070" stop-opacity="0"/></radialGradient>
+                <radialGradient id="lp"><stop offset="0" stop-color="#fff0f5"/><stop offset=".35" stop-color="#ffb3cc" stop-opacity=".8"/><stop offset="1" stop-color="#ff7aa8" stop-opacity="0"/></radialGradient></defs>
+              <path id="arcp" d="M40 120 C 90 10, 190 10, 240 120" fill="none" stroke="rgba(242,240,234,.18)" stroke-width="1" stroke-dasharray="2 5"/>
+              <circle cx="40" cy="120" r="22" fill="url(#lg)"><animate attributeName="r" values="18;24;18" dur="3s" repeatCount="indefinite"/></circle>
+              <circle cx="240" cy="120" r="22" fill="url(#lp)"><animate attributeName="r" values="22;17;22" dur="3s" repeatCount="indefinite"/></circle>
+              <circle r="10" fill="url(#lg)"><animateMotion dur="2.8s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".5 0 .3 1"><mpath href="#arcp"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.85;1" dur="2.8s" repeatCount="indefinite"/></circle>
+              <text x="40" y="146" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="rgba(242,240,234,.55)" letter-spacing=".8">YOU</text>
+              <text x="240" y="146" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" fill="rgba(242,240,234,.55)" letter-spacing=".8">JAGI</text>
+            </svg>
+            <div class="stats">
+              <div><small>Sent</small><b>14</b></div><div><small>Received</small><b>11</b></div><div><small>Last from her</small><b>4m</b></div>
+            </div>
+            <div class="ctas"><div class="primary">Send a light</div><div class="sec">${PHONE_W}</div></div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Home</b>Both lights glow gently, out of step, like two heartbeats. Each send launches a spark along the arc that lands on her light. The grain gives the black screen a film-like texture.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d4-lock">
+          <div class="grain"></div>
+          <div class="di-x">
+            <div class="row" style="justify-content:space-between">
+              <div><div class="t1">Nabeel sent a light</div><div class="t2 mono" style="font-size:10.5px;letter-spacing:.06em">2,140 KM · NOW</div></div>
+            </div>
+            <svg viewBox="0 0 240 46" style="display:block;width:100%;margin-top:6px" aria-hidden="true">
+              <path id="arcm" d="M14 38 C 70 2, 170 2, 226 38" fill="none" stroke="rgba(255,255,255,.2)" stroke-dasharray="2 4"/>
+              <circle cx="14" cy="38" r="9" fill="url(#lg)"/><circle cx="226" cy="38" r="9" fill="url(#lp)"/>
+              <circle r="6" fill="url(#lg)"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#arcm"/></animateMotion></circle>
+            </svg>
+            <div class="cta" style="background:#f2f0ea;color:#060606;margin-top:8px">Send one back</div>
+          </div>
+          <div class="lock-time" style="font-weight:300;position:relative">9:41</div><div class="lock-date" style="position:relative">Saturday, November 8</div>
+          <div class="la">
+            <svg width="44" height="24" viewBox="0 0 44 24" aria-hidden="true"><path id="arcs" d="M4 20 C 14 2, 30 2, 40 20" fill="none" stroke="rgba(255,255,255,.25)" stroke-dasharray="1.5 3"/><circle cx="4" cy="20" r="4" fill="#ffd6a0"/><circle cx="40" cy="20" r="4" fill="#ffb3cc"/><circle r="2.5" fill="#fff"><animateMotion dur="2s" repeatCount="indefinite"><mpath href="#arcs"/></animateMotion></circle></svg>
+            <div class="grow"><div class="t1">Nabeel sent a light</div><div class="t2 mono" style="font-size:10.5px">3 TONIGHT</div></div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Her Dynamic Island + Lock Screen</b>The spark travels between the two lights in the expanded island, and in miniature in the compact island too.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone dark d4-ring">
+          <div class="grain"></div>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="orbit"><div class="trail"></div><div class="o"><i></i><i></i></div></div>
+          <div class="ring-name" style="position:relative">Nabeel</div>
+          <div class="ring-sub mono" style="position:relative;font-size:11px;letter-spacing:.08em">IS REACHING FOR YOU</div>
+          <div class="ring-btns"><div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)">Later</div><div style="background:#f2f0ea;color:#060606">Answer</div></div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Ring</b>The two lights circle each other closer and closer until she answers.</figcaption>
+      </figure>
+    </div>
+    <div class="notes">
+      <div class="note"><h3>Type</h3>SF Pro Light for big numbers, IBM Plex Mono for small labels, like an instrument panel.</div>
+      <div class="note"><h3>Sound</h3>Two kalimba notes, one for you and one for her, a fifth apart, with a long soft echo. The ringtone is the two notes calling back and forth.</div>
+      <div class="note"><h3>Extra</h3>The distance is live, using rough location you both opt into.</div>
+    </div>
+  </section>
+
+  <!-- ===================== 5 ===================== -->
+  <section class="dir" id="pearl">
+    <div class="dir-head"><span class="dir-num">05</span><h2>Pearl</h2>
+      <p>The light-mode option. A cool pearl-white canvas with a soft pastel sheen, an iridescent pearl heart that sends out ripples like water, an elegant italic serif and black pill buttons. It's calm and gentle in the daytime. The Dynamic Island stays black, as iOS requires.</p></div>
+    <div class="rail">
+      <figure>
+        <div class="phone light d5">
+          <div class="wash"></div>
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div class="screen">
+            <span class="hello">Good evening, Nabeel</span>
+            <h3>Jagi feels <em>close</em><br>today.</h3>
+            <div style="position:relative">
+              <div class="water" style="top:90px"><span></span><span></span><span></span></div>
+              <button class="pearl" id="pearl5" aria-label="Send I miss you"><span class="sh"></span><span class="core heart-clip" style="transform:scale(.933);transform-origin:0 0;width:150px;height:136px"></span></button>
+            </div>
+            <div class="cards">
+              <div><small>Missed her</small><b id="cnt5">14</b><span>times today</span></div>
+              <div><small>Her mood</small><b>Sleepy</b><span>set 20 min ago</span></div>
+            </div>
+            <div class="ctas"><div class="primary">${PHONE_W} Ring Jagi</div><div class="sec">${NOTE_D}</div></div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Home</b>The pastel sheen drifts slowly across the pearl while ripples spread out beneath it. Tapping it sends a wave of ripples, and the counter flips over.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone light d5-lock">
+          <div class="di-x">
+            <div class="row"><div class="minipearl"><span class="core heart-clip" style="transform:scale(.267);transform-origin:0 0;width:150px;height:136px;position:absolute"></span></div>
+              <div><div class="t1" style="font-family:var(--f-pearl);font-size:18px;font-weight:400">Nabeel misses <i>you</i></div><div class="t2">3rd time today · now</div></div></div>
+            <div class="cta" style="background:#fff;color:#16141c">${HEART_D} Miss you too</div>
+          </div>
+          <div class="lock-time">9:41</div><div class="lock-date">Saturday, November 8</div>
+          <div class="la">
+            <div class="minipearl"><span class="core heart-clip" style="transform:scale(.267);transform-origin:0 0;width:150px;height:136px;position:absolute"></span></div>
+            <div class="grow"><div class="t1" style="font-family:var(--f-pearl);font-size:15px;font-weight:400">Nabeel misses <i>you</i></div><div class="t2">Tap to answer</div></div>
+            <div class="circbtn" style="width:38px;height:38px;background:#16141c">${HEART_B2}</div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Her Dynamic Island + Lock Screen</b>A black island with a pearl inside. The Lock Screen card is frosted white with serif text.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone light d5-ring">
+          <div class="island"></div><div class="status"><span>9:41</span><i>${SIG}</i></div>
+          <div style="position:absolute;left:50%;top:186px" class="water"><span></span><span></span><span></span></div>
+          <div class="pearl" aria-hidden="true"><span class="sh"></span><span class="core heart-clip"></span></div>
+          <div class="ring-name">Nabeel <em>is ringing</em></div>
+          <div class="ring-sub">just to hear you say hi</div>
+          <div class="ring-btns"><div style="background:#fff;box-shadow:0 8px 20px -10px rgba(60,40,110,.35)">Later</div><div style="background:#16141c;color:#fff">${PHONE_W} Answer</div></div>
+          <div class="homebar"></div>
+        </div>
+        <figcaption><b>Ring</b>The pearl pulses while ripples spread out in time with the harp ringtone.</figcaption>
+      </figure>
+    </div>
+    <div class="notes">
+      <div class="note"><h3>Type</h3>DM Serif Display with italic emphasis for feelings, SF Pro for UI.</div>
+      <div class="note"><h3>Sound</h3>A soft harp glide that ends on a glassy bell. The ringtone is a slow, gentle harp melody.</div>
+      <div class="note"><h3>Theme</h3>It could switch to Direction 2 at night if you want both.</div>
+    </div>
+  </section>
+
+  <footer class="fine">
+    Two things to know before choosing. iOS draws the incoming-call screen itself for a real call-style Ring, so on her locked phone we control the ringtone, caller name and icon. Each Ring screen above is what she sees once the app opens, or when it's already open. The Dynamic Island always has a black background, whatever the design. For every direction, the sounds would be made at studio quality (layered, reverb, 48 kHz), not the simple tones you have now.
+  </footer>
+</div>
+
+<script>
+// Inline small icon snippets into the markup
+const I = {
+  SIG:'<svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="18" height="8" rx="2"/><rect x="23" y="4" width="1.5" height="4" rx=".7" opacity=".4"/></svg>',
+  PHONE_B:'<svg width="15" height="15" viewBox="0 0 24 24" fill="#000"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>',
+  PHONE_W:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>',
+  PHONE_D:'<svg width="24" height="24" viewBox="0 0 24 24" fill="#2a1a00"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>',
+  HEART_B:'<svg width="15" height="15" viewBox="0 0 24 24" fill="#000"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.2 0 3.6 1.2 4.4 2.5.8-1.3 2.2-2.5 4.4-2.5 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>',
+  HEART_B2:'<svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.2 0 3.6 1.2 4.4 2.5.8-1.3 2.2-2.5 4.4-2.5 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>',
+  HEART_D:'<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.2 0 3.6 1.2 4.4 2.5.8-1.3 2.2-2.5 4.4-2.5 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>',
+  HEART_S:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.2 0 3.6 1.2 4.4 2.5.8-1.3 2.2-2.5 4.4-2.5 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>',
+  NOTE:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>',
+  NOTE_D:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16141c" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>',
+  PHOTO:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l5-4 4 3 3-2 4 3"/></svg>',
+  USER:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg>',
+  CAL:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  X:'<svg width="22" height="22" viewBox="0 0 24 24" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+};
+document.querySelectorAll('.wrap').forEach(w=>{w.innerHTML=w.innerHTML.replace(/\$\{(\w+)\}/g,(m,k)=>I[k]||'')});
+
+// Twinkling star fields
+document.querySelectorAll('canvas.stars').forEach(cv=>{
+  const dpr=Math.min(2,window.devicePixelRatio||1),W=280,H=606;cv.width=W*dpr;cv.height=H*dpr;
+  const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  const n=+cv.dataset.density||60;
+  const s=[...Array(n)].map(()=>({x:Math.random()*W,y:Math.random()*H*.75,r:Math.random()*1.1+.25,p:Math.random()*6.28,v:.6+Math.random()*1.6}));
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  (function tick(t){ctx.clearRect(0,0,W,H);for(const a of s){const o=.35+.65*(.5+.5*Math.sin(a.p+t/1000*a.v));ctx.globalAlpha=o;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,6.28);ctx.fill()}if(!reduce)requestAnimationFrame(tick)})(0);
+});
+
+// Solo view for screenshots: ?solo=<section id>
+const solo=new URLSearchParams(location.search).get('solo');if(solo){document.querySelector('header.top').hidden=true;document.querySelector('footer.fine').hidden=true;document.querySelectorAll('section.dir').forEach(s=>s.hidden=s.id!==solo);document.querySelectorAll('.di-x').forEach(d=>d.style.animation='none')}
+document.querySelectorAll('.di-x').forEach(d=>d.closest('.phone').addEventListener('click',()=>{d.style.animation='none';void d.offsetWidth;d.style.animation=''}));
+// Interactions
+function bump(id){const el=document.getElementById(id);if(!el)return;el.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-8px)',opacity:0},{transform:'translateY(8px)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:420,easing:'cubic-bezier(.3,.8,.3,1)'});setTimeout(()=>el.textContent=(+el.textContent+1),210)}
+const g1=document.getElementById('gem1'),sh1=document.getElementById('shock1');
+g1&&g1.addEventListener('click',()=>{g1.classList.remove('pop');void g1.offsetWidth;g1.classList.add('pop');sh1.classList.remove('go');void sh1.offsetWidth;sh1.classList.add('go');bump('cnt1')});
+const m2=document.getElementById('moon2'),q2=document.getElementById('q2');
+m2&&m2.addEventListener('click',()=>{
+  const card=m2.parentElement;
+  for(let i=0;i<10;i++){const s=document.createElement('span');s.className='spark';s.textContent='✦';s.style.right=(30+Math.random()*30)+'px';s.style.bottom=(40+Math.random()*20)+'px';s.style.setProperty('--dx',(Math.random()*80-40)+'px');s.style.animationDelay=(i*50)+'ms';card.appendChild(s);setTimeout(()=>s.remove(),2000)}
+  m2.animate([{filter:'brightness(1)'},{filter:'brightness(1.6)'},{filter:'brightness(1)'}],{duration:900});
+  q2.animate([{opacity:1},{opacity:0}],{duration:250}).onfinish=()=>{q2.textContent='Sent under the same moon ✦';q2.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:400,easing:'ease-out'})};
+});
+const p5=document.getElementById('pearl5');
+p5&&p5.addEventListener('click',()=>{p5.animate([{transform:'scale(1)'},{transform:'scale(.9)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:650,easing:'cubic-bezier(.3,1.4,.4,1)'});
+  const w=p5.parentElement.querySelector('.water');for(let i=0;i<3;i++){const r=document.createElement('span');r.style.animation='rip 1.6s ease-out '+(i*.18)+'s forwards';w.appendChild(r);setTimeout(()=>r.remove(),2400)}bump('cnt5')});
+</script>

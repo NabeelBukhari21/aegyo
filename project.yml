@@ -1,0 +1,71 @@
+# Generate the Xcode project with:  xcodegen generate
+name: Aegyo
+options:
+  bundleIdPrefix: com.nabeelbukhari
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    # Set this to your Apple Developer Team ID (Xcode > Settings > Accounts)
+    DEVELOPMENT_TEAM: ""
+    TARGETED_DEVICE_FAMILY: "1"
+
+targets:
+  Aegyo:
+    type: application
+    platform: iOS
+    sources:
+      - path: Aegyo
+      - path: AegyoShared
+    info:
+      path: Aegyo/Info.plist
+      properties:
+        CFBundleDisplayName: Aegyo
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSSupportsLiveActivities: true
+        NSSupportsLiveActivitiesFrequentUpdates: true
+        UIBackgroundModes: [remote-notification, voip]
+        CFBundleURLTypes:
+          - CFBundleURLName: com.nabeelbukhari.aegyo
+            CFBundleURLSchemes: [aegyo]
+    entitlements:
+      path: Aegyo/Aegyo.entitlements
+      properties:
+        aps-environment: development
+        com.apple.developer.usernotifications.time-sensitive: true
+        com.apple.security.application-groups: [group.com.nabeelbukhari.aegyo]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nabeelbukhari.aegyo
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    dependencies:
+      - target: AegyoWidgets
+
+  AegyoWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: AegyoWidgets
+      - path: AegyoShared
+    info:
+      path: AegyoWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Aegyo
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: AegyoWidgets/AegyoWidgets.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.nabeelbukhari.aegyo]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nabeelbukhari.aegyo.widgets
