@@ -5,6 +5,7 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject private var love: LoveService
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var session: Session
 
     @State private var tab: AppTab = .home
     @State private var sheet: HomeSheet?
@@ -55,6 +56,8 @@ struct RootView: View {
                     CubicKeyframe(1, duration: 0.08); CubicKeyframe(0, duration: 0.5)
                 }
 
+            OfflineBanner(pending: session.pendingSends).zIndex(4)
+
             if let toast {
                 VStack {
                     Text(toast).font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)
@@ -85,9 +88,10 @@ struct RootView: View {
         .fullScreenCover(item: $viewingPhoto) { PhotoViewer(photo: $0) }
         .fullScreenCover(item: Binding(get: { appState.answeredRingFrom.map(RingNote.init) },
                                        set: { appState.answeredRingFrom = $0?.name })) { RingView(name: $0.name) }
-        .alert("Something went wrong", isPresented: Binding(get: { love.lastError != nil }, set: { if !$0 { love.lastError = nil } })) {
+        .alert("Something went wrong", isPresented: Binding(get: { love.lastError != nil || session.lastError != nil },
+                                                             set: { if !$0 { love.lastError = nil; session.lastError = nil } })) {
             Button("OK", role: .cancel) {}
-        } message: { Text(love.lastError ?? "") }
+        } message: { Text(love.lastError ?? session.lastError ?? "") }
         .onOpenURL(perform: handle)
         .task { await startup() }
         #if DEBUG

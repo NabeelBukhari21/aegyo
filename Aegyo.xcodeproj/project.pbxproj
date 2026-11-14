@@ -14,13 +14,16 @@
 		1098D6DEDC8C243A654E9AAE /* ring.caf in Resources */ = {isa = PBXBuildFile; fileRef = 630D7C97530298A67C8565ED /* ring.caf */; };
 		13D07EF230C73AB2F72A5F7C /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D4E84B090FD70CAE7D5CDC /* TokenStore.swift */; };
 		14D9C5AFE34BB60B4FFFB1B3 /* LoveAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFC4F71B0EB37D33A2A461D /* LoveAttributes.swift */; };
+		18285F9829DF8B96958F594F /* StateViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E72B1E21DD42F74F8705AB /* StateViews.swift */; };
 		22963BE96BC94ACC867A59C2 /* ButtonsKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9171C485818BD09390C96C8 /* ButtonsKit.swift */; };
+		28FDE2B0102B4F8D12B3648F /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D518F74EE5EE1FA43B63A1 /* Session.swift */; };
 		2FBFB8DDC01DD140DDE6C647 /* WrappedAndReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB61451917DB1820998F2154 /* WrappedAndReceipt.swift */; };
 		3D2B1FD8131756E78F068986 /* IslandScenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548928A4815D3989BC32B284 /* IslandScenes.swift */; };
 		4330D49E294678F937605FE1 /* IslandArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694CF395022DF23A64B57A34 /* IslandArt.swift */; };
 		440CC431636F1F5A4673D638 /* MoonWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED16136FAC364A0ADAA122F8 /* MoonWeek.swift */; };
 		4A8065A51C01B1A253C81FA0 /* ShareKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E434D8549C81DCFDE94536 /* ShareKit.swift */; };
 		4BD51C23042FC933417EAB2B /* SendLoveIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671312414EB4CC6D2E65D39 /* SendLoveIntents.swift */; };
+		4E5C3D38074AE7140D145546 /* LocalBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE92FA02894BDA78A1A2869 /* LocalBackend.swift */; };
 		52F409D671AD581FD4576A0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BABCBA3344B9E20B6EF229F /* AppDelegate.swift */; };
 		54A87D74F96764931ECA6558 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2034A0A9A5BAFB0C69C1F07C /* Assets.xcassets */; };
 		57EE158548FED83DAB2F1C7D /* SameSkyPremium.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82C0FA42E563658BF93ED4D /* SameSkyPremium.swift */; };
@@ -64,7 +67,10 @@
 		DF14FFF3FB1C50C466BD325D /* Moon3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18B0191F187BD4CE171FF1 /* Moon3D.swift */; };
 		E300B4BE55CA315EFACA8BE7 /* IslandArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694CF395022DF23A64B57A34 /* IslandArt.swift */; };
 		EFAB99F3395E2B503F205E49 /* GemHeart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207D6EC0F64370E9A82080AA /* GemHeart.swift */; };
+		F2CE773EC7889E19D39810AE /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5828F0C00CAAB1FAC4B9E /* Backend.swift */; };
 		F346D6D6C8AB28CD0B284E0B /* AegyoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370C9EADB037BBAE8756505E /* AegyoApp.swift */; };
+		F4702AA4DA2254C27E2041BF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ABDD5976994BBB6B081A27 /* Reachability.swift */; };
+		F7917A71E223E66D2E9A48E8 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99923EAC16D01EF25C853A15 /* OnboardingFlow.swift */; };
 		FA9A0F7386898AEFC7BFED94 /* LoveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E224871B64235F319911381 /* LoveService.swift */; };
 		FDF8EB0B7F63DAD7249F63B7 /* SkyTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52E2E72686EB1E1B5D69310 /* SkyTab.swift */; };
 /* End PBXBuildFile section */
@@ -96,9 +102,11 @@
 /* Begin PBXFileReference section */
 		0373902A9B16F6E6F2222F94 /* IslandGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandGallery.swift; sourceTree = "<group>"; };
 		073D206A1346FD65D5B4ADC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		08D5828F0C00CAAB1FAC4B9E /* Backend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Backend.swift; sourceTree = "<group>"; };
 		0B2FC345AF570C93A618A3A2 /* HeartbeatQuizMilestones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartbeatQuizMilestones.swift; sourceTree = "<group>"; };
 		0E224871B64235F319911381 /* LoveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveService.swift; sourceTree = "<group>"; };
 		0ED2301FAB3D454965E0EDD3 /* Heart3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heart3D.swift; sourceTree = "<group>"; };
+		11ABDD5976994BBB6B081A27 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		153EE14BFA31B8A02EFDC224 /* missyou.caf */ = {isa = PBXFileReference; path = missyou.caf; sourceTree = "<group>"; };
 		17EC0F996F9FA128252025AF /* Aegyo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aegyo.entitlements; sourceTree = "<group>"; };
 		1BABCBA3344B9E20B6EF229F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +118,7 @@
 		2BFC4F71B0EB37D33A2A461D /* LoveAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveAttributes.swift; sourceTree = "<group>"; };
 		31934BC4A1A9EDB828E6D157 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		370C9EADB037BBAE8756505E /* AegyoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AegyoApp.swift; sourceTree = "<group>"; };
+		3EE92FA02894BDA78A1A2869 /* LocalBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalBackend.swift; sourceTree = "<group>"; };
 		40C229CE8FBE6A8E578DAB02 /* MoodCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodCharacter.swift; sourceTree = "<group>"; };
 		42EF2DDD3360FCECB73DC16E /* LiquidTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidTabBar.swift; sourceTree = "<group>"; };
 		4494C7A0A77EA0597DAF5353 /* MomentWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentWidget.swift; sourceTree = "<group>"; };
@@ -126,6 +135,7 @@
 		8073D8079F85CEE16CE5AE70 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		8C8D706028C71E1E302F2D3F /* QuestionAndLetters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionAndLetters.swift; sourceTree = "<group>"; };
 		938DC3765D9708206976F329 /* CallService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallService.swift; sourceTree = "<group>"; };
+		99923EAC16D01EF25C853A15 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		A4AFA6F69F44A82CF5FBEA7D /* GemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GemView.swift; sourceTree = "<group>"; };
 		A60AA9BE7D77CAEFE7F26D15 /* Reminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminders.swift; sourceTree = "<group>"; };
 		A671312414EB4CC6D2E65D39 /* SendLoveIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLoveIntents.swift; sourceTree = "<group>"; };
@@ -135,6 +145,7 @@
 		AF18B0191F187BD4CE171FF1 /* Moon3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon3D.swift; sourceTree = "<group>"; };
 		AFA25E34245BEAB0A6E8F54A /* RingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingView.swift; sourceTree = "<group>"; };
 		B30AD4D7DBA4167C0C3F3608 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B7D518F74EE5EE1FA43B63A1 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		BAD7C1A2A41DB70F3E05D14F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BEC39435B2635A7231A47A6A /* sent.caf */ = {isa = PBXFileReference; path = sent.caf; sourceTree = "<group>"; };
 		C346F8FB7EBFDB97E1D8384F /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
@@ -145,6 +156,7 @@
 		D7A25E87D0F1CD849D73F78A /* DotMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotMatrix.swift; sourceTree = "<group>"; };
 		D90B891FC7D5E9DAFF48CE2C /* LoveLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveLiveActivity.swift; sourceTree = "<group>"; };
 		D9171C485818BD09390C96C8 /* ButtonsKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsKit.swift; sourceTree = "<group>"; };
+		E0E72B1E21DD42F74F8705AB /* StateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateViews.swift; sourceTree = "<group>"; };
 		E7E6A29EABC5511E2AC77DB4 /* SameSkyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SameSkyCard.swift; sourceTree = "<group>"; };
 		ED16136FAC364A0ADAA122F8 /* MoonWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonWeek.swift; sourceTree = "<group>"; };
 		F4E434D8549C81DCFDE94536 /* ShareKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareKit.swift; sourceTree = "<group>"; };
@@ -162,6 +174,7 @@
 				AF18B0191F187BD4CE171FF1 /* Moon3D.swift */,
 				54C3E727CF3D9CDA382CD12E /* MotionKit.swift */,
 				FFF992A05270F0D4C4641022 /* Shaders.metal */,
+				E0E72B1E21DD42F74F8705AB /* StateViews.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -182,6 +195,14 @@
 				BEC39435B2635A7231A47A6A /* sent.caf */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		23FE2CAF327C1D70D795E869 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				99923EAC16D01EF25C853A15 /* OnboardingFlow.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		3AF1503FF3BDF8DC531D69EE /* Home */ = {
@@ -230,6 +251,15 @@
 			path = Root;
 			sourceTree = "<group>";
 		};
+		5BA34D7971B35BE54595E56C /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				08D5828F0C00CAAB1FAC4B9E /* Backend.swift */,
+				3EE92FA02894BDA78A1A2869 /* LocalBackend.swift */,
+			);
+			path = Backend;
+			sourceTree = "<group>";
+		};
 		70B4B46D513892EA8D2712F3 /* AegyoWidgets */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,6 +279,7 @@
 				E2C4198570E462F5F57D6388 /* Extras */,
 				3AF1503FF3BDF8DC531D69EE /* Home */,
 				0F77959286A5791E145EF8F4 /* Moments */,
+				23FE2CAF327C1D70D795E869 /* Onboarding */,
 				48340E07879AB659B1BEF0C4 /* Photo */,
 				ADA9A807E2F34EE807A98A15 /* Ring */,
 				508B2EAF22D8BD14BC3ADFF9 /* Root */,
@@ -324,8 +355,11 @@
 				C346F8FB7EBFDB97E1D8384F /* Haptics.swift */,
 				C4AA1FDB5EF7FC6B2838CF91 /* LoveData.swift */,
 				0E224871B64235F319911381 /* LoveService.swift */,
+				11ABDD5976994BBB6B081A27 /* Reachability.swift */,
 				A60AA9BE7D77CAEFE7F26D15 /* Reminders.swift */,
+				B7D518F74EE5EE1FA43B63A1 /* Session.swift */,
 				70D4E84B090FD70CAE7D5CDC /* TokenStore.swift */,
+				5BA34D7971B35BE54595E56C /* Backend */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -468,6 +502,7 @@
 				F346D6D6C8AB28CD0B284E0B /* AegyoApp.swift in Sources */,
 				52F409D671AD581FD4576A0C /* AppDelegate.swift in Sources */,
 				B4419C1C8A734DD2D80E3E83 /* Astro.swift in Sources */,
+				F2CE773EC7889E19D39810AE /* Backend.swift in Sources */,
 				22963BE96BC94ACC867A59C2 /* ButtonsKit.swift in Sources */,
 				C1D37746F70BB09D8B4C95E6 /* CallService.swift in Sources */,
 				94B8C92EDF651CECD3084F4B /* DotMatrix.swift in Sources */,
@@ -481,6 +516,7 @@
 				D3589916250904DDABEBF854 /* IslandGallery.swift in Sources */,
 				A2B35B79E351B153DE1922BD /* IslandScenes.swift in Sources */,
 				DACB08742C4A0D0A44AB204F /* LiquidTabBar.swift in Sources */,
+				4E5C3D38074AE7140D145546 /* LocalBackend.swift in Sources */,
 				D981784BC2D1EAC084CB585D /* LoveAttributes.swift in Sources */,
 				6A7A68803FF64EBA960928EF /* LoveData.swift in Sources */,
 				FA9A0F7386898AEFC7BFED94 /* LoveService.swift in Sources */,
@@ -492,20 +528,24 @@
 				DF14FFF3FB1C50C466BD325D /* Moon3D.swift in Sources */,
 				440CC431636F1F5A4673D638 /* MoonWeek.swift in Sources */,
 				6465052D4AFA27B21AB9413A /* MotionKit.swift in Sources */,
+				F7917A71E223E66D2E9A48E8 /* OnboardingFlow.swift in Sources */,
 				7A9D7919C9B6B27F07CA4374 /* PhotoFeatures.swift in Sources */,
 				733201C12DAE373EC3A7605C /* Profile.swift in Sources */,
 				8A846F990AC4B4CB30E69D90 /* QuestionAndLetters.swift in Sources */,
 				6ABDF24264E7D465601B575D /* QuickActionSheet.swift in Sources */,
+				F4702AA4DA2254C27E2041BF /* Reachability.swift in Sources */,
 				DBDE00DC5BB43A08155AE415 /* Reminders.swift in Sources */,
 				81A18CE4856DA90B9CB8C070 /* RingView.swift in Sources */,
 				086CBFBBC28DA94E52A7EE5D /* RootView.swift in Sources */,
 				C2299A3FF72B3DF9C496EC63 /* SameSkyCard.swift in Sources */,
 				57EE158548FED83DAB2F1C7D /* SameSkyPremium.swift in Sources */,
 				4BD51C23042FC933417EAB2B /* SendLoveIntents.swift in Sources */,
+				28FDE2B0102B4F8D12B3648F /* Session.swift in Sources */,
 				A0713F6E4F11FC50DB7D1A8E /* SettingsView.swift in Sources */,
 				C26CB58FB7996825E2345CF6 /* Shaders.metal in Sources */,
 				4A8065A51C01B1A253C81FA0 /* ShareKit.swift in Sources */,
 				FDF8EB0B7F63DAD7249F63B7 /* SkyTab.swift in Sources */,
+				18285F9829DF8B96958F594F /* StateViews.swift in Sources */,
 				13D07EF230C73AB2F72A5F7C /* TokenStore.swift in Sources */,
 				2FBFB8DDC01DD140DDE6C647 /* WrappedAndReceipt.swift in Sources */,
 			);

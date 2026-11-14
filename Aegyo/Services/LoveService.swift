@@ -18,7 +18,7 @@ final class LoveService: ObservableObject {
     /// Bumps every time love is sent; views use it to fire animations (sparks, shockwaves).
     @Published private(set) var sendPulse = 0
 
-    var isPaired: Bool { false }
+    var isPaired: Bool { Session.shared.isPaired }
 
     private var sentPlayer: AVAudioPlayer?
     private let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("aegyo.json")
@@ -130,11 +130,38 @@ final class LoveService: ObservableObject {
         record(LoveEvent(date: .now, kind: kind, outgoing: true, detail: detail, photoID: photoID))
         sendPulse += 1
         if kind.countsAsLove { Reminders.shared.lovedToday() }
+        let event = data.events.last!
         if isPaired {
-            // Phase 2: Firestore couples/{id}/pings → Cloud Function → APNs push-to-start on her phone.
+            await Session.shared.deliver(event)
         } else {
             await previewOnThisPhone(kind, detail: detail, photoID: photoID)
         }
+    }
+
+    /// Events from the partner, delivered by the backend. Shows each one in the Dynamic Island.
+    func receive(_ events: [LoveEvent]) {
+        guard !events.isEmpty else { return }
+        for e in events where !data.events.contains(where: { $0.id == e.id }) {
+            data.events.append(e)
+            if e.kind == .mood, let m = e.detail.flatMap({ Mood(rawValue: $0.lowercased()) }) {
+                data.herMood = MoodStatus(mood: m, at: e.date)
+            }
+            if e.kind == .letter {
+                // the letter body travels in `detail` as "title|body"
+            }
+        }
+        save()
+        sendPulse += 1
+        if let last = events.last {
+            Task { await previewOnThisPhone(last.kind, detail: last.detail, photoID: last.photoID, incoming: true) }
+        }
+    }
+
+    /// Wipes everything in memory (used by account deletion).
+    func resetAll() {
+        data = LoveData()
+        recomputeStats()
+        imageCache.removeAllObjects()
     }
 
     func setMood(_ mood: Mood) async {
@@ -283,8 +310,8 @@ final class LoveService: ObservableObject {
 
     /// Island-first: love shows up as a Live Activity that expands in the Dynamic Island with the chime.
     /// No notification banner. Notifications are kept for reminders only (see `Reminders`).
-    private func previewOnThisPhone(_ kind: LoveKind, detail: String?, photoID: String?) async {
-        let sender = Profile.myName
+    private func previewOnThisPhone(_ kind: LoveKind, detail: String?, photoID: String?, incoming: Bool = false) async {
+        let sender = incoming ? Profile.partnerName.capitalized(with: nil) : Profile.myName
         let headline = kind.headline(from: sender, detail: detail)
         let alert = AlertConfiguration(title: "\(headline)", body: "\(kind.subtitle(detail: detail))", sound: .named("missyou.caf"))
         let today = todayEvents().filter { $0.kind.countsAsLove }
