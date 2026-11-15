@@ -4,6 +4,8 @@ import SwiftUI
 /// "Send a photo" — it pops open in her Dynamic Island and lands on her Home Screen widget.
 struct PhotoCard: View {
     @EnvironmentObject private var love: LoveService
+    @ObservedObject private var store = Store.shared
+    @State private var paywall = false
     @State private var item: PhotosPickerItem?
     @State private var picked: UIImage?
     @State private var viewing: SentPhoto?
@@ -57,6 +59,8 @@ struct PhotoCard: View {
         }
         .onChange(of: item) {
             guard let item else { return }
+            let sentToday = love.data.photos.filter { Calendar.current.isDateInToday($0.date) && $0.outgoing }.count
+            if !store.isPlus && sentToday >= Store.freePhotosPerDay { self.item = nil; paywall = true; return }
             Task {
                 if let data = try? await item.loadTransferable(type: Data.self), let img = UIImage(data: data) {
                     picked = img
@@ -64,6 +68,7 @@ struct PhotoCard: View {
                 self.item = nil
             }
         }
+        .sheet(isPresented: $paywall) { PaywallView(highlight: .unlimitedPhotos).aegyoSheet([.large]) }
         .sheet(item: Binding(get: { picked.map(IdentifiedImage.init) }, set: { picked = $0?.image })) { wrap in
             PhotoComposer(image: wrap.image)
                 .presentationBackground(.black)

@@ -1,0 +1,99 @@
+{
+  "identifier" : "AEGYO-STOREKIT",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "59.99",
+      "familyShareable" : false,
+      "internalID" : "LIFETIME-1",
+      "localizations" : [
+        {
+          "description" : "Every Aegyo Plus feature, forever.",
+          "displayName" : "Aegyo Plus Lifetime",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.nabeelbukhari.aegyo.plus.lifetime",
+      "referenceName" : "Plus Lifetime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6740000001",
+    "_developerTeamID" : "547Y88F9Z9",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 783000000,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21500001",
+      "localizations" : [
+        {
+          "description" : "More ways to feel close.",
+          "displayName" : "Aegyo Plus",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "Aegyo Plus",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "MONTHLY-1",
+          "introductoryOffer" : {
+            "internalID" : "INTRO-M",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Billed monthly. Cancel anytime.",
+              "displayName" : "Plus Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.nabeelbukhari.aegyo.plus.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Plus Monthly",
+          "subscriptionGroupID" : "21500001",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "ANNUAL-1",
+          "introductoryOffer" : {
+            "internalID" : "INTRO-Y",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Billed yearly. Cancel anytime.",
+              "displayName" : "Plus Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.nabeelbukhari.aegyo.plus.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Plus Annual",
+          "subscriptionGroupID" : "21500001",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

@@ -88,47 +88,38 @@ struct AccountDangerView: View {
     }
 }
 
-/// Upsell card in Settings; the paywall itself arrives in Phase 5.
+/// Upsell card in Settings. Opens the paywall, or the subscription screen when already on Plus.
 struct PlusTeaserCard: View {
+    @ObservedObject private var store = Store.shared
     @State private var showPaywall = false
     var body: some View {
-        Button { Haptics.tap(); showPaywall = true } label: {
-            HStack(spacing: 14) {
-                ZStack {
-                    Circle().fill(Love.glow).frame(width: 44, height: 44)
-                    Image(systemName: "sparkles").font(.system(size: 18, weight: .semibold)).foregroundStyle(.white)
-                }
-                .shadow(color: Love.pink.opacity(0.5), radius: 10)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Aegyo Plus").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
-                    Text("Letters, voice notes, Doki's forms and more.").font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.55))
-                }
-                Spacer()
-                Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.3))
+        Group {
+            if store.isPlus {
+                NavigationLink { SubscriptionView() } label: { card(title: "Aegyo Plus · \(store.activePlanName)", line: "You're all in. Manage your plan.") }
+            } else {
+                Button { Haptics.tap(); showPaywall = true } label: { card(title: "Aegyo Plus", line: "Letters, voice notes, \(Doki.name)'s forms and more.") }
             }
-            .padding(14)
-            .background(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(LinearGradient(colors: [Love.pink.opacity(0.18), Love.violet.opacity(0.12)], startPoint: .leading, endPoint: .trailing)))
-            .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(Love.pink.opacity(0.35), lineWidth: 1))
         }
         .buttonStyle(PressStyle(scale: 0.98))
-        .sheet(isPresented: $showPaywall) { PaywallPlaceholder() }
+        .sheet(isPresented: $showPaywall) { PaywallView().aegyoSheet([.large]) }
     }
-}
 
-/// Stands in until the StoreKit paywall lands in Phase 5.
-struct PaywallPlaceholder: View {
-    @Environment(\.dismiss) private var dismiss
-    var body: some View {
-        VStack(spacing: 16) {
+    private func card(title: String, line: String) -> some View {
+        HStack(spacing: 14) {
+            ZStack {
+                Circle().fill(Love.glow).frame(width: 44, height: 44)
+                Image(systemName: "sparkles").font(.system(size: 18, weight: .semibold)).foregroundStyle(.white)
+            }
+            .shadow(color: Love.pink.opacity(0.5), radius: 10)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                Text(line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.55))
+            }
             Spacer()
-            Image(systemName: "sparkles").font(.system(size: 40)).foregroundStyle(Love.pink)
-            Text("Aegyo Plus").font(.system(size: 26, weight: .semibold)).foregroundStyle(.white)
-            Text("The paywall is coming in the next build.").font(.system(size: 14)).foregroundStyle(.white.opacity(0.55))
-            Spacer()
-            ContinuePill(title: "Close") { dismiss() }.padding(.horizontal, 24).padding(.bottom, 24)
+            Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.3))
         }
-        .frame(maxWidth: .infinity)
-        .background(OpalBackground())
-        .preferredColorScheme(.dark)
+        .padding(14)
+        .background(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(LinearGradient(colors: [Love.pink.opacity(0.18), Love.violet.opacity(0.12)], startPoint: .leading, endPoint: .trailing)))
+        .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(Love.pink.opacity(0.35), lineWidth: 1))
     }
 }

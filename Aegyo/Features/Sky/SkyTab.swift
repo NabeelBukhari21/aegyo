@@ -21,8 +21,8 @@ struct SkyTab: View {
                 Group {
                     switch section {
                     case .moon: MoonSection(phase: phase).transition(.blurReplace.combined(with: .move(edge: .leading)))
-                    case .stars: StarsSection().transition(.blurReplace)
-                    case .sameSky: SameSkyPremium().transition(.blurReplace.combined(with: .move(edge: .trailing)))
+                    case .stars: StarsSection().plusGateInline(.stars).transition(.blurReplace)
+                    case .sameSky: SameSkyPremium().plusGateInline(.sameSky).transition(.blurReplace.combined(with: .move(edge: .trailing)))
                     }
                 }
                 .animation(.spring(response: 0.5, dampingFraction: 0.85), value: section)

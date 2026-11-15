@@ -125,19 +125,21 @@ struct RootView: View {
         switch s {
         case .quick:
             EmptyView()
+        case .paywall:
+            PaywallView().aegyoSheet([.large])
         case .meet:
             MeetDatePicker(date: Binding(get: { AppGroup.defaults.double(forKey: Profile.meetDateKey) },
                                          set: { AppGroup.defaults.set($0, forKey: Profile.meetDateKey) }))
                 .aegyoSheet([.large])
         case .settings: SettingsView()
         case .question: DailyQuestionView()
-        case .letters: LettersView()
-        case .heartbeat(let code): HeartbeatView(incomingCode: code)
-        case .wrapped: WrappedView()
-        case .receipt: ReceiptView()
+        case .letters: LettersView().plusGate(.letters)
+        case .heartbeat(let code): HeartbeatView(incomingCode: code).plusGate(.heartbeat)
+        case .wrapped: WrappedView().plusGate(.wrapped)
+        case .receipt: ReceiptView().plusGate(.lovePass)
         case .language: LoveLanguageView()
         case .milestones: MilestonesView()
-        case .gem: GemCollectionView()
+        case .gem: GemCollectionView().plusGate(.forms)
         case .mood: MoodPicker().aegyoSheet([.height(560)])
         case .pair: PairSheet(prefill: pairCode).aegyoSheet([.large])
         }
@@ -171,7 +173,7 @@ struct RootView: View {
         if let i = args.firstIndex(of: "-joinCode"), i + 1 < args.count { try? await Task.sleep(for: .milliseconds(800)); PairStep.pendingCode = args[i + 1]; sheet = .pair }
         if args.contains("-openActions") { try? await Task.sleep(for: .milliseconds(600)); actionsOpen = true }
         let sheets: [String: HomeSheet] = ["-openWrapped": .wrapped, "-openReceipt": .receipt, "-openGem": .gem, "-openLetters": .letters, 
-                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair, "-openSettings": .settings]
+                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair, "-openSettings": .settings, "-openPaywall": .paywall]
         for (flag, s) in sheets where args.contains(flag) { try? await Task.sleep(for: .milliseconds(600)); sheet = s }
         if args.contains("-noPrompt") { return }
         #endif
@@ -215,16 +217,17 @@ struct UsTab: View {
     var open: (HomeSheet) -> Void
     @State private var appeared = false
 
-    private struct Item: Identifiable { let id: String, sheet: HomeSheet, icon: String, title: String, line: String, tint: Color }
+    @ObservedObject private var store = Store.shared
+    private struct Item: Identifiable { let id: String, sheet: HomeSheet, icon: String, title: String, line: String, tint: Color; var plus = false }
 
     private var items: [Item] {
         [
-            Item(id: "w", sheet: .wrapped, icon: "sparkles.rectangle.stack.fill", title: "Love Wrapped", line: "Your story, ready to post", tint: Love.pink),
-            Item(id: "g", sheet: .gem, icon: "heart.fill", title: "\(Doki.name)'s forms", line: love.tier.name, tint: Color(uiColor: love.tier.heartTint)),
+            Item(id: "w", sheet: .wrapped, icon: "sparkles.rectangle.stack.fill", title: "Love Wrapped", line: "Your story, ready to post", tint: Love.pink, plus: true),
+            Item(id: "g", sheet: .gem, icon: "heart.fill", title: "\(Doki.name)'s forms", line: love.tier.name, tint: Color(uiColor: love.tier.heartTint), plus: true),
             Item(id: "q", sheet: .question, icon: "questionmark.bubble.fill", title: "Daily Question", line: love.data.answers[DayKey.of(.now)] == nil ? "Today's is waiting" : "Answered", tint: Love.violet),
-            Item(id: "l", sheet: .letters, icon: "envelope.fill", title: "Open When…", line: "\(love.data.letters.count) sealed", tint: Love.peach),
-            Item(id: "h", sheet: .heartbeat(nil), icon: "waveform.path.ecg", title: "Heartbeat", line: "Tap a rhythm", tint: Color(red: 1, green: 0.4, blue: 0.45)),
-            Item(id: "r", sheet: .receipt, icon: "airplane.departure", title: "Love Pass", line: "A ticket to her", tint: Color(red: 1, green: 0.85, blue: 0.4)),
+            Item(id: "l", sheet: .letters, icon: "envelope.fill", title: "Open When…", line: "\(love.data.letters.count) sealed", tint: Love.peach, plus: true),
+            Item(id: "h", sheet: .heartbeat(nil), icon: "waveform.path.ecg", title: "Heartbeat", line: "Tap a rhythm", tint: Color(red: 1, green: 0.4, blue: 0.45), plus: true),
+            Item(id: "r", sheet: .receipt, icon: "airplane.departure", title: "Love Pass", line: "A ticket to her", tint: Color(red: 1, green: 0.85, blue: 0.4), plus: true),
             Item(id: "m", sheet: .milestones, icon: "flag.checkered", title: "Milestones", line: "Big numbers", tint: Opal.mint),
             Item(id: "ll", sheet: .language, icon: "heart.text.square.fill", title: "Love Language", line: love.data.loveLanguage ?? "Take the quiz", tint: Color(red: 1, green: 0.8, blue: 0.4)),
         ]
@@ -248,9 +251,16 @@ struct UsTab: View {
                     ForEach(Array(items.enumerated()), id: \.element.id) { i, it in
                         Button { open(it.sheet) } label: {
                             VStack(alignment: .leading, spacing: 0) {
-                                Image(systemName: it.icon).font(.system(size: 22)).foregroundStyle(it.tint)
-                                    .frame(width: 48, height: 48).background(it.tint.opacity(0.14), in: Circle())
-                                    .symbolEffect(.bounce, value: appeared)
+                                HStack {
+                                    Image(systemName: it.icon).font(.system(size: 22)).foregroundStyle(it.tint)
+                                        .frame(width: 48, height: 48).background(it.tint.opacity(0.14), in: Circle())
+                                        .symbolEffect(.bounce, value: appeared)
+                                    Spacer()
+                                    if it.plus && !store.isPlus {
+                                        Text("PLUS").font(.system(size: 9, weight: .bold)).tracking(0.8).foregroundStyle(.black)
+                                            .padding(.horizontal, 7).padding(.vertical, 4).background(Love.pink, in: Capsule())
+                                    }
+                                }
                                 Spacer()
                                 Text(it.title).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
                                 Text(it.line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(1).padding(.top, 3)

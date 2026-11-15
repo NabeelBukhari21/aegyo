@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Sheets the app can open.
 enum HomeSheet: Identifiable, Hashable {
-    case settings, question, letters, heartbeat(String?), wrapped, receipt, language, milestones, gem, mood, quick, meet, pair
+    case settings, question, letters, heartbeat(String?), wrapped, receipt, language, milestones, gem, mood, quick, meet, pair, paywall
     var id: String {
         switch self {
         case .heartbeat(let c): "heartbeat\(c ?? "")"

@@ -45,6 +45,7 @@
 		73C6305EF7187AC6FF98B476 /* SupportViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B5BBF425ED40CF5AB9B17CF /* SupportViews.swift */; };
 		745AA47F190CA51EC3667C9C /* LoveLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90B891FC7D5E9DAFF48CE2C /* LoveLiveActivity.swift */; };
 		74BFBF418B47CA7321F6E8BC /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDE963997C0A7730CF8EA89 /* Profile.swift */; };
+		790EA2ED7B0B19CFC3C49685 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17195E5BE6F8D9500367345C /* Store.swift */; };
 		7A9D7919C9B6B27F07CA4374 /* PhotoFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C487C129EA46FE515EB8C7C1 /* PhotoFeatures.swift */; };
 		7F41532CE7DB37F016970312 /* sent.caf in Resources */ = {isa = PBXBuildFile; fileRef = BEC39435B2635A7231A47A6A /* sent.caf */; };
 		8172FBF3B0F624A76B6B992C /* Mood.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C3D1D7DB9864BBD40E162C /* Mood.swift */; };
@@ -78,6 +79,7 @@
 		F2CE773EC7889E19D39810AE /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5828F0C00CAAB1FAC4B9E /* Backend.swift */; };
 		F346D6D6C8AB28CD0B284E0B /* AegyoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370C9EADB037BBAE8756505E /* AegyoApp.swift */; };
 		F4702AA4DA2254C27E2041BF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11ABDD5976994BBB6B081A27 /* Reachability.swift */; };
+		F6A102730E0793489FB9EA60 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A4779BB086B08F2047C058 /* PaywallView.swift */; };
 		F7917A71E223E66D2E9A48E8 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99923EAC16D01EF25C853A15 /* OnboardingFlow.swift */; };
 		FA9A0F7386898AEFC7BFED94 /* LoveService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E224871B64235F319911381 /* LoveService.swift */; };
 		FDF8EB0B7F63DAD7249F63B7 /* SkyTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52E2E72686EB1E1B5D69310 /* SkyTab.swift */; };
@@ -117,6 +119,7 @@
 		0ED2301FAB3D454965E0EDD3 /* Heart3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heart3D.swift; sourceTree = "<group>"; };
 		11ABDD5976994BBB6B081A27 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		153EE14BFA31B8A02EFDC224 /* missyou.caf */ = {isa = PBXFileReference; path = missyou.caf; sourceTree = "<group>"; };
+		17195E5BE6F8D9500367345C /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		17EC0F996F9FA128252025AF /* Aegyo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aegyo.entitlements; sourceTree = "<group>"; };
 		1BABCBA3344B9E20B6EF229F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E2FFC0880CB2CF2150F9710 /* QuickActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionSheet.swift; sourceTree = "<group>"; };
@@ -170,6 +173,7 @@
 		C6EF13A62845150B91FE07C1 /* PairStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairStep.swift; sourceTree = "<group>"; };
 		CC37B22CFD9472076CE26496 /* AegyoWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = AegyoWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F3AAE120EAEE5CE58F70B5 /* AccountDangerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDangerView.swift; sourceTree = "<group>"; };
+		D2A4779BB086B08F2047C058 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		D52E2E72686EB1E1B5D69310 /* SkyTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyTab.swift; sourceTree = "<group>"; };
 		D7A25E87D0F1CD849D73F78A /* DotMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotMatrix.swift; sourceTree = "<group>"; };
 		D90B891FC7D5E9DAFF48CE2C /* LoveLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveLiveActivity.swift; sourceTree = "<group>"; };
@@ -213,6 +217,14 @@
 				BEC39435B2635A7231A47A6A /* sent.caf */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		21299AE7E7B822EFBCA2F36A /* Commerce */ = {
+			isa = PBXGroup;
+			children = (
+				D2A4779BB086B08F2047C058 /* PaywallView.swift */,
+			);
+			path = Commerce;
 			sourceTree = "<group>";
 		};
 		23FE2CAF327C1D70D795E869 /* Onboarding */ = {
@@ -297,6 +309,7 @@
 		734B92A75A494EB5913D52C6 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				21299AE7E7B822EFBCA2F36A /* Commerce */,
 				04558C6F0C0BC6D9B2AF37D7 /* Components */,
 				E2C4198570E462F5F57D6388 /* Extras */,
 				3AF1503FF3BDF8DC531D69EE /* Home */,
@@ -381,6 +394,7 @@
 				11ABDD5976994BBB6B081A27 /* Reachability.swift */,
 				A60AA9BE7D77CAEFE7F26D15 /* Reminders.swift */,
 				B7D518F74EE5EE1FA43B63A1 /* Session.swift */,
+				17195E5BE6F8D9500367345C /* Store.swift */,
 				70D4E84B090FD70CAE7D5CDC /* TokenStore.swift */,
 				5BA34D7971B35BE54595E56C /* Backend */,
 			);
@@ -560,6 +574,7 @@
 				F7917A71E223E66D2E9A48E8 /* OnboardingFlow.swift in Sources */,
 				FEFE4ACBCF7C4E7A35497484 /* PairStep.swift in Sources */,
 				2727C44011E3C3CEE575C697 /* PairingBanner.swift in Sources */,
+				F6A102730E0793489FB9EA60 /* PaywallView.swift in Sources */,
 				7A9D7919C9B6B27F07CA4374 /* PhotoFeatures.swift in Sources */,
 				5FE3D3DBB9F4BEB273F67EB9 /* PreferenceViews.swift in Sources */,
 				33E7ACA295244917A04A8CA9 /* Prefs.swift in Sources */,
@@ -581,6 +596,7 @@
 				4703F1659EF2A3170CA86363 /* SignUpSheet.swift in Sources */,
 				FDF8EB0B7F63DAD7249F63B7 /* SkyTab.swift in Sources */,
 				18285F9829DF8B96958F594F /* StateViews.swift in Sources */,
+				790EA2ED7B0B19CFC3C49685 /* Store.swift in Sources */,
 				73C6305EF7187AC6FF98B476 /* SupportViews.swift in Sources */,
 				13D07EF230C73AB2F72A5F7C /* TokenStore.swift in Sources */,
 				2FBFB8DDC01DD140DDE6C647 /* WrappedAndReceipt.swift in Sources */,

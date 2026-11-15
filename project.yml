@@ -16,6 +16,25 @@ settings:
     DEVELOPMENT_TEAM: ""
     TARGETED_DEVICE_FAMILY: "1"
 
+schemes:
+  Aegyo:
+    build:
+      targets:
+        Aegyo: all
+    run:
+      config: Debug
+      storeKitConfiguration: Aegyo.storekit
+      commandLineArguments:
+        "-skipOnboarding": false
+        "-noPrompt": false
+        "-noTour": false
+        "-seedDemo": false
+        "-openPaywall": false
+        "-resetOnboarding": false
+        "-plus": false
+    archive:
+      config: Release
+
 targets:
   Aegyo:
     type: application
