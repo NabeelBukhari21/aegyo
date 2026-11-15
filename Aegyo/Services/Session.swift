@@ -42,6 +42,10 @@ final class Session: ObservableObject {
         let args = ProcessInfo.processInfo.arguments
         if args.contains("-resetOnboarding") { onboardingComplete = false; await backend.signOut() }
         if args.contains("-onboarding") { onboardingComplete = false }
+        if args.contains("-skipOnboarding") {
+            _ = try? await backend.signIn(.email(name: Profile.myName, email: "demo@aegyo.local"))
+            onboardingComplete = true
+        }
         #endif
         account = backend.currentAccount
         await refreshPairing()

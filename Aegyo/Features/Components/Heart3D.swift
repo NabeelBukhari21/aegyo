@@ -50,6 +50,7 @@ struct Heart3DView: UIViewRepresentable {
         }
         c.bpm = bpm
         c.setTint(tint)
+        if !reveal && c.revealEnabled { c.skipReveal() }
     }
 
     static func dismantleUIView(_ view: SCNView, coordinator: Coordinator) {
@@ -168,6 +169,8 @@ struct Heart3DView: UIViewRepresentable {
         func skipReveal() {
             revealEnabled = false
             shell.isHidden = true
+            burstDone = true
+            heart.removeAllParticleSystems()
         }
 
         private func burst() {

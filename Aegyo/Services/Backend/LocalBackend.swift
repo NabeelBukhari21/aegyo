@@ -223,9 +223,11 @@ final class LocalBackend: Backend {
         if let d = try? Data(contentsOf: storeURL), let s = try? JSONDecoder().decode(Store.self, from: d) { store = s }
     }
 
+    /// Synchronous on purpose: the files are small, and a reader (or a second simulator) must see the
+    /// write as soon as the call returns.
     private func save() {
         let s = store, l = local, su = storeURL, lu = localURL
-        io.async {
+        io.sync {
             if let d = try? JSONEncoder().encode(s) { try? d.write(to: su, options: .atomic) }
             if let d = try? JSONEncoder().encode(l) { try? d.write(to: lu, options: .atomic) }
         }

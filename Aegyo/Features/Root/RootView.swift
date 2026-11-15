@@ -17,6 +17,8 @@ struct RootView: View {
     @State private var composing: UIImage?
     @State private var viewingPhoto: SentPhoto?
     @State private var actionsOpen = false
+    @State private var tour = !AppGroup.defaults.bool(forKey: GuidedTour.seenKey)
+    @State private var pairCode: String?
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -57,6 +59,8 @@ struct RootView: View {
                 }
 
             OfflineBanner(pending: session.pendingSends).zIndex(4)
+
+            if tour { GuidedTour(shown: $tour).zIndex(5) }
 
             if let toast {
                 VStack {
@@ -135,6 +139,7 @@ struct RootView: View {
         case .milestones: MilestonesView()
         case .gem: GemCollectionView()
         case .mood: MoodPicker().aegyoSheet([.height(560)])
+        case .pair: PairSheet(prefill: pairCode).aegyoSheet([.large])
         }
     }
 
@@ -145,6 +150,7 @@ struct RootView: View {
         case "photo": viewingPhoto = love.data.photos.first { $0.id == url.lastPathComponent }
         case "mood": sheet = .mood
         case "letters": sheet = .letters
+        case "pair": pairCode = url.lastPathComponent; sheet = .pair
         case "heartbeat":
             sheet = .heartbeat(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "code" }?.value)
         default: tab = .home
@@ -161,9 +167,10 @@ struct RootView: View {
         if args.contains("-tabSky") { tab = .sky }
         if args.contains("-tabMoments") { tab = .moments }
         if args.contains("-tabUs") { tab = .us }
+        if args.contains("-noTour") { tour = false }
         if args.contains("-openActions") { try? await Task.sleep(for: .milliseconds(600)); actionsOpen = true }
         let sheets: [String: HomeSheet] = ["-openWrapped": .wrapped, "-openReceipt": .receipt, "-openGem": .gem, "-openLetters": .letters, 
-                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet]
+                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair]
         for (flag, s) in sheets where args.contains(flag) { try? await Task.sleep(for: .milliseconds(600)); sheet = s }
         if args.contains("-noPrompt") { return }
         #endif
