@@ -4,6 +4,8 @@ import SwiftUI
 /// Pair with your partner: create a couple (you get a 6-digit code to share) or join with theirs.
 /// Used inside onboarding and from Settings / the Home banner. Phase 3 extends the states.
 struct PairStep: View {
+    /// A code arriving from an `aegyo://pair/CODE` link, consumed by the next PairStep that appears.
+    nonisolated(unsafe) static var pendingCode: String?
     var prefillCode: String? = nil
     var onDone: () -> Void
     @EnvironmentObject private var session: Session
@@ -20,6 +22,8 @@ struct PairStep: View {
             switch session.pairing {
             case .paired(let p):
                 pairedView(p)
+            case .partnerLeft(let name) where mode == .choose:
+                partnerLeftView(name)
             default:
                 switch mode {
                 case .choose: choose
@@ -33,7 +37,9 @@ struct PairStep: View {
         .animation(.spring(response: 0.45, dampingFraction: 0.85), value: mode)
         .onAppear {
             if case .waiting = session.pairing { mode = .waiting }
-            if let prefillCode, prefillCode.count == 6 { code = prefillCode; mode = .join }
+            let incoming = prefillCode ?? Self.pendingCode
+            Self.pendingCode = nil
+            if let incoming, incoming.count == 6 { mode = .join; DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { code = incoming } }
         }
         .onChange(of: session.pairing) { _, p in if case .paired = p { Haptics.success(); celebrate = true } }
         .alert("Hmm", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) {
@@ -155,16 +161,63 @@ struct PairStep: View {
 
     // MARK: Paired
 
+    @State private var confirmUnpair = false
+
     private func pairedView(_ p: Account) -> some View {
         VStack(spacing: 18) {
             PairHearts(joined: true).frame(height: 160)
+            HStack(spacing: -10) {
+                AvatarView(who: .me, name: Profile.myName, size: 56)
+                AvatarView(who: .partner, name: p.name, size: 56)
+            }
             Text("You're paired with \(p.name)").font(.system(size: 24, weight: .semibold)).foregroundStyle(.white).multilineTextAlignment(.center)
             Text("From now on, every tap lands on their phone.").font(.system(size: 14)).foregroundStyle(.white.opacity(0.55))
             Spacer(minLength: 0)
             ContinuePill(title: "Continue") { onDone() }
+            Button { Haptics.tap(); confirmUnpair = true } label: {
+                Text("Unpair").font(.system(size: 14, weight: .medium)).foregroundStyle(Color(red: 1, green: 0.5, blue: 0.5)).frame(maxWidth: .infinity)
+            }
+            .buttonStyle(PressStyle())
         }
         .frame(maxWidth: .infinity)
         .overlay { if celebrate { ConfettiBurst().allowsHitTesting(false) } }
+        .sheet(isPresented: $confirmUnpair) {
+            ConfirmSheet(title: "Unpair from \(p.name)?",
+                         message: "Your taps will stop reaching each other. Your history stays on this phone, and you can pair again any time.",
+                         confirmTitle: "Unpair") {
+                Task { await session.leaveCouple(); mode = .choose }
+            }
+        }
+    }
+
+    // MARK: Partner left
+
+    private func partnerLeftView(_ name: String) -> some View {
+        VStack(alignment: .leading, spacing: 18) {
+            PairHearts(joined: false).frame(maxWidth: .infinity).frame(height: 140).saturation(0.3)
+            FadeInText("\(name) left the pair.")
+            Text("Pair again?").font(.system(size: 22, weight: .semibold)).foregroundStyle(.white)
+            Text("Everything you two shared is still here. Create a new link or enter a code to reconnect.")
+                .font(.system(size: 14)).foregroundStyle(.white.opacity(0.55)).fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+            ContinuePill(title: "Create a new link", loading: busy) {
+                busy = true
+                Task {
+                    await session.leaveCouple()
+                    do { _ = try await session.createCouple(); withAnimation { mode = .waiting } } catch { self.error = error.localizedDescription }
+                    busy = false
+                }
+            }
+            Button { Haptics.tap(); Task { await session.leaveCouple() }; withAnimation { mode = .join } } label: {
+                Text("I have a code").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                    .frame(maxWidth: .infinity).frame(height: 54).background(.white.opacity(0.1), in: Capsule())
+            }
+            .buttonStyle(PressStyle())
+            Button { Haptics.tap(); onDone() } label: {
+                Text("Not now").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.55)).frame(maxWidth: .infinity)
+            }
+            .buttonStyle(PressStyle())
+        }
     }
 }
 

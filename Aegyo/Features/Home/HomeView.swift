@@ -63,6 +63,8 @@ struct HomeTab: View {
 
                 quickRow.padding(.top, 18).stagger(appeared, 3)
 
+                PairingBanner { open(.pair) }.padding(.top, 14).stagger(appeared, 4)
+
                 SlideToConfirm(title: "Slide to ring \(partner.capitalized(with: nil))", systemImage: "phone.fill") {
                     love.ring()
                     toast(love.isPaired ? "Ringing \(partner)…" : "Lock your phone · it rings in 4 seconds")

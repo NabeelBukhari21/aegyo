@@ -43,11 +43,17 @@ final class Session: ObservableObject {
         if args.contains("-resetOnboarding") { onboardingComplete = false; await backend.signOut() }
         if args.contains("-onboarding") { onboardingComplete = false }
         if args.contains("-skipOnboarding") {
-            _ = try? await backend.signIn(.email(name: Profile.myName, email: "demo@aegyo.local"))
+            let env = ProcessInfo.processInfo.environment
+            let name = env["AEGYO_DEMO_NAME"] ?? Profile.myName
+            _ = try? await backend.signIn(.email(name: name, email: env["AEGYO_DEMO_EMAIL"] ?? "demo@aegyo.local"))
+            AppGroup.defaults.set(name, forKey: Profile.myNameKey)
             onboardingComplete = true
         }
         #endif
         account = backend.currentAccount
+        #if DEBUG
+        if let i = args.firstIndex(of: "-pairing"), i + 1 < args.count { await backend.debugSeedPairing(args[i + 1]) }
+        #endif
         await refreshPairing()
         route = (onboardingComplete && account != nil) ? .app : .onboarding
         pendingSends = backend.pendingOutbound

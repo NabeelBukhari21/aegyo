@@ -6,6 +6,7 @@ import UIKit
 /// It keeps the same shape as the server will: accounts, couples keyed by invite code, an inbox per
 /// account, and an outbound queue that only drains while "online". With the debug flag `-sharedStore`
 /// two simulators point at the same folder, so pairing and sending between them can be tested end to end.
+@MainActor
 final class LocalBackend: Backend {
     private struct Store: Codable {
         var accounts: [String: Account] = [:]
@@ -153,7 +154,7 @@ final class LocalBackend: Backend {
     func send(_ event: LoveEvent) async throws {
         reload()
         guard let me = local.accountID else { throw BackendError.notSignedIn }
-        guard await Reachability.shared.isOnline else {
+        guard Reachability.shared.isOnline else {
             local.outbound.append(event)
             save()
             throw BackendError.offline
@@ -164,7 +165,7 @@ final class LocalBackend: Backend {
     /// Push anything that was queued while offline.
     func drainOutbound() async {
         reload()
-        guard let me = local.accountID, !local.outbound.isEmpty, await Reachability.shared.isOnline else { return }
+        guard let me = local.accountID, !local.outbound.isEmpty, Reachability.shared.isOnline else { return }
         let pending = local.outbound
         local.outbound = []
         save()
@@ -206,6 +207,25 @@ final class LocalBackend: Backend {
         store.tokens[me] = tokens
         save()
     }
+
+    #if DEBUG
+    /// Seeds a pairing state for screenshots: "waiting", "paired" or "left".
+    func debugSeedPairing(_ state: String) async {
+        guard let me = local.accountID else { return }
+        let partner = Account(id: "demo:partner", name: "Jagi", birthday: Calendar.current.date(from: DateComponents(year: 2001, month: 3, day: 14)),
+                              city: Place(name: "Vancouver", lat: 49.28, lon: -123.12, timeZoneID: "America/Vancouver"))
+        store.accounts[partner.id] = partner
+        var c = Couple(id: "demo-couple", code: "482913", creatorID: me, partnerID: nil)
+        switch state {
+        case "paired": c.partnerID = partner.id
+        case "left": c.partnerID = partner.id; c.leftBy = partner.id
+        default: break
+        }
+        store.couples[c.id] = c
+        store.codes[c.code] = c.id
+        save()
+    }
+    #endif
 
     // MARK: Persistence
 

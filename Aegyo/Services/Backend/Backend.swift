@@ -64,6 +64,7 @@ enum BackendError: LocalizedError {
 
 /// Everything Aegyo needs from a server. `LocalBackend` runs it entirely on this phone;
 /// a future `FirebaseBackend` implements the same calls against Firestore + Cloud Functions.
+@MainActor
 protocol Backend: AnyObject {
     var currentAccount: Account? { get }
     var currentCouple: Couple? { get }

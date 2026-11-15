@@ -150,7 +150,7 @@ struct RootView: View {
         case "photo": viewingPhoto = love.data.photos.first { $0.id == url.lastPathComponent }
         case "mood": sheet = .mood
         case "letters": sheet = .letters
-        case "pair": pairCode = url.lastPathComponent; sheet = .pair
+        case "pair": PairStep.pendingCode = url.lastPathComponent; sheet = .pair
         case "heartbeat":
             sheet = .heartbeat(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "code" }?.value)
         default: tab = .home
@@ -168,6 +168,7 @@ struct RootView: View {
         if args.contains("-tabMoments") { tab = .moments }
         if args.contains("-tabUs") { tab = .us }
         if args.contains("-noTour") { tour = false }
+        if let i = args.firstIndex(of: "-joinCode"), i + 1 < args.count { try? await Task.sleep(for: .milliseconds(800)); PairStep.pendingCode = args[i + 1]; sheet = .pair }
         if args.contains("-openActions") { try? await Task.sleep(for: .milliseconds(600)); actionsOpen = true }
         let sheets: [String: HomeSheet] = ["-openWrapped": .wrapped, "-openReceipt": .receipt, "-openGem": .gem, "-openLetters": .letters, 
                                            "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair]
@@ -242,6 +243,7 @@ struct UsTab: View {
                     .buttonStyle(PressStyle())
                 }
                 .padding(.top, 8)
+                PairingBanner(compact: false) { open(.pair) }.stagger(appeared, 0)
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
                     ForEach(Array(items.enumerated()), id: \.element.id) { i, it in
                         Button { open(it.sheet) } label: {
