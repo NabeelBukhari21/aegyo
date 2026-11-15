@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Sheets the app can open.
 enum HomeSheet: Identifiable, Hashable {
-    case settings, question, letters, heartbeat(String?), wrapped, receipt, language, milestones, gem, mood, quick, meet, pair, paywall
+    case settings, question, letters, heartbeat(String?), wrapped, receipt, language, milestones, gem, mood, quick, meet, pair, paywall, timeline, progress, achievements, calendar, saved
     var id: String {
         switch self {
         case .heartbeat(let c): "heartbeat\(c ?? "")"
@@ -121,6 +121,12 @@ struct HomeTab: View {
                 .background(.white.opacity(0.08), in: Capsule())
             }
             .buttonStyle(PressStyle())
+            Button { open(.timeline) } label: {
+                Image(systemName: "clock.arrow.circlepath").font(.system(size: 18)).foregroundStyle(.white.opacity(0.85))
+                    .frame(width: 36, height: 36)
+            }
+            .buttonStyle(PressStyle())
+            .accessibilityLabel("Timeline")
             Button { open(.settings) } label: {
                 Image(systemName: "person.crop.circle").font(.system(size: 20)).foregroundStyle(.white.opacity(0.85))
                     .frame(width: 36, height: 36)

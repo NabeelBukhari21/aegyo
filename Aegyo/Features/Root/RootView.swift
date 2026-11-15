@@ -127,6 +127,11 @@ struct RootView: View {
             EmptyView()
         case .paywall:
             PaywallView().aegyoSheet([.large])
+        case .timeline: LoveTimelineView().plusGate(.history)
+        case .progress: LoveProgressView().plusGate(.history)
+        case .achievements: AchievementsView()
+        case .calendar: LoveCalendarView().plusGate(.history)
+        case .saved: SavedView()
         case .meet:
             MeetDatePicker(date: Binding(get: { AppGroup.defaults.double(forKey: Profile.meetDateKey) },
                                          set: { AppGroup.defaults.set($0, forKey: Profile.meetDateKey) }))
@@ -173,7 +178,7 @@ struct RootView: View {
         if let i = args.firstIndex(of: "-joinCode"), i + 1 < args.count { try? await Task.sleep(for: .milliseconds(800)); PairStep.pendingCode = args[i + 1]; sheet = .pair }
         if args.contains("-openActions") { try? await Task.sleep(for: .milliseconds(600)); actionsOpen = true }
         let sheets: [String: HomeSheet] = ["-openWrapped": .wrapped, "-openReceipt": .receipt, "-openGem": .gem, "-openLetters": .letters, 
-                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair, "-openSettings": .settings, "-openPaywall": .paywall]
+                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair, "-openSettings": .settings, "-openPaywall": .paywall, "-openTimeline": .timeline, "-openProgress": .progress, "-openAchievements": .achievements, "-openCalendar": .calendar, "-openSaved": .saved]
         for (flag, s) in sheets where args.contains(flag) { try? await Task.sleep(for: .milliseconds(600)); sheet = s }
         if args.contains("-noPrompt") { return }
         #endif
@@ -200,6 +205,8 @@ struct MomentsTab: View {
                 MoodCards().stagger(appeared, 1)
                 PhotoCard().stagger(appeared, 2)
                 CountdownCard().stagger(appeared, 3)
+                SectionHeader(title: "Looking back", subtitle: "Everything you two have shared").padding(.top, 10).stagger(appeared, 4)
+                HistoryRow(open: open).stagger(appeared, 5)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 130)
@@ -280,5 +287,43 @@ struct UsTab: View {
         .scrollIndicators(.hidden)
         .background(OpalBackground(focus: UnitPoint(x: 0.7, y: 0.15)))
         .onAppear { appeared = true }
+    }
+}
+
+/// Timeline · Progress · Calendar · Achievements · Saved, as a scrolling row of tiles.
+struct HistoryRow: View {
+    var open: (HomeSheet) -> Void
+    @ObservedObject private var store = Store.shared
+    private let items: [(HomeSheet, String, String, Color, Bool)] = [
+        (.timeline, "clock.arrow.circlepath", "Timeline", Love.pink, true),
+        (.progress, "chart.bar.fill", "Progress", Opal.mint, true),
+        (.calendar, "calendar", "Calendar", Color(red: 1, green: 0.85, blue: 0.4), true),
+        (.achievements, "rosette", "Achievements", Love.violet, false),
+        (.saved, "bookmark.fill", "Saved", Love.peach, false),
+    ]
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(Array(items.enumerated()), id: \.offset) { _, it in
+                    Button { Haptics.tap(); open(it.0) } label: {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Image(systemName: it.1).font(.system(size: 18, weight: .semibold)).foregroundStyle(it.3)
+                                    .frame(width: 40, height: 40).background(it.3.opacity(0.14), in: Circle())
+                                Spacer()
+                                if it.4 && !store.isPlus {
+                                    Text("PLUS").font(.system(size: 9, weight: .bold)).tracking(0.8).foregroundStyle(.black)
+                                        .padding(.horizontal, 7).padding(.vertical, 4).background(Love.pink, in: Capsule())
+                                }
+                            }
+                            Text(it.2).font(.system(size: 15, weight: .semibold)).foregroundStyle(.white)
+                        }
+                        .padding(14).frame(width: 150, alignment: .leading).glass(22)
+                    }
+                    .buttonStyle(PressStyle())
+                }
+            }
+        }
+        .scrollClipDisabled()
     }
 }

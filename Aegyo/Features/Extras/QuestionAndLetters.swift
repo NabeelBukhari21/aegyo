@@ -282,9 +282,12 @@ private struct LetterOpenView: View {
                     .frame(height: 420)
                 }
                 Spacer()
-                Button { dismiss() } label: {
-                    Text("Close").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
-                        .frame(maxWidth: .infinity).frame(height: 52).background(.white.opacity(0.1), in: Capsule())
+                HStack(spacing: 10) {
+                    if !letter.isLocked { SaveButton(id: letter.id.uuidString).frame(width: 52, height: 52) }
+                    Button { dismiss() } label: {
+                        Text("Close").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                            .frame(maxWidth: .infinity).frame(height: 52).background(.white.opacity(0.1), in: Capsule())
+                    }
                 }
                 .padding(.horizontal, 24)
             }

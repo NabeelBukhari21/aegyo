@@ -79,6 +79,8 @@ struct LoveData: Codable {
     var myPlace: Place?
     var herPlace: Place?
     var celebratedMilestones: [Int] = []
+    /// Bookmarked photo ids and letter ids.
+    var savedIDs: [String] = []
 }
 
 enum DayKey {

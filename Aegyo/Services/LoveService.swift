@@ -248,6 +248,38 @@ final class LoveService: ObservableObject {
         }
     }
 
+    // MARK: - Saved & delete
+
+    func isSaved(_ id: String) -> Bool { data.savedIDs.contains(id) }
+
+    func toggleSaved(_ id: String) {
+        if let i = data.savedIDs.firstIndex(of: id) { data.savedIDs.remove(at: i) } else { data.savedIDs.append(id) }
+        save()
+    }
+
+    func deleteEvent(_ e: LoveEvent) {
+        data.events.removeAll { $0.id == e.id }
+        if let pid = e.photoID { deletePhoto(id: pid, removeEvent: false) }
+        save()
+    }
+
+    func deletePhoto(id: String, removeEvent: Bool = true) {
+        data.photos.removeAll { $0.id == id }
+        data.savedIDs.removeAll { $0 == id }
+        if removeEvent { data.events.removeAll { $0.photoID == id } }
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Photos/\(id).jpg")
+        try? FileManager.default.removeItem(at: docs)
+        if let t = AppGroup.photoURL(id) { try? FileManager.default.removeItem(at: t) }
+        imageCache.removeObject(forKey: id as NSString)
+        save()
+    }
+
+    func deleteLetter(_ l: Letter) {
+        data.letters.removeAll { $0.id == l.id }
+        data.savedIDs.removeAll { $0 == l.id.uuidString }
+        save()
+    }
+
     // MARK: - Ring
 
     /// Call-style ring. In preview mode it rings *this* phone after a short delay so you can lock it and watch.

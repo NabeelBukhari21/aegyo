@@ -171,6 +171,7 @@ struct PhotoViewer: View {
                         Text(photo.date.formatted(date: .abbreviated, time: .shortened)).font(.system(size: 12)).foregroundStyle(.white.opacity(0.5))
                     }
                     Spacer()
+                    SaveButton(id: photo.id)
                     Button { dismiss() } label: {
                         Image(systemName: "xmark").font(.system(size: 15, weight: .semibold))
                             .frame(width: 40, height: 40).background(.white.opacity(0.12), in: Circle())

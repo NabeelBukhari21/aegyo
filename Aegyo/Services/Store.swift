@@ -25,6 +25,7 @@ final class Store: ObservableObject {
     @Published var lastError: String?
 
     private var updates: Task<Void, Never>?
+    private var debugForcePlus = false
     private static let plusCacheKey = "store.isPlus"
 
     /// Free tier allowances.
@@ -34,7 +35,7 @@ final class Store: ObservableObject {
         // Trust the last known state until StoreKit answers, so gates don't flash.
         isPlus = AppGroup.defaults.bool(forKey: Self.plusCacheKey)
         #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-plus") { isPlus = true }
+        if ProcessInfo.processInfo.arguments.contains("-plus") { isPlus = true; debugForcePlus = true }
         #endif
         updates = Task { [weak self] in
             for await result in Transaction.updates {
@@ -102,7 +103,7 @@ final class Store: ObservableObject {
             guard case .verified(let t) = result, t.revocationDate == nil else { continue }
             if ProductID(rawValue: t.productID) != nil { plus = true; active = t.productID }
         }
-        isPlus = plus
+        isPlus = plus || debugForcePlus
         activeProductID = active
         AppGroup.defaults.set(plus, forKey: Self.plusCacheKey)
         await refreshRenewal()
