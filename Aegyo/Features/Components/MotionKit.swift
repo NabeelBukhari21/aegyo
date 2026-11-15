@@ -21,7 +21,7 @@ struct ShakeValues {
 extension View {
     /// Shakes the whole screen like the heart's thump rattled the phone.
     func screenShake(trigger: Int) -> some View {
-        keyframeAnimator(initialValue: ShakeValues(), trigger: trigger) { content, v in
+        keyframeAnimator(initialValue: ShakeValues(), trigger: Prefs.reduceEffects ? 0 : trigger) { content, v in
             content
                 .offset(x: v.x)
                 .rotationEffect(.degrees(v.rotation))
@@ -64,7 +64,7 @@ private struct RippleModifier: ViewModifier {
             view.visualEffect { v, _ in
                 v.layerEffect(ShaderLibrary.Ripple(.float2(origin), .float(elapsed), .float(amplitude), .float(15), .float(7), .float(1100)),
                               maxSampleOffset: CGSize(width: amplitude, height: amplitude),
-                              isEnabled: elapsed > 0 && elapsed < 1.6)
+                              isEnabled: !Prefs.reduceEffects && elapsed > 0 && elapsed < 1.6)
             }
         } keyframes: { _ in
             MoveKeyframe(0)

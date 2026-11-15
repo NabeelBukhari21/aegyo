@@ -524,7 +524,8 @@ struct Heart3DView: UIViewRepresentable {
 
 /// The heart's name. Change it here and it updates everywhere.
 enum Doki {
-    static let name = "Doki"
+    /// Set in Settings → Doki's name.
+    static var name: String { Prefs.dokiName }
 }
 
 extension GemTier {

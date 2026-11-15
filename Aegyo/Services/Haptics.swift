@@ -18,17 +18,18 @@ enum Haptics {
     }()
 
     /// Any tap anywhere.
-    static func touch() { soft.impactOccurred(intensity: 0.45) }
+    static func touch() { guard Prefs.hapticsEnabled else { return }; soft.impactOccurred(intensity: 0.45) }
     /// A button going down.
-    static func press() { rigid.impactOccurred(intensity: 0.55) }
+    static func press() { guard Prefs.hapticsEnabled else { return }; rigid.impactOccurred(intensity: 0.55) }
     /// A soft confirmation tap.
-    static func tap() { light.impactOccurred(intensity: 0.8) }
+    static func tap() { guard Prefs.hapticsEnabled else { return }; light.impactOccurred(intensity: 0.8) }
     /// Detents on sliders, pickers, tabs.
-    static func tick() { selection.selectionChanged() }
-    static func success() { notify.notificationOccurred(.success) }
+    static func tick() { guard Prefs.hapticsEnabled else { return }; selection.selectionChanged() }
+    static func success() { guard Prefs.hapticsEnabled else { return }; notify.notificationOccurred(.success) }
 
     /// A soft "lub-dub" heartbeat. `beats` repeats it every 1.2 s.
     static func heartbeat(beats: Int = 1) {
+        guard Prefs.hapticsEnabled else { return }
         guard let engine else { rigid.impactOccurred(); return }
         var events: [CHHapticEvent] = []
         for i in 0..<beats {
@@ -41,6 +42,7 @@ enum Haptics {
 
     /// The heart's squeeze: a quick swell then a deep thump, then an echo.
     static func gemPress() {
+        guard Prefs.hapticsEnabled else { return }
         guard let engine else { rigid.impactOccurred(); return }
         let swell = CHHapticEvent(eventType: .hapticContinuous,
                                   parameters: [.init(parameterID: .hapticIntensity, value: 0.35), .init(parameterID: .hapticSharpness, value: 0.1)],
@@ -50,11 +52,13 @@ enum Haptics {
 
     /// Rising buzz for hold-to-send buttons (0…1).
     static func charge(_ level: Double) {
+        guard Prefs.hapticsEnabled else { return }
         rigid.impactOccurred(intensity: 0.2 + 0.8 * min(1, max(0, level)))
     }
 
     /// A long rumble that fades (screen shake, ring answered).
     static func rumble(duration: Double = 0.45) {
+        guard Prefs.hapticsEnabled else { return }
         guard let engine else { rigid.impactOccurred(); return }
         let e = CHHapticEvent(eventType: .hapticContinuous,
                               parameters: [.init(parameterID: .hapticIntensity, value: 0.7), .init(parameterID: .hapticSharpness, value: 0.2)],

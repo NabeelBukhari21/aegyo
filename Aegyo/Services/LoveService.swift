@@ -297,6 +297,7 @@ final class LoveService: ObservableObject {
     // MARK: - Sound & permissions
 
     func playSentChime() {
+        guard Prefs.soundsEnabled else { return }
         try? AVAudioSession.sharedInstance().setCategory(.ambient, options: .mixWithOthers)
         sentPlayer?.currentTime = 0
         sentPlayer?.play()
@@ -313,7 +314,7 @@ final class LoveService: ObservableObject {
     private func previewOnThisPhone(_ kind: LoveKind, detail: String?, photoID: String?, incoming: Bool = false) async {
         let sender = incoming ? Profile.partnerName.capitalized(with: nil) : Profile.myName
         let headline = kind.headline(from: sender, detail: detail)
-        let alert = AlertConfiguration(title: "\(headline)", body: "\(kind.subtitle(detail: detail))", sound: .named("missyou.caf"))
+        let alert = AlertConfiguration(title: "\(headline)", body: "\(kind.subtitle(detail: detail))", sound: .named("\(Prefs.chime).caf"))
         let today = todayEvents().filter { $0.kind.countsAsLove }
         let timeline = today.map { Calendar.current.component(.hour, from: $0.date) * 2 + ($0.outgoing ? 0 : 1) }
         let mine = today.filter(\.outgoing).count, hers = today.count - mine

@@ -171,7 +171,7 @@ struct RootView: View {
         if let i = args.firstIndex(of: "-joinCode"), i + 1 < args.count { try? await Task.sleep(for: .milliseconds(800)); PairStep.pendingCode = args[i + 1]; sheet = .pair }
         if args.contains("-openActions") { try? await Task.sleep(for: .milliseconds(600)); actionsOpen = true }
         let sheets: [String: HomeSheet] = ["-openWrapped": .wrapped, "-openReceipt": .receipt, "-openGem": .gem, "-openLetters": .letters, 
-                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair]
+                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair, "-openSettings": .settings]
         for (flag, s) in sheets where args.contains(flag) { try? await Task.sleep(for: .milliseconds(600)); sheet = s }
         if args.contains("-noPrompt") { return }
         #endif
