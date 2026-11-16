@@ -131,7 +131,7 @@ struct Heart3DView: UIViewRepresentable {
             cam.bloomThreshold = 0.92
             cam.bloomBlurRadius = 18
             cam.wantsExposureAdaptation = false
-            cam.exposureOffset = -0.35
+            cam.exposureOffset = -0.2
             cam.vignettingIntensity = 0
             let camNode = SCNNode()
             camNode.camera = cam
@@ -407,94 +407,77 @@ struct Heart3DView: UIViewRepresentable {
 
         deinit { observers.forEach(NotificationCenter.default.removeObserver) }
 
-        /// An "inflated" heart: the classic heart curve, puffed up like a balloon.
-        /// Height comes from distance to the edge (smooth, no creases), then gets relaxed.
+        /// A real 3D heart: the classic implicit heart surface
+        /// (x² + 9/4·y² + z² − 1)³ − x²z³ − 9/80·y²z³ = 0, ray-cast from the centre onto a sphere grid so the
+        /// mesh has no seams, with normals from the analytic gradient so the shading is perfectly smooth.
+        /// Full, rounded lobes, a deep cleft and a soft tip, puffed a little in depth so it reads as a plush gem.
         static func heartGeometry() -> SCNGeometry {
-            let M = 200, N = 34
-            let depth: Float = 0.66
-            func boundary(_ t: Double) -> SIMD2<Float> {
-                let x = 16 * pow(sin(t), 3)
-                let y = 13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t)
-                return SIMD2(Float(x / 17), Float((y + 2.2) / 17))
-            }
-            let rim = (0..<600).map { boundary(Double($0) / 600 * 2 * .pi) }
-            let center = SIMD2<Float>(0, 0.02)
-            func ringS(_ i: Int) -> Float { Float(sin(Double(i) / Double(N) * .pi / 2)) }
+            let lat = 120, lon = 200
+            let plump: Float = 0.92          // depth multiplier (1 = the mathematical heart)
+            let squash: Float = 0.9          // vertical multiplier: a little wider than tall reads cuter
+            let targetWidth: Float = 1.92    // object-space width, matches the old mesh so the camera framing holds
 
-            // Balloon heights: solve a pressurised membrane (Δh = -1, h = 0 outside the heart)
-            // on a uniform square grid with SOR, then sample it. Smooth and crease-free.
-            let G = 140
-            let lo: Float = -1.1, span: Float = 2.2
-            func inside(_ p: SIMD2<Float>) -> Bool {
-                var c = false
-                var j = rim.count - 1
-                for i in 0..<rim.count {
-                    let a = rim[i], b = rim[j]
-                    if (a.y > p.y) != (b.y > p.y), p.x < (b.x - a.x) * (p.y - a.y) / (b.y - a.y) + a.x { c.toggle() }
-                    j = i
+            // f < 0 inside. Implicit space: x right, y depth, z up.
+            func f(_ p: SIMD3<Float>) -> Float {
+                let a = p.x * p.x + 2.25 * p.y * p.y + p.z * p.z - 1
+                return a * a * a - p.x * p.x * p.z * p.z * p.z - 0.1125 * p.y * p.y * p.z * p.z * p.z
+            }
+            func grad(_ p: SIMD3<Float>) -> SIMD3<Float> {
+                let a = p.x * p.x + 2.25 * p.y * p.y + p.z * p.z - 1
+                let a2 = 3 * a * a
+                let z2 = p.z * p.z, z3 = z2 * p.z
+                return SIMD3(a2 * 2 * p.x - 2 * p.x * z3,
+                             a2 * 4.5 * p.y - 0.225 * p.y * z3,
+                             a2 * 2 * p.z - 3 * p.x * p.x * z2 - 0.3375 * p.y * p.y * z2)
+            }
+            // The heart is star-shaped around a point a little below centre: every ray from there crosses once.
+            let origin = SIMD3<Float>(0, 0, -0.08)
+            func hit(_ d: SIMD3<Float>) -> Float {
+                var r: Float = 0.05
+                while r < 2.5, f(origin + d * r) < 0 { r += 0.04 }
+                var lo = r - 0.04, hi = r
+                for _ in 0..<22 {
+                    let mid = (lo + hi) / 2
+                    if f(origin + d * mid) < 0 { lo = mid } else { hi = mid }
                 }
-                return c
+                return (lo + hi) / 2
             }
-            var mask = [Bool](repeating: false, count: G * G)
-            for gy in 0..<G { for gx in 0..<G {
-                mask[gy * G + gx] = inside(SIMD2(lo + span * Float(gx) / Float(G - 1), lo + span * Float(gy) / Float(G - 1)))
-            } }
-            var field = [Float](repeating: 0, count: G * G)
-            let hstep = span / Float(G - 1)
-            let rhs = hstep * hstep
-            for _ in 0..<260 {
-                for gy in 1..<(G - 1) { for gx in 1..<(G - 1) {
-                    let k = gy * G + gx
-                    guard mask[k] else { continue }
-                    let avg = (field[k - 1] + field[k + 1] + field[k - G] + field[k + G] + rhs) / 4
-                    field[k] += 1.9 * (avg - field[k])
-                } }
-            }
-            func sample(_ p: SIMD2<Float>) -> Float {
-                let fx = (p.x - lo) / span * Float(G - 1), fy = (p.y - lo) / span * Float(G - 1)
-                let x0 = max(0, min(G - 2, Int(fx))), y0 = max(0, min(G - 2, Int(fy)))
-                let tx = fx - Float(x0), ty = fy - Float(y0)
-                let a = field[y0 * G + x0], b = field[y0 * G + x0 + 1], c = field[(y0 + 1) * G + x0], d = field[(y0 + 1) * G + x0 + 1]
-                return (a * (1 - tx) + b * tx) * (1 - ty) + (c * (1 - tx) + d * tx) * ty
-            }
-            let fmax = max(1e-6, field.max() ?? 1)
 
-            var xy: [SIMD2<Float>] = []
-            var h: [Float] = []
-            for i in 0...N {
-                for j in 0..<M {
-                    let b = boundary(Double(j) / Double(M) * 2 * .pi)
-                    let p = center + (b - center) * ringS(i)
-                    xy.append(p)
-                    h.append(i == N ? 0 : depth * powf(max(0, sample(p) / fmax), 0.5))
+            // Sphere grid: pole at the cleft (top) and at the tip (bottom), so rings follow the lobes.
+            var imp: [SIMD3<Float>] = []
+            var nrm: [SIMD3<Float>] = []
+            imp.reserveCapacity((lat + 1) * lon); nrm.reserveCapacity((lat + 1) * lon)
+            for i in 0...lat {
+                let phi = Float(i) / Float(lat) * .pi
+                for j in 0..<lon {
+                    let th = Float(j) / Float(lon) * 2 * .pi
+                    let d = SIMD3(sin(phi) * cos(th), sin(phi) * sin(th) / plump, cos(phi))
+                    let dn = simd_normalize(d)
+                    let p = origin + dn * hit(dn)
+                    imp.append(p)
+                    nrm.append(grad(p))
                 }
             }
 
-            var verts: [SIMD3<Float>] = []
-            for k in 0..<xy.count { verts.append(SIMD3(xy[k].x, xy[k].y, h[k])) }
-            for k in 0..<(N * M) { verts.append(SIMD3(xy[k].x, xy[k].y, -h[k])) }
+            // Implicit → object space: SceneKit y is up, z is depth. Centre and scale.
+            var minX: Float = .infinity, maxX: Float = -.infinity, minY: Float = .infinity, maxY: Float = -.infinity
+            for p in imp { minX = min(minX, p.x); maxX = max(maxX, p.x); minY = min(minY, p.z); maxY = max(maxY, p.z) }
+            let s = targetWidth / (maxX - minX)
+            let cy = (minY + maxY) / 2
+            let verts: [SIMD3<Float>] = imp.map { SIMD3($0.x * s, ($0.z - cy) * s * squash, $0.y * s * plump) }
+            // normals transform by the inverse transpose of the (diagonal) scale
+            let normals: [SIMD3<Float>] = nrm.map { simd_normalize(SIMD3($0.x / s, $0.z / (s * squash), $0.y / (s * plump))) }
 
-            func fi(_ i: Int, _ j: Int) -> Int32 { Int32(i * M + (j % M)) }
-            func bi(_ i: Int, _ j: Int) -> Int32 { i == N ? fi(N, j) : Int32((N + 1) * M + i * M + (j % M)) }
-
-            var tris: [(Int32, Int32, Int32, Bool)] = []
-            for i in 0..<N {
-                for j in 0..<M {
-                    tris.append((fi(i, j), fi(i + 1, j), fi(i + 1, j + 1), true))
-                    tris.append((fi(i, j), fi(i + 1, j + 1), fi(i, j + 1), true))
-                    tris.append((bi(i, j), bi(i + 1, j + 1), bi(i + 1, j), false))
-                    tris.append((bi(i, j), bi(i, j + 1), bi(i + 1, j + 1), false))
-                }
-            }
-            var normals = [SIMD3<Float>](repeating: .zero, count: verts.count)
+            func idx(_ i: Int, _ j: Int) -> Int32 { Int32(i * lon + (j % lon)) }
             var indices: [Int32] = []
-            for (a, b, c, front) in tris {
-                var n = simd_cross(verts[Int(b)] - verts[Int(a)], verts[Int(c)] - verts[Int(a)])
-                if (front && n.z < 0) || (!front && n.z > 0) { n = -n }
-                for k in [a, b, c] { normals[Int(k)] += n }
-                indices += [a, b, c]
+            indices.reserveCapacity(lat * lon * 6)
+            for i in 0..<lat {
+                for j in 0..<lon {
+                    // outward winding (counter-clockwise seen from outside)
+                    if i > 0 { indices += [idx(i, j), idx(i, j + 1), idx(i + 1, j)] }
+                    if i < lat - 1 { indices += [idx(i + 1, j), idx(i, j + 1), idx(i + 1, j + 1)] }
+                }
             }
-            normals = normals.map { simd_length($0) > 0 ? simd_normalize($0) : SIMD3(0, 0, 1) }
 
             let vSrc = SCNGeometrySource(vertices: verts.map { SCNVector3($0.x, $0.y, $0.z) })
             let nSrc = SCNGeometrySource(normals: normals.map { SCNVector3($0.x, $0.y, $0.z) })
