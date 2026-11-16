@@ -44,6 +44,7 @@ enum DailyQuestions {
 struct DailyQuestionView: View {
     @EnvironmentObject private var love: LoveService
     @State private var draft = ""
+    @State private var editingAnswer = false
     @FocusState private var focused: Bool
 
     private var answered: String? { love.data.answers[DayKey.of(.now)] }
@@ -60,9 +61,13 @@ struct DailyQuestionView: View {
                 }
             }
 
-            if let answered {
+            if let answered, !editingAnswer {
                 answerCard(title: "You", text: answered, locked: false)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .contextMenu { Button { draft = answered; editingAnswer = true; focused = true } label: { Label("Edit answer", systemImage: "pencil") } }
+                Button { Haptics.tick(); draft = answered; withAnimation { editingAnswer = true }; focused = true } label: {
+                    Label("Edit my answer", systemImage: "pencil").font(.system(size: 13, weight: .medium)).foregroundStyle(.white.opacity(0.6))
+                }
                 answerCard(title: Profile.partnerName.capitalized(with: nil),
                            text: "Her answer appears here the moment she answers. Until then, no peeking.", locked: true)
             } else {
@@ -82,7 +87,7 @@ struct DailyQuestionView: View {
                 }
                 HoldTogetherButton(title: "Hold to lock in", me: Profile.myName, her: Profile.partnerName) {
                     guard !draft.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) { love.answerToday(draft) }
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) { love.answerToday(draft); editingAnswer = false }
                 }
                 .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
                 .opacity(draft.trimmingCharacters(in: .whitespaces).isEmpty ? 0.45 : 1)
@@ -114,6 +119,8 @@ struct LettersView: View {
     @EnvironmentObject private var love: LoveService
     @State private var writing = false
     @State private var opening: Letter?
+    @State private var editing: Letter?
+    @State private var deleting: Letter?
 
     var body: some View {
         FeatureSheet(title: "Open When…", subtitle: "Letters she can only open at the right moment.") {
@@ -131,9 +138,17 @@ struct LettersView: View {
                 Button { Haptics.tap(); opening = letter } label: { EnvelopeRow(letter: letter) }
                     .buttonStyle(PressStyle())
                     .transition(.scale.combined(with: .opacity))
+                    .contextMenu {
+                        if letter.outgoing && letter.openedAt == nil { Button { editing = letter } label: { Label("Edit", systemImage: "pencil") } }
+                        Button(role: .destructive) { deleting = letter } label: { Label("Delete", systemImage: "trash") }
+                    }
             }
         }
         .sheet(isPresented: $writing) { LetterComposer().presentationBackground(.black) }
+        .sheet(item: $editing) { LetterComposer(existing: $0).presentationBackground(.black) }
+        .sheet(item: $deleting) { l in
+            ConfirmSheet(title: "Delete this letter?", message: "It won't be delivered, and it's gone from this phone.", confirmTitle: "Delete") { love.deleteLetter(l) }
+        }
         .fullScreenCover(item: $opening) { LetterOpenView(letter: $0) }
     }
 }
@@ -173,6 +188,7 @@ struct EnvelopeFlap: Shape {
 }
 
 private struct LetterComposer: View {
+    var existing: Letter? = nil
     @EnvironmentObject private var love: LoveService
     @Environment(\.dismiss) private var dismiss
     @State private var trigger: Letter.Trigger = .missMe
@@ -183,7 +199,7 @@ private struct LetterComposer: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                SectionHeader(title: "New letter")
+                SectionHeader(title: existing == nil ? "New letter" : "Edit letter")
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(Letter.Trigger.allCases) { t in
@@ -219,11 +235,15 @@ private struct LetterComposer: View {
                 Button {
                     Haptics.gemPress()
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) { sealing = true }
-                    let letter = Letter(trigger: trigger, body: body_,
-                                        unlockDate: (trigger == .onDate || trigger == .anniversary) ? date : nil)
+                    let unlock = (trigger == .onDate || trigger == .anniversary) ? date : nil
                     Task {
                         try? await Task.sleep(for: .milliseconds(700))
-                        await love.saveLetter(letter)
+                        if var l = existing {
+                            l.trigger = trigger; l.body = body_; l.unlockDate = unlock
+                            love.updateLetter(l)
+                        } else {
+                            await love.saveLetter(Letter(trigger: trigger, body: body_, unlockDate: unlock))
+                        }
                         dismiss()
                     }
                 } label: {
@@ -237,6 +257,7 @@ private struct LetterComposer: View {
             .padding(22)
         }
         .preferredColorScheme(.dark)
+        .onAppear { if let e = existing { trigger = e.trigger; body_ = e.body; if let d = e.unlockDate { date = d } } }
     }
 }
 

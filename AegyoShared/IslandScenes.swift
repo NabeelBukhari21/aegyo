@@ -13,6 +13,7 @@ struct IslandScene: View {
         case .light: NeonArc(state: state)
         case .tapCode: NeonHeartbeat(state: state)
         case .mood: MoodIsland(state: state)
+        case .voice: VoiceIsland(state: state)
         default: LEDPanel(state: state, cols: compact ? 46 : 52, rows: 9, dot: 3.3).frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -186,5 +187,27 @@ struct MoodIsland: View {
             Spacer(minLength: 0)
         }
         .padding(.leading, 4)
+    }
+}
+
+// MARK: - Voice note: a static waveform with the duration
+
+struct VoiceIsland: View {
+    let state: LoveAttributes.ContentState
+    var body: some View {
+        HStack(spacing: 12) {
+            Canvas { g, size in
+                let n = 34
+                let w = size.width / CGFloat(n)
+                for i in 0..<n {
+                    let t = Double(i)
+                    let h = (0.25 + 0.75 * abs(sin(t * 0.7) * cos(t * 0.31))) * size.height
+                    let r = CGRect(x: CGFloat(i) * w + 1, y: (size.height - h) / 2, width: max(2, w - 2), height: h)
+                    g.fill(Path(roundedRect: r, cornerRadius: 2), with: .color(Pixels.rose.opacity(i < n / 2 ? 1 : 0.4)))
+                }
+            }
+            .frame(height: 36)
+            Text(state.detail ?? "0:00").font(.system(size: 13, weight: .semibold)).monospacedDigit().foregroundStyle(.white.opacity(0.8))
+        }
     }
 }

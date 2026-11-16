@@ -148,6 +148,9 @@ struct PhotoViewer: View {
     @Environment(\.dismiss) private var dismiss
     @State private var appeared = false
     @State private var drag: CGSize = .zero
+    @State private var editingCaption = false
+    @State private var captionDraft = ""
+    @State private var confirmDelete = false
 
     var body: some View {
         ZStack {
@@ -172,6 +175,14 @@ struct PhotoViewer: View {
                     }
                     Spacer()
                     SaveButton(id: photo.id)
+                    Menu {
+                        Button { captionDraft = photo.caption ?? ""; editingCaption = true } label: { Label("Edit caption", systemImage: "pencil") }
+                        Button(role: .destructive) { confirmDelete = true } label: { Label("Delete photo", systemImage: "trash") }
+                    } label: {
+                        Image(systemName: "ellipsis").font(.system(size: 15, weight: .semibold))
+                            .frame(width: 40, height: 40).background(.white.opacity(0.12), in: Circle())
+                    }
+                    .accessibilityLabel("More")
                     Button { dismiss() } label: {
                         Image(systemName: "xmark").font(.system(size: 15, weight: .semibold))
                             .frame(width: 40, height: 40).background(.white.opacity(0.12), in: Circle())
@@ -189,6 +200,16 @@ struct PhotoViewer: View {
         }
         .preferredColorScheme(.dark)
         .onAppear { withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) { appeared = true } }
+        .alert("Edit caption", isPresented: $editingCaption) {
+            TextField("Caption", text: $captionDraft)
+            Button("Save") { love.updatePhotoCaption(photo.id, caption: captionDraft.isEmpty ? nil : captionDraft) }
+            Button("Cancel", role: .cancel) {}
+        }
+        .sheet(isPresented: $confirmDelete) {
+            ConfirmSheet(title: "Delete this photo?", message: "It's removed from this phone and your timeline.", confirmTitle: "Delete") {
+                love.deletePhoto(id: photo.id); dismiss()
+            }
+        }
     }
 }
 

@@ -96,10 +96,18 @@ struct TimelineRow: View {
                 Text(line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(1)
             }
             Spacer()
+            if event.kind == .voice, let id = event.photoID {
+                VoicePlayButton(id: id, duration: parse(event.detail))
+            }
             Text(event.date.formatted(date: .omitted, time: .shortened)).font(.system(size: 12)).foregroundStyle(.white.opacity(0.4))
         }
         .padding(.horizontal, 14).padding(.vertical, 11)
         .accessibilityElement(children: .combine)
+    }
+
+    private func parse(_ s: String?) -> TimeInterval {
+        let p = (s ?? "0:00").split(separator: ":").compactMap { Double($0) }
+        return p.count == 2 ? p[0] * 60 + p[1] : 0
     }
 
     private var line: String {
@@ -108,6 +116,7 @@ struct TimelineRow: View {
         case .photo: event.detail ?? "A photo"
         case .letter: event.detail ?? "A sealed letter"
         case .tapCode: "A tapped rhythm"
+        case .voice: "A voice note"
         default: event.kind.subtitle(detail: event.detail)
         }
     }

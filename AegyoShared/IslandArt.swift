@@ -9,6 +9,7 @@ func kindColor(_ s: LoveAttributes.ContentState) -> Color {
     case .mood: moodColor(s.detail)
     case .letter: Pixels.rose
     case .photo: Pixels.mint
+    case .voice: Pixels.rose
     default: Pixels.pink
     }
 }
@@ -149,6 +150,11 @@ struct LEDPanel: View {
                 if Pixels.envelope(c - ox, r - 1) { return Pixels.rose }
                 if (c == ox + 5 && r == 5) || (c == ox + 4 && r == 4) || (c == ox + 6 && r == 4) { return Pixels.pink }
                 return nil
+            }
+        case .voice:
+            return { c, r in
+                let h = Int((0.5 + 0.5 * sin(Double(c) * 0.9 + Double(c % 7) * 1.7)) * Double(R - 2))
+                return abs(r - R / 2) <= h / 2 ? Pixels.rose : nil
             }
         case .photo:
             return { c, r in

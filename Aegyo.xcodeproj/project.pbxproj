@@ -79,6 +79,7 @@
 		DF14FFF3FB1C50C466BD325D /* Moon3D.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18B0191F187BD4CE171FF1 /* Moon3D.swift */; };
 		E300B4BE55CA315EFACA8BE7 /* IslandArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694CF395022DF23A64B57A34 /* IslandArt.swift */; };
 		E313015BCF7B1CB9C9E4D04D /* LoveTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88F82E2319F11F0942B1C19 /* LoveTimelineView.swift */; };
+		E5067E8A39E1F85861F9B3EA /* VoiceNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD12818FEDB3C7A5F76E3A /* VoiceNoteView.swift */; };
 		EABAFE553EF99334F5DFCA6E /* LoveProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB8A7E42BA22F95CB1EA52 /* LoveProgressView.swift */; };
 		EFAB99F3395E2B503F205E49 /* GemHeart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207D6EC0F64370E9A82080AA /* GemHeart.swift */; };
 		F2CE773EC7889E19D39810AE /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D5828F0C00CAAB1FAC4B9E /* Backend.swift */; };
@@ -122,6 +123,7 @@
 		0B2FC345AF570C93A618A3A2 /* HeartbeatQuizMilestones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartbeatQuizMilestones.swift; sourceTree = "<group>"; };
 		0E224871B64235F319911381 /* LoveService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveService.swift; sourceTree = "<group>"; };
 		0ED2301FAB3D454965E0EDD3 /* Heart3D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heart3D.swift; sourceTree = "<group>"; };
+		0FFD12818FEDB3C7A5F76E3A /* VoiceNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteView.swift; sourceTree = "<group>"; };
 		11ABDD5976994BBB6B081A27 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		153EE14BFA31B8A02EFDC224 /* missyou.caf */ = {isa = PBXFileReference; path = missyou.caf; sourceTree = "<group>"; };
 		17195E5BE6F8D9500367345C /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -197,6 +199,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		019AA9344FBABC0C295D1CF8 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				0FFD12818FEDB3C7A5F76E3A /* VoiceNoteView.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
 		04558C6F0C0BC6D9B2AF37D7 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -331,6 +341,7 @@
 				508B2EAF22D8BD14BC3ADFF9 /* Root */,
 				E1EB2E9E6184516899DD01BF /* Settings */,
 				B416483672F1A0ABDED30A7B /* Sky */,
+				019AA9344FBABC0C295D1CF8 /* Voice */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -627,6 +638,7 @@
 				790EA2ED7B0B19CFC3C49685 /* Store.swift in Sources */,
 				73C6305EF7187AC6FF98B476 /* SupportViews.swift in Sources */,
 				13D07EF230C73AB2F72A5F7C /* TokenStore.swift in Sources */,
+				E5067E8A39E1F85861F9B3EA /* VoiceNoteView.swift in Sources */,
 				2FBFB8DDC01DD140DDE6C647 /* WrappedAndReceipt.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

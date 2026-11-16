@@ -19,6 +19,7 @@ struct ActionStack: View {
         [
             Row(id: "photo", icon: "camera.fill", title: "Photo", line: "Lands in her Dynamic Island", tint: Opal.mint) { close { openPhoto() } },
             Row(id: "mood", icon: "face.smiling.inverse", title: "Mood", line: "Show her how you feel", tint: Color(red: 1, green: 0.8, blue: 0.4)) { close { open(.mood) } },
+            Row(id: "voice", icon: "waveform", title: "Voice note", line: "Say it in your own voice", tint: Love.rose) { close { open(.voice) } },
             Row(id: "beat", icon: "waveform.path.ecg", title: "Heartbeat", line: "Tap a rhythm she can feel", tint: Love.pink) { close { open(.heartbeat(nil)) } },
             Row(id: "letter", icon: "envelope.fill", title: "Letter", line: "Seal one for the right moment", tint: Love.peach) { close { open(.letters) } },
             Row(id: "ring", icon: "phone.fill", title: "Ring", line: "Her phone rings like a call", tint: Color(red: 0.45, green: 1, blue: 0.6)) { close { ring() } },

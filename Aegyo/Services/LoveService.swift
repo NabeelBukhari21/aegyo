@@ -248,6 +248,40 @@ final class LoveService: ObservableObject {
         }
     }
 
+    // MARK: - Voice notes
+
+    private var voiceDir: URL {
+        let d = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("Voice", isDirectory: true)
+        try? FileManager.default.createDirectory(at: d, withIntermediateDirectories: true)
+        return d
+    }
+
+    func voiceURL(_ id: String) -> URL? {
+        let u = voiceDir.appendingPathComponent("\(id).m4a")
+        return FileManager.default.fileExists(atPath: u.path) ? u : nil
+    }
+
+    /// Stores the recording and sends it. `detail` carries the duration as m:ss.
+    func sendVoice(url: URL, duration: TimeInterval, peaks: [Float]) async {
+        let id = UUID().uuidString
+        try? FileManager.default.moveItem(at: url, to: voiceDir.appendingPathComponent("\(id).m4a"))
+        let text = String(format: "%d:%02d", Int(duration) / 60, Int(duration) % 60)
+        await send(.voice, detail: text, photoID: id)
+    }
+
+    func updateLetter(_ letter: Letter) {
+        guard let i = data.letters.firstIndex(where: { $0.id == letter.id }) else { return }
+        data.letters[i] = letter
+        save()
+    }
+
+    func updatePhotoCaption(_ id: String, caption: String?) {
+        guard let i = data.photos.firstIndex(where: { $0.id == id }) else { return }
+        data.photos[i].caption = caption
+        if let j = data.events.lastIndex(where: { $0.photoID == id }) { data.events[j].detail = caption }
+        save()
+    }
+
     // MARK: - Saved & delete
 
     func isSaved(_ id: String) -> Bool { data.savedIDs.contains(id) }
@@ -259,7 +293,9 @@ final class LoveService: ObservableObject {
 
     func deleteEvent(_ e: LoveEvent) {
         data.events.removeAll { $0.id == e.id }
-        if let pid = e.photoID { deletePhoto(id: pid, removeEvent: false) }
+        if let pid = e.photoID {
+            if e.kind == .voice { try? FileManager.default.removeItem(at: voiceDir.appendingPathComponent("\(pid).m4a")) } else { deletePhoto(id: pid, removeEvent: false) }
+        }
         save()
     }
 

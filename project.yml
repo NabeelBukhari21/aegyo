@@ -50,6 +50,8 @@ targets:
           UIColorName: LaunchBackground
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSSupportsLiveActivities: true
+        NSMicrophoneUsageDescription: Aegyo uses the microphone to record voice notes for your partner.
+        NSPhotoLibraryUsageDescription: Aegyo lets you pick photos to send to your partner's Dynamic Island.
         NSSupportsLiveActivitiesFrequentUpdates: true
         UIBackgroundModes: [remote-notification, voip]
         CFBundleURLTypes:

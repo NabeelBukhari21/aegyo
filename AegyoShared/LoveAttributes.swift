@@ -4,7 +4,7 @@ import Foundation
 /// Everything you can send. Shared by the app, the Live Activity and (later) the backend payloads.
 enum LoveKind: String, Codable, Hashable, CaseIterable {
     case missYou, hug, thinkingOfYou, goodMorning, goodnight
-    case photo, mood, light, tapCode, letter
+    case photo, mood, light, tapCode, letter, voice
 
     /// Short label for buttons and logs.
     var label: String {
@@ -19,6 +19,7 @@ enum LoveKind: String, Codable, Hashable, CaseIterable {
         case .light: "Light"
         case .tapCode: "Heartbeat"
         case .letter: "Letter"
+        case .voice: "Voice note"
         }
     }
 
@@ -34,6 +35,7 @@ enum LoveKind: String, Codable, Hashable, CaseIterable {
         case .light: "sparkle"
         case .tapCode: "waveform.path.ecg"
         case .letter: "envelope.fill"
+        case .voice: "waveform"
         }
     }
 
@@ -50,6 +52,7 @@ enum LoveKind: String, Codable, Hashable, CaseIterable {
         case .light: "\(sender) sent a light"
         case .tapCode: "\(sender) sent a heartbeat"
         case .letter: "\(sender) wrote you a letter"
+        case .voice: "\(sender) sent a voice note"
         }
     }
 
@@ -65,6 +68,7 @@ enum LoveKind: String, Codable, Hashable, CaseIterable {
         case .light: "It travelled the whole way to you"
         case .tapCode: "Hold your phone to feel it"
         case .letter: detail ?? "Sealed until the right moment"
+        case .voice: detail.map { "\($0) · tap to listen" } ?? "Tap to listen"
         }
     }
 

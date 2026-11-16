@@ -132,6 +132,7 @@ struct RootView: View {
         case .achievements: AchievementsView()
         case .calendar: LoveCalendarView().plusGate(.history)
         case .saved: SavedView()
+        case .voice: VoiceNoteView().plusGate(.voiceNotes)
         case .meet:
             MeetDatePicker(date: Binding(get: { AppGroup.defaults.double(forKey: Profile.meetDateKey) },
                                          set: { AppGroup.defaults.set($0, forKey: Profile.meetDateKey) }))
@@ -178,7 +179,7 @@ struct RootView: View {
         if let i = args.firstIndex(of: "-joinCode"), i + 1 < args.count { try? await Task.sleep(for: .milliseconds(800)); PairStep.pendingCode = args[i + 1]; sheet = .pair }
         if args.contains("-openActions") { try? await Task.sleep(for: .milliseconds(600)); actionsOpen = true }
         let sheets: [String: HomeSheet] = ["-openWrapped": .wrapped, "-openReceipt": .receipt, "-openGem": .gem, "-openLetters": .letters, 
-                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair, "-openSettings": .settings, "-openPaywall": .paywall, "-openTimeline": .timeline, "-openProgress": .progress, "-openAchievements": .achievements, "-openCalendar": .calendar, "-openSaved": .saved]
+                                           "-openQuestion": .question, "-openMilestones": .milestones, "-openLanguage": .language, "-openMood": .mood, "-openMeet": .meet, "-openPair": .pair, "-openSettings": .settings, "-openPaywall": .paywall, "-openTimeline": .timeline, "-openProgress": .progress, "-openAchievements": .achievements, "-openCalendar": .calendar, "-openSaved": .saved, "-openVoice": .voice]
         for (flag, s) in sheets where args.contains(flag) { try? await Task.sleep(for: .milliseconds(600)); sheet = s }
         if args.contains("-noPrompt") { return }
         #endif
