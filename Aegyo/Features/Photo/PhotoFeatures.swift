@@ -17,13 +17,13 @@ struct PhotoCard: View {
                     VStack(alignment: .leading, spacing: 4) {
                         CapsLabel(text: "Moments")
                         Text("Send a photo to her Dynamic Island")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.aegyo(16, .semibold))
                             .foregroundStyle(.white)
                     }
                     Spacer()
                     PhotosPicker(selection: $item, matching: .images) {
                         Image(systemName: "plus")
-                            .font(.system(size: 17, weight: .semibold))
+                            .font(.aegyo(17, .semibold))
                             .foregroundStyle(.black)
                             .frame(width: 40, height: 40)
                             .background(.white, in: Circle())
@@ -34,8 +34,8 @@ struct PhotoCard: View {
                 if love.data.photos.isEmpty {
                     PhotosPicker(selection: $item, matching: .images) {
                         HStack(spacing: 10) {
-                            Image(systemName: "photo.on.rectangle.angled").font(.system(size: 18))
-                            Text("Your first moment goes here").font(.system(size: 14))
+                            Image(systemName: "photo.on.rectangle.angled").font(.aegyo(18))
+                            Text("Your first moment goes here").font(.aegyo(14))
                         }
                         .foregroundStyle(.white.opacity(0.5))
                         .frame(maxWidth: .infinity).frame(height: 88)
@@ -101,8 +101,8 @@ struct PhotoComposer: View {
                         Image(uiImage: image).resizable().scaledToFill()
                             .frame(width: 34, height: 34).clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
                         VStack(alignment: .leading, spacing: 1) {
-                            Text("\(Profile.myName) sent a photo").font(.system(size: 13, weight: .semibold))
-                            Text(caption.isEmpty ? "Tap to open it" : caption).font(.system(size: 11)).foregroundStyle(.white.opacity(0.55)).lineLimit(1)
+                            Text("\(Profile.myName) sent a photo").font(.aegyo(13, .semibold))
+                            Text(caption.isEmpty ? "Tap to open it" : caption).font(.aegyo(11)).foregroundStyle(.white.opacity(0.55)).lineLimit(1)
                         }
                         Spacer(minLength: 0)
                     }
@@ -115,7 +115,7 @@ struct PhotoComposer: View {
                 .opacity(sending ? 0 : 1)
 
             TextField("", text: $caption, prompt: Text("Add a little note").foregroundStyle(.white.opacity(0.35)))
-                .font(.system(size: 16))
+                .font(.aegyo(16))
                 .foregroundStyle(.white)
                 .padding(.horizontal, 18).frame(height: 52)
                 .glass(26)
@@ -170,8 +170,8 @@ struct PhotoViewer: View {
             VStack {
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(photo.outgoing ? "You sent" : "From \(Profile.partnerName)").font(.system(size: 15, weight: .semibold))
-                        Text(photo.date.formatted(date: .abbreviated, time: .shortened)).font(.system(size: 12)).foregroundStyle(.white.opacity(0.5))
+                        Text(photo.outgoing ? "You sent" : "From \(Profile.partnerName)").font(.aegyo(15, .semibold))
+                        Text(photo.date.formatted(date: .abbreviated, time: .shortened)).font(.aegyo(12)).foregroundStyle(.white.opacity(0.5))
                     }
                     Spacer()
                     SaveButton(id: photo.id)
@@ -179,20 +179,21 @@ struct PhotoViewer: View {
                         Button { captionDraft = photo.caption ?? ""; editingCaption = true } label: { Label("Edit caption", systemImage: "pencil") }
                         Button(role: .destructive) { confirmDelete = true } label: { Label("Delete photo", systemImage: "trash") }
                     } label: {
-                        Image(systemName: "ellipsis").font(.system(size: 15, weight: .semibold))
+                        Image(systemName: "ellipsis").font(.aegyo(15, .semibold))
                             .frame(width: 40, height: 40).background(.white.opacity(0.12), in: Circle())
                     }
                     .accessibilityLabel("More")
                     Button { dismiss() } label: {
-                        Image(systemName: "xmark").font(.system(size: 15, weight: .semibold))
+                        Image(systemName: "xmark").font(.aegyo(15, .semibold))
                             .frame(width: 40, height: 40).background(.white.opacity(0.12), in: Circle())
                     }
+                    .accessibilityLabel("Close")
                 }
                 .foregroundStyle(.white)
                 .padding(20)
                 Spacer()
                 if let c = photo.caption {
-                    Text(c).font(.system(size: 17, weight: .medium)).foregroundStyle(.white)
+                    Text(c).font(.aegyo(17, .medium)).foregroundStyle(.white)
                         .padding(.horizontal, 20).padding(.vertical, 14).glass(22).padding(.bottom, 30)
                 }
             }
@@ -228,7 +229,7 @@ struct CountdownCard: View {
                     CapsLabel(text: "Next time together")
                     Spacer()
                     Button { Haptics.tap(); editing = true } label: {
-                        Text(meetDate > 0 ? "Change" : "Set date").font(.system(size: 13, weight: .medium)).foregroundStyle(Opal.mint)
+                        Text(meetDate > 0 ? "Change" : "Set date").font(.aegyo(13, .medium)).foregroundStyle(Opal.mint)
                     }
                 }
                 if meetDate > 0 {
@@ -238,15 +239,15 @@ struct CountdownCard: View {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack(alignment: .firstTextBaseline, spacing: 8) {
                                 Text("\(days)")
-                                    .font(.system(size: 52, weight: .light)).tracking(-2).monospacedDigit()
+                                    .font(.aegyo(52, .light)).tracking(-2).monospacedDigit()
                                     .contentTransition(.numericText(value: Double(days)))
                                 Text(days == 1 ? "day to go" : days == 0 ? "today" : "days to go")
-                                    .font(.system(size: 16, weight: .medium)).foregroundStyle(.white.opacity(0.6))
+                                    .font(.aegyo(16, .medium)).foregroundStyle(.white.opacity(0.6))
                             }
                             .foregroundStyle(.white)
                             ProgressBar(value: progress(to: date))
                             Text(date.formatted(.dateTime.weekday(.wide).month().day()))
-                                .font(.system(size: 13)).foregroundStyle(.white.opacity(0.5))
+                                .font(.aegyo(13)).foregroundStyle(.white.opacity(0.5))
                         }
                     }
                     Button {
@@ -255,7 +256,7 @@ struct CountdownCard: View {
                     } label: {
                         Label(love.countdownActivity != nil ? "Remove from Dynamic Island" : "Show in Dynamic Island",
                               systemImage: love.countdownActivity != nil ? "minus.circle" : "capsule.inset.filled")
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.aegyo(14, .semibold))
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity).frame(height: 42)
                             .background(.white.opacity(0.1), in: Capsule())
@@ -263,7 +264,7 @@ struct CountdownCard: View {
                     .buttonStyle(PressStyle())
                 } else {
                     Text("Set the day you'll see each other and watch it count down, right in the Dynamic Island.")
-                        .font(.system(size: 14)).foregroundStyle(.white.opacity(0.6))
+                        .font(.aegyo(14)).foregroundStyle(.white.opacity(0.6))
                 }
             }
         }

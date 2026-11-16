@@ -150,8 +150,8 @@ struct MorphSendButton: View {
                     switch phase {
                     case .idle:
                         HStack(spacing: 8) {
-                            Image(systemName: systemImage).font(.system(size: height * 0.32, weight: .semibold))
-                            Text(title).font(.system(size: height * 0.31, weight: .semibold))
+                            Image(systemName: systemImage).font(.aegyo(height * 0.32, .semibold))
+                            Text(title).font(.aegyo(height * 0.31, .semibold))
                         }
                         .foregroundStyle(filled ? .black : .white)
                         .transition(.blurReplace)
@@ -166,7 +166,7 @@ struct MorphSendButton: View {
                             .transition(.scale.combined(with: .opacity))
                     case .done:
                         Image(systemName: "checkmark")
-                            .font(.system(size: height * 0.38, weight: .bold))
+                            .font(.aegyo(height * 0.38, .bold))
                             .foregroundStyle(.white)
                             .transition(.scale(scale: 0.3).combined(with: .opacity))
                     }
@@ -210,11 +210,11 @@ struct HoldToSendButton: View {
             }
             HStack(spacing: 8) {
                 Image(systemName: done ? "checkmark" : systemImage)
-                    .font(.system(size: height * 0.32, weight: .semibold))
+                    .font(.aegyo(height * 0.32, .semibold))
                     .symbolEffect(.bounce, value: burst)
                     .contentTransition(.symbolEffect(.replace))
                 Text(done ? "Sent" : holding ? holdingTitle : title)
-                    .font(.system(size: height * 0.3, weight: .semibold))
+                    .font(.aegyo(height * 0.3, .semibold))
                     .contentTransition(.interpolate)
             }
             .foregroundStyle(.white)
@@ -289,7 +289,7 @@ struct PillSegmented<T: Hashable>: View {
                     withAnimation(.spring(response: 0.42, dampingFraction: 0.72)) { selection = value }
                 } label: {
                     Text(label)
-                        .font(.system(size: 13.5, weight: .semibold))
+                        .font(.aegyo(13.5, .semibold))
                         .foregroundStyle(selection == value ? .black : .white.opacity(0.6))
                         .frame(maxWidth: .infinity).frame(height: 36)
                         .background {

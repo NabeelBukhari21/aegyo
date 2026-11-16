@@ -33,17 +33,17 @@ struct IslandGallery: View {
                 DotMatrix(cols: 13, rows: 9, dot: 2.6, gap: 0.9, dimOpacity: 0) { c, r in Pixels.bigHeart(c, r) ? kindColor(s) : nil }
                     .frame(width: 46, height: 46)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(s.kind.headline(from: "Nabeel", detail: s.detail)).font(.system(size: 15.5, weight: .semibold)).foregroundStyle(.white).lineLimit(1)
-                    Text(s.kind.subtitle(detail: s.detail)).font(.system(size: 12)).foregroundStyle(.white.opacity(0.55)).lineLimit(1)
+                    Text(s.kind.headline(from: "Nabeel", detail: s.detail)).font(.aegyo(15.5, .semibold)).foregroundStyle(.white).lineLimit(1)
+                    Text(s.kind.subtitle(detail: s.detail)).font(.aegyo(12)).foregroundStyle(.white.opacity(0.55)).lineLimit(1)
                 }
                 Spacer(minLength: 0)
-                Text("9:41").font(.system(size: 11)).foregroundStyle(.white.opacity(0.45))
+                Text("9:41").font(.aegyo(11)).foregroundStyle(.white.opacity(0.45))
             }
             HStack(alignment: .bottom, spacing: 10) {
                 IslandScene(state: s, sender: "Nabeel").frame(maxWidth: .infinity)
                 VStack(spacing: 2) {
-                    Image(systemName: "heart.fill").font(.system(size: 15, weight: .semibold))
-                    Text("Too").font(.system(size: 10.5, weight: .semibold))
+                    Image(systemName: "heart.fill").font(.aegyo(15, .semibold))
+                    Text("Too").font(.aegyo(10.5, .semibold))
                 }
                 .foregroundStyle(.black).frame(width: 58, height: 52)
                 .background(.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))

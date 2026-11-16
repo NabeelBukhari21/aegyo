@@ -55,14 +55,14 @@ struct ActionStack: View {
                     card(index: i + 4) {
                         Button(action: r.run) {
                             HStack(spacing: 14) {
-                                Image(systemName: r.icon).font(.system(size: 17, weight: .semibold)).foregroundStyle(r.tint)
+                                Image(systemName: r.icon).font(.aegyo(17, .semibold)).foregroundStyle(r.tint)
                                     .frame(width: 40, height: 40).background(r.tint.opacity(0.14), in: Circle())
                                 VStack(alignment: .leading, spacing: 1) {
-                                    Text(r.title).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
-                                    Text(r.line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5))
+                                    Text(r.title).font(.aegyo(16, .semibold)).foregroundStyle(.white)
+                                    Text(r.line).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5))
                                 }
                                 Spacer()
-                                Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.3))
+                                Image(systemName: "chevron.right").font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.3))
                             }
                             .padding(.horizontal, 14).frame(height: 62)
                             .contentShape(Rectangle())
@@ -98,8 +98,8 @@ struct ActionStack: View {
             close { toast("\(title) sent") }
         } label: {
             HStack(spacing: 6) {
-                Image(systemName: k.symbol).font(.system(size: 13, weight: .semibold))
-                Text(title).font(.system(size: 14, weight: .semibold))
+                Image(systemName: k.symbol).font(.aegyo(13, .semibold))
+                Text(title).font(.aegyo(14, .semibold))
             }
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity).frame(height: 46)

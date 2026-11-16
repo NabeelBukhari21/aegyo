@@ -23,11 +23,11 @@ struct LoveCalendarView: View {
     var body: some View {
         FeatureSheet(title: "Calendar", subtitle: "Your months, marked with love.") {
             HStack {
-                Button { shift(-1) } label: { Image(systemName: "chevron.left").frame(width: 36, height: 36).background(.white.opacity(0.08), in: Circle()) }
+                Button { shift(-1) } label: { Image(systemName: "chevron.left").frame(width: 36, height: 36).background(.white.opacity(0.08), in: Circle()) }.accessibilityLabel("Previous month")
                 Spacer()
-                Text(month.formatted(.dateTime.month(.wide).year())).font(.system(size: 18, weight: .semibold))
+                Text(month.formatted(.dateTime.month(.wide).year())).font(.aegyo(18, .semibold))
                 Spacer()
-                Button { shift(1) } label: { Image(systemName: "chevron.right").frame(width: 36, height: 36).background(.white.opacity(0.08), in: Circle()) }
+                Button { shift(1) } label: { Image(systemName: "chevron.right").frame(width: 36, height: 36).background(.white.opacity(0.08), in: Circle()) }.accessibilityLabel("Next month")
             }
             .foregroundStyle(.white)
             .buttonStyle(PressStyle())
@@ -35,7 +35,7 @@ struct LoveCalendarView: View {
             VStack(spacing: 8) {
                 HStack(spacing: 0) {
                     ForEach(cal.veryShortWeekdaySymbols, id: \.self) { s in
-                        Text(s).font(.system(size: 11, weight: .medium)).foregroundStyle(.white.opacity(0.4)).frame(maxWidth: .infinity)
+                        Text(s).font(.aegyo(11, .medium)).foregroundStyle(.white.opacity(0.4)).frame(maxWidth: .infinity)
                     }
                 }
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7), spacing: 6) {
@@ -53,7 +53,7 @@ struct LoveCalendarView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     CapsLabel(text: selected.formatted(.dateTime.weekday(.wide).month(.abbreviated).day())).padding(.leading, 4)
                     if items.isEmpty {
-                        Text(selected > .now ? "Not yet. Something to look forward to." : "A quiet day.").font(.system(size: 14)).foregroundStyle(.white.opacity(0.5)).padding(.leading, 4)
+                        Text(selected > .now ? "Not yet. Something to look forward to." : "A quiet day.").font(.aegyo(14)).foregroundStyle(.white.opacity(0.5)).padding(.leading, 4)
                     } else {
                         VStack(spacing: 0) {
                             ForEach(items) { e in
@@ -80,11 +80,11 @@ struct LoveCalendarView: View {
             withAnimation(.snappy) { selected = cal.startOfDay(for: d) }
         } label: {
             VStack(spacing: 3) {
-                Text(d.formatted(.dateTime.day())).font(.system(size: 14, weight: isToday ? .bold : .medium)).foregroundStyle(d > .now ? .white.opacity(0.35) : .white)
+                Text(d.formatted(.dateTime.day())).font(.aegyo(14, isToday ? .bold : .medium)).foregroundStyle(d > .now ? .white.opacity(0.35) : .white)
                 HStack(spacing: 2) {
                     if n > 0 { Circle().fill(Love.pink).frame(width: 5, height: 5).opacity(0.5 + min(0.5, Double(n) / 8)) }
-                    if m.anniversary { Image(systemName: "heart.fill").font(.system(size: 6)).foregroundStyle(Opal.mint) }
-                    if m.meet { Image(systemName: "airplane").font(.system(size: 6)).foregroundStyle(Color(red: 1, green: 0.85, blue: 0.4)) }
+                    if m.anniversary { Image(systemName: "heart.fill").font(.aegyo(6)).foregroundStyle(Opal.mint) }
+                    if m.meet { Image(systemName: "airplane").font(.aegyo(6)).foregroundStyle(Color(red: 1, green: 0.85, blue: 0.4)) }
                     if m.fullMoon { Circle().fill(.white.opacity(0.8)).frame(width: 5, height: 5) }
                 }
                 .frame(height: 6)
@@ -100,11 +100,11 @@ struct LoveCalendarView: View {
     private var legend: some View {
         HStack(spacing: 14) {
             HStack(spacing: 5) { Circle().fill(Love.pink).frame(width: 6, height: 6); Text("Love") }
-            HStack(spacing: 5) { Image(systemName: "heart.fill").font(.system(size: 7)).foregroundStyle(Opal.mint); Text("Anniversary") }
-            HStack(spacing: 5) { Image(systemName: "airplane").font(.system(size: 7)).foregroundStyle(Color(red: 1, green: 0.85, blue: 0.4)); Text("Meet-up") }
+            HStack(spacing: 5) { Image(systemName: "heart.fill").font(.aegyo(7)).foregroundStyle(Opal.mint); Text("Anniversary") }
+            HStack(spacing: 5) { Image(systemName: "airplane").font(.aegyo(7)).foregroundStyle(Color(red: 1, green: 0.85, blue: 0.4)); Text("Meet-up") }
             HStack(spacing: 5) { Circle().fill(.white.opacity(0.8)).frame(width: 6, height: 6); Text("Full moon") }
         }
-        .font(.system(size: 11)).foregroundStyle(.white.opacity(0.55))
+        .font(.aegyo(11)).foregroundStyle(.white.opacity(0.55))
         .frame(maxWidth: .infinity)
     }
 

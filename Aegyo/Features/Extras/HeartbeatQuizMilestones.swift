@@ -51,7 +51,7 @@ struct HeartbeatView: View {
 
             HStack(alignment: .bottom) {
                 Button { reset() } label: {
-                    Text("Clear").font(.system(size: 15, weight: .semibold)).foregroundStyle(.white.opacity(0.7))
+                    Text("Clear").font(.aegyo(15, .semibold)).foregroundStyle(.white.opacity(0.7))
                         .frame(width: 90, height: 44).background(.white.opacity(0.08), in: Capsule())
                 }
                 .buttonStyle(PressStyle())
@@ -145,7 +145,7 @@ struct LoveLanguageView: View {
             } else {
                 let q = questions[index]
                 ProgressBar(value: Double(index) / Double(questions.count))
-                Text(q.0).font(.system(size: 26, weight: .semibold)).tracking(-0.6).foregroundStyle(.white)
+                Text(q.0).font(.aegyo(26, .semibold)).tracking(-0.6).foregroundStyle(.white)
                     .id(index).transition(.push(from: .trailing))
                 VStack(spacing: 10) {
                     option(q.1)
@@ -168,7 +168,7 @@ struct LoveLanguageView: View {
                 }
             }
         } label: {
-            Text(o.0).font(.system(size: 17, weight: .medium)).foregroundStyle(.white)
+            Text(o.0).font(.aegyo(17, .medium)).foregroundStyle(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20).frame(height: 64)
                 .glass(20)
@@ -181,7 +181,7 @@ struct LoveLanguageView: View {
             LoveLanguageCard(language: r).scaleEffect(0.86).frame(height: 560)
             ShareCardButton(title: "Share my result", name: "My love language") { LoveLanguageCard(language: r) }
             Button { withAnimation { result = nil; index = 0; tally = [:] } } label: {
-                Text("Retake").font(.system(size: 15, weight: .medium)).foregroundStyle(.white.opacity(0.6))
+                Text("Retake").font(.aegyo(15, .medium)).foregroundStyle(.white.opacity(0.6))
             }
         }
         .transition(.scale(scale: 0.9).combined(with: .opacity))
@@ -196,16 +196,16 @@ struct LoveLanguageCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 Wordmark()
                 Spacer()
-                Image(systemName: info.symbol).font(.system(size: 64, weight: .light)).foregroundStyle(Opal.mint)
+                Image(systemName: info.symbol).font(.aegyo(64, .light)).foregroundStyle(Opal.mint)
                 Spacer().frame(height: 26)
-                Text("MY LOVE LANGUAGE IS").font(.system(size: 11, weight: .medium)).tracking(1.2).foregroundStyle(.white.opacity(0.55))
+                Text("MY LOVE LANGUAGE IS").font(.aegyo(11, .medium)).tracking(1.2).foregroundStyle(.white.opacity(0.55))
                 Text(language == "Acts" ? "Acts of service" : language == "Time" ? "Quality time" : language == "Touch" ? "Physical touch" : language == "Gifts" ? "Thoughtful gifts" : "Words of affirmation")
-                    .font(.system(size: 40, weight: .semibold)).tracking(-1.4)
+                    .font(.aegyo(40, .semibold)).tracking(-1.4)
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer().frame(height: 14)
-                Text(info.line).font(.system(size: 16)).foregroundStyle(.white.opacity(0.7))
+                Text(info.line).font(.aegyo(16)).foregroundStyle(.white.opacity(0.7))
                 Spacer()
-                Text("What's yours? · aegyo.app").font(.system(size: 12)).foregroundStyle(.white.opacity(0.5))
+                Text("What's yours? · aegyo.app").font(.aegyo(12)).foregroundStyle(.white.opacity(0.5))
             }
         }
     }
@@ -241,12 +241,12 @@ struct MilestonesView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             CapsLabel(text: "Next milestone")
-                            Text("Day \(next)").font(.system(size: 24, weight: .semibold)).foregroundStyle(.white)
+                            Text("Day \(next)").font(.aegyo(24, .semibold)).foregroundStyle(.white)
                             Text(nextDate.formatted(.dateTime.weekday(.wide).month().day().year()))
-                                .font(.system(size: 13)).foregroundStyle(.white.opacity(0.5))
+                                .font(.aegyo(13)).foregroundStyle(.white.opacity(0.5))
                         }
                         Spacer()
-                        Text("in \(next - days)d").font(.system(size: 20, weight: .light)).foregroundStyle(Opal.mint)
+                        Text("in \(next - days)d").font(.aegyo(20, .light)).foregroundStyle(Opal.mint)
                     }
                 }
                 ForEach(Self.marks.filter { $0 <= days }.reversed(), id: \.self) { m in
@@ -257,12 +257,12 @@ struct MilestonesView: View {
                         Text(Calendar.current.date(byAdding: .day, value: m, to: start)!.formatted(date: .abbreviated, time: .omitted))
                             .foregroundStyle(.white.opacity(0.45))
                     }
-                    .font(.system(size: 15))
+                    .font(.aegyo(15))
                     .padding(.horizontal, 4)
                 }
             } else {
                 Text("Set the day you got together in Settings to unlock milestones.")
-                    .font(.system(size: 15)).foregroundStyle(.white.opacity(0.6))
+                    .font(.aegyo(15)).foregroundStyle(.white.opacity(0.6))
             }
         }
     }
@@ -278,11 +278,11 @@ struct MilestoneCard: View {
                 Spacer()
                 StaticGem(width: 90)
                 Spacer().frame(height: 30)
-                Text("\(days)").font(.system(size: 110, weight: .ultraLight)).tracking(-6).monospacedDigit()
-                Text(label.uppercased()).font(.system(size: 12, weight: .medium)).tracking(1.4).foregroundStyle(.white.opacity(0.6))
+                Text("\(days)").font(.aegyo(110, .ultraLight)).tracking(-6).monospacedDigit()
+                Text(label.uppercased()).font(.aegyo(12, .medium)).tracking(1.4).foregroundStyle(.white.opacity(0.6))
                 Spacer()
-                Text("\(Profile.myName) & \(Profile.partnerName.capitalized(with: nil))").font(.system(size: 15, weight: .medium))
-                Text("aegyo.app").font(.system(size: 11)).foregroundStyle(.white.opacity(0.45)).padding(.top, 4)
+                Text("\(Profile.myName) & \(Profile.partnerName.capitalized(with: nil))").font(.aegyo(15, .medium))
+                Text("aegyo.app").font(.aegyo(11)).foregroundStyle(.white.opacity(0.45)).padding(.top, 4)
             }
         }
     }
@@ -337,14 +337,15 @@ struct GemCollectionView: View {
                 VStack(spacing: 18) {
                     HStack {
                         Spacer()
-                        Text("\(Doki.name)'s forms").font(.system(size: 17, weight: .semibold)).foregroundStyle(.white.opacity(0.85))
+                        Text("\(Doki.name)'s forms").font(.aegyo(17, .semibold)).foregroundStyle(.white.opacity(0.85))
                         Spacer()
                     }
                     .overlay(alignment: .trailing) {
                         Button { dismiss() } label: {
-                            Image(systemName: "xmark").font(.system(size: 13, weight: .bold)).foregroundStyle(.black)
+                            Image(systemName: "xmark").font(.aegyo(13, .bold)).foregroundStyle(.black)
                                 .frame(width: 30, height: 30).background(.white, in: Circle())
                         }
+                        .accessibilityLabel("Close")
                     }
                     .padding(.top, 18)
 
@@ -352,12 +353,12 @@ struct GemCollectionView: View {
                         .frame(height: 260)
                         .saturation(unlocked ? 1 : 0.15)
                         .opacity(unlocked ? 1 : 0.55)
-                        .overlay { if !unlocked { Image(systemName: "lock.fill").font(.system(size: 26)).foregroundStyle(.white.opacity(0.85)) } }
+                        .overlay { if !unlocked { Image(systemName: "lock.fill").font(.aegyo(26)).foregroundStyle(.white.opacity(0.85)) } }
 
                     VStack(spacing: 4) {
-                        Text(shown.name).font(.system(size: 28, weight: .semibold)).foregroundStyle(.white)
+                        Text(shown.name).font(.aegyo(28, .semibold)).foregroundStyle(.white)
                             .contentTransition(.interpolate)
-                        Text(unlocked ? shown.blurb : "Unlocks at \(shown.threshold) moments").font(.system(size: 14)).foregroundStyle(.white.opacity(0.55))
+                        Text(unlocked ? shown.blurb : "Unlocks at \(shown.threshold) moments").font(.aegyo(14)).foregroundStyle(.white.opacity(0.55))
                     }
                     .animation(.snappy, value: shown)
 
@@ -373,7 +374,7 @@ struct GemCollectionView: View {
                                 ZStack {
                                     Circle().fill(AngularGradient(colors: tier.palette, center: .center))
                                     Circle().fill(RadialGradient(colors: [.white.opacity(0.7), .clear], center: UnitPoint(x: 0.35, y: 0.3), startRadius: 0, endRadius: 14))
-                                    if !open { Circle().fill(.black.opacity(0.5)); Image(systemName: "lock.fill").font(.system(size: 10)).foregroundStyle(.white) }
+                                    if !open { Circle().fill(.black.opacity(0.5)); Image(systemName: "lock.fill").font(.aegyo(10)).foregroundStyle(.white) }
                                 }
                                 .frame(width: 38, height: 38)
                                 .overlay(Circle().stroke(.white, lineWidth: tier == shown ? 2 : 0).padding(-4))
@@ -402,11 +403,11 @@ struct GemCollectionView: View {
                                 Wordmark().frame(maxWidth: .infinity, alignment: .leading)
                                 Spacer()
                                 StaticGem(width: 170, palette: current.palette)
-                                Text("Our \(Doki.name) became").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.6)).padding(.top, 20)
-                                Text(current.name).font(.system(size: 44, weight: .semibold)).tracking(-1.5)
-                                Text("\(total) moments of love").font(.system(size: 15)).foregroundStyle(Opal.mint)
+                                Text("Our \(Doki.name) became").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.6)).padding(.top, 20)
+                                Text(current.name).font(.aegyo(44, .semibold)).tracking(-1.5)
+                                Text("\(total) moments of love").font(.aegyo(15)).foregroundStyle(Opal.mint)
                                 Spacer()
-                                Text("aegyo.app").font(.system(size: 11)).foregroundStyle(.white.opacity(0.45))
+                                Text("aegyo.app").font(.aegyo(11)).foregroundStyle(.white.opacity(0.45))
                             }
                         }
                     }
@@ -423,11 +424,11 @@ struct GemCollectionView: View {
     private func tallBox(_ value: String, _ label: String) -> some View {
         VStack(spacing: 6) {
             Text(value)
-                .font(.system(size: 54, weight: .heavy, design: .default).width(.compressed))
+                .font(.aegyo(54, .heavy, .default).width(.compressed))
                 .monospacedDigit()
                 .foregroundStyle(.white.opacity(0.85))
                 .contentTransition(.numericText())
-            Text(label.uppercased()).font(.system(size: 10, weight: .medium, design: .monospaced)).tracking(1).foregroundStyle(.white.opacity(0.5))
+            Text(label.uppercased()).font(.aegyo(10, .medium, .monospaced)).tracking(1).foregroundStyle(.white.opacity(0.5))
         }
         .frame(maxWidth: .infinity).padding(.vertical, 14)
         .background(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(.white.opacity(0.18), lineWidth: 1))

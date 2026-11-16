@@ -186,9 +186,9 @@ private struct PlusInlineGate: ViewModifier {
         if store.isPlus { content } else {
             Button { Haptics.tap(); paywall = true } label: {
                 VStack(spacing: 12) {
-                    Image(systemName: "sparkles").font(.system(size: 26)).foregroundStyle(Love.pink)
-                    Text(feature.rawValue).font(.system(size: 18, weight: .semibold)).foregroundStyle(.white)
-                    Text("Part of Aegyo Plus. Tap to see what's inside.").font(.system(size: 13)).foregroundStyle(.white.opacity(0.55))
+                    Image(systemName: "sparkles").font(.aegyo(26)).foregroundStyle(Love.pink)
+                    Text(feature.rawValue).font(.aegyo(18, .semibold)).foregroundStyle(.white)
+                    Text("Part of Aegyo Plus. Tap to see what's inside.").font(.aegyo(13)).foregroundStyle(.white.opacity(0.55))
                     WhitePill(title: "Unlock", height: 40)
                 }
                 .padding(24).frame(maxWidth: .infinity).glass(24)

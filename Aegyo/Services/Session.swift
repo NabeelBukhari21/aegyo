@@ -37,7 +37,11 @@ final class Session: ObservableObject {
 
     // MARK: Lifecycle
 
+    private var started = false
+
     func start() async {
+        guard !started else { return }
+        started = true
         #if DEBUG
         let args = ProcessInfo.processInfo.arguments
         if args.contains("-resetOnboarding") { onboardingComplete = false; await backend.signOut() }

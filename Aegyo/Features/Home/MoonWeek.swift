@@ -32,12 +32,12 @@ struct MoonWeek: View {
                     } label: {
                         VStack(spacing: 7) {
                             Text(day.formatted(.dateTime.weekday(.abbreviated)).uppercased())
-                                .font(.system(size: 9.5, weight: .medium)).tracking(0.6)
+                                .font(.aegyo(9.5, .medium)).tracking(0.6)
                                 .foregroundStyle(.white.opacity(0.5))
                             MoonPhase(fill: future ? 0 : min(1, Double(love.loveCount(on: day)) / 8), size: 22)
                                 .opacity(future ? 0.35 : 1)
                             Text(day.formatted(.dateTime.day()))
-                                .font(.system(size: 13, weight: .semibold))
+                                .font(.aegyo(13, .semibold))
                                 .foregroundStyle(.white)
                         }
                         .frame(maxWidth: .infinity)
@@ -89,7 +89,7 @@ struct TwinkleStar: View {
     @State private var on = false
     var body: some View {
         Image(systemName: "sparkle")
-            .font(.system(size: 9, weight: .bold))
+            .font(.aegyo(9, .bold))
             .foregroundStyle(Opal.mint)
             .scaleEffect(on ? 1 : 0.6)
             .opacity(on ? 1 : 0.4)

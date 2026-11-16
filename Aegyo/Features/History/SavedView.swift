@@ -34,8 +34,8 @@ struct SavedView: View {
                         HStack(spacing: 12) {
                             Image(systemName: "envelope.fill").foregroundStyle(Love.peach).frame(width: 36, height: 36).background(Love.peach.opacity(0.14), in: Circle())
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(l.trigger.title).font(.system(size: 14.5, weight: .semibold)).foregroundStyle(.white)
-                                Text(l.body).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(2)
+                                Text(l.trigger.title).font(.aegyo(14.5, .semibold)).foregroundStyle(.white)
+                                Text(l.body).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(2)
                             }
                             Spacer()
                             Button { Haptics.tick(); love.toggleSaved(l.id.uuidString) } label: { Image(systemName: "bookmark.fill").foregroundStyle(Love.pink) }
@@ -62,7 +62,7 @@ struct SaveButton: View {
             Haptics.tap()
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) { love.toggleSaved(id) }
         } label: {
-            Image(systemName: on ? "bookmark.fill" : "bookmark").font(.system(size: 15, weight: .semibold))
+            Image(systemName: on ? "bookmark.fill" : "bookmark").font(.aegyo(15, .semibold))
                 .foregroundStyle(on ? Love.pink : .white)
                 .frame(width: 40, height: 40).background(.white.opacity(0.12), in: Circle())
                 .symbolEffect(.bounce, value: on)

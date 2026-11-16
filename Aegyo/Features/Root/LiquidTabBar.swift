@@ -97,10 +97,10 @@ struct LiquidTabBar: View {
         } label: {
             VStack(spacing: 3) {
                 Image(systemName: on ? t.icon + ".fill" : t.icon)
-                    .font(.system(size: 19, weight: on ? .semibold : .regular))
+                    .font(.aegyo(19, on ? .semibold : .regular))
                     .symbolEffect(.bounce.up.byLayer, value: on)
                     .contentTransition(.symbolEffect(.replace))
-                Text(t.title).font(.system(size: 10, weight: .semibold))
+                Text(t.title).font(.aegyo(10, .semibold))
             }
             .foregroundStyle(on ? .white : .white.opacity(0.55))
             .scaleEffect(on ? 1.06 : 1)
@@ -132,7 +132,7 @@ private struct PlusOrb: View {
                 Circle().fill(RadialGradient(colors: [.white.opacity(0.55), .clear], center: UnitPoint(x: 0.32, y: 0.25), startRadius: 0, endRadius: 30))
                 Circle().stroke(.white.opacity(0.35), lineWidth: 1)
                 Image(systemName: "plus")
-                    .font(.system(size: 24, weight: .semibold))
+                    .font(.aegyo(24, .semibold))
                     .foregroundStyle(.white)
                     .rotationEffect(.degrees(open ? 135 : 0))
                     .animation(.spring(response: 0.45, dampingFraction: 0.6), value: open)

@@ -24,9 +24,9 @@ struct AccountDangerView: View {
 
             if deleting {
                 VStack(alignment: .leading, spacing: 14) {
-                    Text("Type DELETE to confirm").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                    Text("Type DELETE to confirm").font(.aegyo(16, .semibold)).foregroundStyle(.white)
                     Text("This removes your account, every photo, letter, mood and tap on this phone, your pairing, and your subscription record on this device (your Apple subscription itself is managed in iOS Settings).")
-                        .font(.system(size: 13)).foregroundStyle(.white.opacity(0.6)).fixedSize(horizontal: false, vertical: true)
+                        .font(.aegyo(13)).foregroundStyle(.white.opacity(0.6)).fixedSize(horizontal: false, vertical: true)
                     OnboardField(text: $typed, placeholder: "DELETE", capitalization: .characters)
                     Button {
                         guard typed == "DELETE" else { return }
@@ -40,7 +40,7 @@ struct AccountDangerView: View {
                         ZStack {
                             Capsule().fill(typed == "DELETE" ? Color(red: 0.95, green: 0.25, blue: 0.3) : .white.opacity(0.1))
                             if busy { ProgressView().tint(.white) } else {
-                                Text("Delete my account").font(.system(size: 16, weight: .semibold)).foregroundStyle(typed == "DELETE" ? .white : .white.opacity(0.4))
+                                Text("Delete my account").font(.aegyo(16, .semibold)).foregroundStyle(typed == "DELETE" ? .white : .white.opacity(0.4))
                             }
                         }
                         .frame(height: 54)
@@ -48,7 +48,7 @@ struct AccountDangerView: View {
                     .buttonStyle(PressStyle())
                     .disabled(typed != "DELETE" || busy)
                     Button { Haptics.tap(); withAnimation { deleting = false; typed = "" } } label: {
-                        Text("Keep my account").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.6)).frame(maxWidth: .infinity)
+                        Text("Keep my account").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.6)).frame(maxWidth: .infinity)
                     }
                     .buttonStyle(PressStyle())
                 }
@@ -72,14 +72,14 @@ struct AccountDangerView: View {
     private func dangerRow(_ title: String, line: String, icon: String, tint: Color, action: @escaping () -> Void) -> some View {
         Button { Haptics.tick(); action() } label: {
             HStack(spacing: 14) {
-                Image(systemName: icon).font(.system(size: 15, weight: .semibold)).foregroundStyle(tint)
+                Image(systemName: icon).font(.aegyo(15, .semibold)).foregroundStyle(tint)
                     .frame(width: 32, height: 32).background(tint.opacity(0.14), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title).font(.system(size: 15, weight: .medium)).foregroundStyle(tint == .white ? .white : tint)
-                    Text(line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5))
+                    Text(title).font(.aegyo(15, .medium)).foregroundStyle(tint == .white ? .white : tint)
+                    Text(line).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5))
                 }
                 Spacer()
-                Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.3))
+                Image(systemName: "chevron.right").font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.3))
             }
             .padding(.horizontal, 14).padding(.vertical, 12).contentShape(Rectangle())
             .overlay(alignment: .bottom) { Rectangle().fill(.white.opacity(0.07)).frame(height: 1).padding(.leading, 60) }
@@ -108,15 +108,15 @@ struct PlusTeaserCard: View {
         HStack(spacing: 14) {
             ZStack {
                 Circle().fill(Love.glow).frame(width: 44, height: 44)
-                Image(systemName: "sparkles").font(.system(size: 18, weight: .semibold)).foregroundStyle(.white)
+                Image(systemName: "sparkles").font(.aegyo(18, .semibold)).foregroundStyle(.white)
             }
             .shadow(color: Love.pink.opacity(0.5), radius: 10)
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
-                Text(line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.55))
+                Text(title).font(.aegyo(16, .semibold)).foregroundStyle(.white)
+                Text(line).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.55))
             }
             Spacer()
-            Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.3))
+            Image(systemName: "chevron.right").font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.3))
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(LinearGradient(colors: [Love.pink.opacity(0.18), Love.violet.opacity(0.12)], startPoint: .leading, endPoint: .trailing)))

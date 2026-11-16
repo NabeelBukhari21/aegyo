@@ -165,8 +165,8 @@ struct WhitePill: View {
     var height: CGFloat = 38
     var body: some View {
         HStack(spacing: 6) {
-            if let systemImage { Image(systemName: systemImage).font(.system(size: height * 0.36, weight: .semibold)) }
-            Text(title).font(.system(size: height * 0.37, weight: .semibold))
+            if let systemImage { Image(systemName: systemImage).font(.aegyo(height * 0.36, .semibold)) }
+            Text(title).font(.aegyo(height * 0.37, .semibold))
         }
         .foregroundStyle(.black)
         .padding(.horizontal, height * 0.45)
@@ -180,7 +180,7 @@ struct CapsLabel: View {
     var text: String
     var body: some View {
         Text(text.uppercased())
-            .font(.system(size: 10.5, weight: .medium))
+            .font(.aegyo(10.5, .medium))
             .tracking(1.1)
             .foregroundStyle(.white.opacity(0.5))
     }
@@ -192,8 +192,8 @@ struct SectionHeader: View {
     var subtitle: String?
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(title).font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
-            if let subtitle { Text(subtitle).font(.system(size: 13)).foregroundStyle(.white.opacity(0.5)) }
+            Text(title).font(.aegyo(20, .semibold)).foregroundStyle(.white)
+            if let subtitle { Text(subtitle).font(.aegyo(13)).foregroundStyle(.white.opacity(0.5)) }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

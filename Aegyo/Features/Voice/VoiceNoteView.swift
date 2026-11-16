@@ -16,21 +16,21 @@ struct VoiceNoteView: View {
                     .frame(height: 120)
                     .padding(.horizontal, 6)
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
-                    Text(timeText(rec.isPlaying ? rec.playTime : rec.duration)).font(.system(size: 38, weight: .light)).monospacedDigit()
-                    Text("/ 1:00").font(.system(size: 14)).foregroundStyle(.white.opacity(0.4))
+                    Text(timeText(rec.isPlaying ? rec.playTime : rec.duration)).font(.aegyo(38, .light)).monospacedDigit()
+                    Text("/ 1:00").font(.aegyo(14)).foregroundStyle(.white.opacity(0.4))
                 }
                 .foregroundStyle(.white)
 
                 if rec.hasRecording && !rec.isRecording {
                     HStack(spacing: 12) {
                         Button { Haptics.tap(); rec.togglePlay() } label: {
-                            Image(systemName: rec.isPlaying ? "pause.fill" : "play.fill").font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
+                            Image(systemName: rec.isPlaying ? "pause.fill" : "play.fill").font(.aegyo(20, .semibold)).foregroundStyle(.white)
                                 .frame(width: 64, height: 64).background(.white.opacity(0.12), in: Circle())
                         }
                         .buttonStyle(PressStyle())
                         .accessibilityLabel(rec.isPlaying ? "Pause" : "Play")
                         Button { Haptics.tick(); rec.discard() } label: {
-                            Image(systemName: "arrow.counterclockwise").font(.system(size: 18, weight: .semibold)).foregroundStyle(.white.opacity(0.7))
+                            Image(systemName: "arrow.counterclockwise").font(.aegyo(18, .semibold)).foregroundStyle(.white.opacity(0.7))
                                 .frame(width: 64, height: 64).background(.white.opacity(0.08), in: Circle())
                         }
                         .buttonStyle(PressStyle())
@@ -43,7 +43,7 @@ struct VoiceNoteView: View {
                 }
 
                 Text(rec.isRecording ? "Tap to stop" : rec.hasRecording ? "Listen back, or send it over." : "Tap to start recording")
-                    .font(.system(size: 13)).foregroundStyle(.white.opacity(0.5))
+                    .font(.aegyo(13)).foregroundStyle(.white.opacity(0.5))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 10)
@@ -242,8 +242,8 @@ struct VoicePlayButton: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + (player?.duration ?? duration) + 0.2) { playing = false }
         } label: {
             HStack(spacing: 6) {
-                Image(systemName: playing ? "stop.fill" : "play.fill").font(.system(size: 11, weight: .bold))
-                Text(String(format: "%d:%02d", Int(duration) / 60, Int(duration) % 60)).font(.system(size: 12, weight: .semibold)).monospacedDigit()
+                Image(systemName: playing ? "stop.fill" : "play.fill").font(.aegyo(11, .bold))
+                Text(String(format: "%d:%02d", Int(duration) / 60, Int(duration) % 60)).font(.aegyo(12, .semibold)).monospacedDigit()
             }
             .foregroundStyle(.black)
             .padding(.horizontal, 10).frame(height: 28).background(.white, in: Capsule())

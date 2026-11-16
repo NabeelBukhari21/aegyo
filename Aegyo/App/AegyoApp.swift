@@ -8,6 +8,8 @@ struct AegyoApp: App {
     @StateObject private var appState = AppState.shared
     @StateObject private var session = Session.shared
 
+    @Environment(\.dynamicTypeSize) private var typeSize
+
     var body: some Scene {
         WindowGroup {
             Group {
@@ -21,6 +23,8 @@ struct AegyoApp: App {
                 }
             }
             .animation(.smooth(duration: 0.5), value: session.route)
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+            .id(typeSize)
             .environmentObject(love)
             .environmentObject(tokens)
             .environmentObject(appState)

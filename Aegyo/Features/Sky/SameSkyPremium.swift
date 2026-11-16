@@ -25,9 +25,9 @@ struct SameSkyPremium: View {
                         }
                         HStack(alignment: .firstTextBaseline, spacing: 6) {
                             Text(Int(shownKm).formatted())
-                                .font(.system(size: 60, weight: .ultraLight)).tracking(-3).monospacedDigit()
+                                .font(.aegyo(60, .ultraLight)).tracking(-3).monospacedDigit()
                                 .contentTransition(.numericText(value: shownKm))
-                            Text("km").font(.system(size: 18, weight: .medium)).foregroundStyle(.white.opacity(0.5))
+                            Text("km").font(.aegyo(18, .medium)).foregroundStyle(.white.opacity(0.5))
                         }
                         .foregroundStyle(.white)
                         .padding(.top, 6)
@@ -52,7 +52,7 @@ struct SameSkyPremium: View {
 
                         if let lastHeld {
                             Text("A \(String(format: "%.1f", lastHeld))-second light is on its way to \(her.name).")
-                                .font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5))
+                                .font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5))
                                 .padding(.top, 10)
                                 .transition(.opacity.combined(with: .move(edge: .top)))
                         }
@@ -65,11 +65,11 @@ struct SameSkyPremium: View {
             } else {
                 Card(padding: 22) {
                     VStack(alignment: .leading, spacing: 14) {
-                        Image(systemName: "globe.asia.australia.fill").font(.system(size: 30)).foregroundStyle(Opal.mint)
+                        Image(systemName: "globe.asia.australia.fill").font(.aegyo(30)).foregroundStyle(Opal.mint)
                             .symbolEffect(.rotate, options: .repeating)
-                        Text("How far is your love travelling?").font(.system(size: 22, weight: .semibold)).foregroundStyle(.white)
+                        Text("How far is your love travelling?").font(.aegyo(22, .semibold)).foregroundStyle(.white)
                         Text("Add your two cities to see both skies, your distance and her local time.")
-                            .font(.system(size: 14)).foregroundStyle(.white.opacity(0.6))
+                            .font(.aegyo(14)).foregroundStyle(.white.opacity(0.6))
                         Button { setup = true } label: {
                             WhitePill(title: "Add cities", systemImage: "mappin.and.ellipse", height: 50).frame(maxWidth: .infinity).background(.white, in: Capsule())
                         }
@@ -92,7 +92,7 @@ struct SameSkyPremium: View {
         VStack(alignment: .leading, spacing: 4) {
             Rectangle().fill(.white.opacity(0.12)).frame(height: 1)
             CapsLabel(text: label).lineLimit(1).minimumScaleFactor(0.8)
-            Text(value).font(.system(size: 18, weight: .medium)).monospacedDigit().foregroundStyle(.white)
+            Text(value).font(.aegyo(18, .medium)).monospacedDigit().foregroundStyle(.white)
                 .contentTransition(.numericText()).animation(.snappy, value: value)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -130,9 +130,9 @@ struct SkyWindow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     CapsLabel(text: "\(title) · \(place.name)")
                     Text(ctx.date.formatted(Date.FormatStyle(date: .omitted, time: .shortened, timeZone: place.timeZone)))
-                        .font(.system(size: 24, weight: .semibold)).monospacedDigit()
+                        .font(.aegyo(24, .semibold)).monospacedDigit()
                         .foregroundStyle(.white)
-                    Text(status(hour)).font(.system(size: 11.5, weight: .medium)).foregroundStyle(.white.opacity(0.75))
+                    Text(status(hour)).font(.aegyo(11.5, .medium)).foregroundStyle(.white.opacity(0.75))
                 }
                 .padding(14)
             }

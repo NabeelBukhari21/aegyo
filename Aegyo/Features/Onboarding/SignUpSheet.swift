@@ -20,18 +20,19 @@ struct SignUpSheet: View {
         VStack(spacing: 0) {
             HStack {
                 Button { dismiss() } label: {
-                    Image(systemName: "xmark").font(.system(size: 13, weight: .bold)).foregroundStyle(.white)
+                    Image(systemName: "xmark").font(.aegyo(13, .bold)).foregroundStyle(.white)
                         .frame(width: 32, height: 32).background(.white.opacity(0.12), in: Circle())
                 }
                 .buttonStyle(PressStyle())
+                .accessibilityLabel("Close")
                 Spacer()
             }
             .padding(.horizontal, 20).padding(.top, 20)
 
             VStack(spacing: 6) {
-                Text(existing ? "Welcome back" : "Sign Up").font(.system(size: 28, weight: .semibold)).tracking(-0.8).foregroundStyle(.white)
+                Text(existing ? "Welcome back" : "Sign Up").font(.aegyo(28, .semibold)).tracking(-0.8).foregroundStyle(.white)
                 Text(existing ? "Pick up right where you left off." : "Let's get started on your love story.")
-                    .font(.system(size: 14)).foregroundStyle(.white.opacity(0.55))
+                    .font(.aegyo(14)).foregroundStyle(.white.opacity(0.55))
             }
             .padding(.top, 10)
 
@@ -49,10 +50,10 @@ struct SignUpSheet: View {
 
             VStack(spacing: 6) {
                 Text("Your data stays between you two. We never sell it, and you can delete everything in one tap.")
-                    .font(.system(size: 12)).foregroundStyle(.white.opacity(0.5)).multilineTextAlignment(.center)
+                    .font(.aegyo(12)).foregroundStyle(.white.opacity(0.5)).multilineTextAlignment(.center)
                 HStack(spacing: 14) {
-                    Button("Privacy Policy") { }.font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.75))
-                    Button("Terms") { }.font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.75))
+                    Button("Privacy Policy") { }.font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.75))
+                    Button("Terms") { }.font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.75))
                 }
             }
             .padding(.horizontal, 30).padding(.bottom, 26)
@@ -86,11 +87,11 @@ struct SignUpSheet: View {
             .frame(height: 52)
             .clipShape(Capsule())
 
-            HStack { line; Text("or").font(.system(size: 12)).foregroundStyle(.white.opacity(0.4)); line }
+            HStack { line; Text("or").font(.aegyo(12)).foregroundStyle(.white.opacity(0.4)); line }
 
             Button { Haptics.tap(); withAnimation { mode = .email } } label: {
                 Label("Continue with Email", systemImage: "envelope.fill")
-                    .font(.system(size: 15, weight: .semibold)).foregroundStyle(.white)
+                    .font(.aegyo(15, .semibold)).foregroundStyle(.white)
                     .frame(maxWidth: .infinity).frame(height: 52)
                     .background(.white.opacity(0.1), in: Capsule())
                     .overlay(Capsule().stroke(.white.opacity(0.14), lineWidth: 1))
@@ -99,7 +100,7 @@ struct SignUpSheet: View {
 
             Button { Haptics.tap(); withAnimation { existing.toggle() } } label: {
                 Text(existing ? "New here? Create an account" : "Already have an account?")
-                    .font(.system(size: 14, weight: .semibold)).foregroundStyle(.white.opacity(0.8))
+                    .font(.aegyo(14, .semibold)).foregroundStyle(.white.opacity(0.8))
             }
             .padding(.top, 10)
         }
@@ -115,7 +116,7 @@ struct SignUpSheet: View {
                 onSignIn(.email(name: name.trimmingCharacters(in: .whitespaces), email: email.trimmingCharacters(in: .whitespaces)))
             }
             Button { Haptics.tap(); withAnimation { mode = .choose } } label: {
-                Text("Back").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.55))
+                Text("Back").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.55))
             }
         }
     }

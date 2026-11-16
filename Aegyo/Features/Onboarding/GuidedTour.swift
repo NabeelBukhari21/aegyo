@@ -47,10 +47,10 @@ struct GuidedTour: View {
                             Capsule().fill(i == index ? Color.white : Color.white.opacity(0.25)).frame(width: i == index ? 18 : 6, height: 6)
                         }
                     }
-                    Text(s.title).font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
-                    Text(s.line).font(.system(size: 14)).foregroundStyle(.white.opacity(0.65)).fixedSize(horizontal: false, vertical: true)
+                    Text(s.title).font(.aegyo(20, .semibold)).foregroundStyle(.white)
+                    Text(s.line).font(.aegyo(14)).foregroundStyle(.white.opacity(0.65)).fixedSize(horizontal: false, vertical: true)
                     HStack {
-                        Button { finish() } label: { Text("Skip").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.55)) }
+                        Button { finish() } label: { Text("Skip").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.55)) }
                         Spacer()
                         Button {
                             Haptics.tick()

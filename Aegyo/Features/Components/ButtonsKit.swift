@@ -34,7 +34,7 @@ struct SlideToConfirm: View {
                             .frame(width: phase > 0 ? geo.size.width : offset + height)
                             .shadow(color: glowColor.opacity(0.5 * p), radius: 14)
                         Text(title)
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.aegyo(16, .semibold))
                             .foregroundStyle(.white.opacity(0.55))
                             .frame(maxWidth: .infinity)
                             .padding(.leading, height * 0.6)
@@ -62,10 +62,10 @@ struct SlideToConfirm: View {
                                     .onAppear { withAnimation(.linear(duration: 0.7).repeatForever(autoreverses: false)) { spin = true } }
                                     .onDisappear { spin = false }
                             case 2:
-                                Image(systemName: "checkmark").font(.system(size: height * 0.3, weight: .bold)).foregroundStyle(.black)
+                                Image(systemName: "checkmark").font(.aegyo(height * 0.3, .bold)).foregroundStyle(.black)
                                     .transition(.scale.combined(with: .opacity))
                             default:
-                                Image(systemName: systemImage).font(.system(size: height * 0.28, weight: .bold)).foregroundStyle(.black)
+                                Image(systemName: systemImage).font(.aegyo(height * 0.28, .bold)).foregroundStyle(.black)
                             }
                         }
                     }
@@ -93,7 +93,7 @@ struct SlideToConfirm: View {
 
             if style == .glow {
                 Text(phase == 2 ? "Locked in" : title)
-                    .font(.system(size: 13, weight: .medium))
+                    .font(.aegyo(13, .medium))
                     .foregroundStyle(.white.opacity(0.55))
                     .contentTransition(.interpolate)
             }
@@ -154,7 +154,7 @@ struct HoldTogetherButton: View {
                     .opacity(done ? 0 : 1)
                 if done {
                     Image(systemName: "heart.fill")
-                        .font(.system(size: 46))
+                        .font(.aegyo(46))
                         .foregroundStyle(Love.glow)
                         .shadow(color: Love.pink.opacity(0.8), radius: 18)
                         .transition(.scale(scale: 0.2).combined(with: .opacity))
@@ -167,7 +167,7 @@ struct HoldTogetherButton: View {
             ZStack {
                 Capsule().fill(.white.opacity(done ? 1 : 0.92))
                 Text(done ? "Sent" : holding ? "Keep holding…" : title)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.aegyo(16, .semibold))
                     .foregroundStyle(.black)
                     .contentTransition(.interpolate)
                 Capsule()
@@ -191,7 +191,7 @@ struct HoldTogetherButton: View {
 
     private func bubble(_ name: String, colors: [Color]) -> some View {
         Text(String(name.prefix(1)).uppercased())
-            .font(.system(size: 20, weight: .semibold))
+            .font(.aegyo(20, .semibold))
             .foregroundStyle(.white)
             .frame(width: 54, height: 54)
             .background(LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing), in: Circle())
@@ -254,7 +254,7 @@ struct MergeBar: View {
         HStack(spacing: merged ? 0 : 12) {
             if !merged {
                 Button(action: onSecondary) {
-                    Text(secondary).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                    Text(secondary).font(.aegyo(16, .semibold)).foregroundStyle(.white)
                         .frame(maxWidth: .infinity).frame(height: 56)
                         .background(.white.opacity(0.1), in: Capsule())
                 }
@@ -271,7 +271,7 @@ struct MergeBar: View {
                     Image(systemName: merged ? "checkmark" : primaryIcon).contentTransition(.symbolEffect(.replace))
                     Text(merged ? doneTitle : primary).contentTransition(.interpolate)
                 }
-                .font(.system(size: 16, weight: .semibold))
+                .font(.aegyo(16, .semibold))
                 .foregroundStyle(merged ? .white : .black)
                 .frame(maxWidth: .infinity).frame(height: 56)
                 .background {
@@ -293,7 +293,7 @@ struct BreatheButton: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text(label).font(.system(size: 13, weight: .medium)).foregroundStyle(.white.opacity(0.55))
+            Text(label).font(.aegyo(13, .medium)).foregroundStyle(.white.opacity(0.55))
             Button(action: action) {
                 TimelineView(.animation(minimumInterval: 1 / 40)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
@@ -302,7 +302,7 @@ struct BreatheButton: View {
                         Circle().fill(.white.opacity(0.14)).scaleEffect(1.15 + 0.3 * b)
                         Circle().fill(.white.opacity(0.08)).scaleEffect(1.3 + 0.45 * b)
                         Circle().fill(.white)
-                        Image(systemName: systemImage).font(.system(size: 22, weight: .semibold)).foregroundStyle(.black)
+                        Image(systemName: systemImage).font(.aegyo(22, .semibold)).foregroundStyle(.black)
                     }
                     .frame(width: 66, height: 66)
                 }
@@ -327,13 +327,13 @@ struct RulerSlider: View {
         VStack(spacing: 14) {
             VStack(spacing: 2) {
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
-                    Text("\(Int(value))").font(.system(size: 44, weight: .light)).monospacedDigit()
+                    Text("\(Int(value))").font(.aegyo(44, .light)).monospacedDigit()
                         .contentTransition(.numericText(value: value))
-                    Text("/10").font(.system(size: 16, weight: .medium)).foregroundStyle(.white.opacity(0.5))
+                    Text("/10").font(.aegyo(16, .medium)).foregroundStyle(.white.opacity(0.5))
                 }
                 .foregroundStyle(.white)
                 Text(words[max(0, min(words.count - 1, Int(value) - 1))])
-                    .font(.system(size: 13, weight: .semibold)).foregroundStyle(Love.pink)
+                    .font(.aegyo(13, .semibold)).foregroundStyle(Love.pink)
                     .contentTransition(.interpolate)
             }
             .animation(.snappy, value: Int(value))
@@ -416,7 +416,7 @@ struct TickScrubber: View {
                     .shadow(color: tint.opacity(0.6), radius: 8)
                     .offset(x: x - 11, y: 26)
                 Text(label(index))
-                    .font(.system(size: 12.5, weight: .semibold)).monospacedDigit()
+                    .font(.aegyo(12.5, .semibold)).monospacedDigit()
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10).padding(.vertical, 5)
                     .background(tint.opacity(0.35), in: Capsule())
@@ -445,10 +445,10 @@ struct CascadePills: View {
     var body: some View {
         VStack(spacing: 10) {
             Label("suggest", systemImage: "sparkle")
-                .font(.system(size: 13, weight: .medium)).foregroundStyle(.white.opacity(0.8))
+                .font(.aegyo(13, .medium)).foregroundStyle(.white.opacity(0.8))
             ForEach(Array(options.enumerated()), id: \.offset) { i, o in
                 Button { Haptics.tap(); onPick(o) } label: {
-                    Text(o).font(.system(size: 14.5, weight: .medium)).foregroundStyle(.black.opacity(0.85))
+                    Text(o).font(.aegyo(14.5, .medium)).foregroundStyle(.black.opacity(0.85))
                         .frame(maxWidth: .infinity).frame(height: 42)
                         .background(Color(white: 0.88), in: Capsule())
                 }

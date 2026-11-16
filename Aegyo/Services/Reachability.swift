@@ -43,9 +43,9 @@ struct OfflineBanner: View {
         VStack {
             if !reach.isOnline {
                 HStack(spacing: 8) {
-                    Image(systemName: "wifi.slash").font(.system(size: 12, weight: .semibold))
+                    Image(systemName: "wifi.slash").font(.aegyo(12, .semibold))
                     Text(pending > 0 ? "Offline · \(pending) waiting to send" : "Offline · sends will go out when you're back")
-                        .font(.system(size: 12.5, weight: .semibold))
+                        .font(.aegyo(12.5, .semibold))
                 }
                 .foregroundStyle(.black)
                 .padding(.horizontal, 14).padding(.vertical, 8)

@@ -19,7 +19,7 @@ struct MyProfileView: View {
                 PhotosPicker(selection: $photoItem, matching: .images) {
                     ZStack(alignment: .bottomTrailing) {
                         AvatarView(who: .me, name: name.isEmpty ? Profile.defaultMyName : name, size: 110)
-                        Image(systemName: "camera.fill").font(.system(size: 12, weight: .bold)).foregroundStyle(.black)
+                        Image(systemName: "camera.fill").font(.aegyo(12, .bold)).foregroundStyle(.black)
                             .frame(width: 32, height: 32).background(.white, in: Circle())
                     }
                 }
@@ -39,7 +39,7 @@ struct MyProfileView: View {
                 DateRow(title: "Birthday", value: $birthday, range: ...Date.now)
                     .onChange(of: birthday) { _, v in Task { await session.updateProfile { $0.birthday = Date(timeIntervalSince1970: v) }; flash() } }
                 HStack {
-                    Text("City").font(.system(size: 15, weight: .medium)).foregroundStyle(.white)
+                    Text("City").font(.aegyo(15, .medium)).foregroundStyle(.white)
                     Spacer()
                     if love.data.myPlace != nil { Image(systemName: "checkmark.circle.fill").foregroundStyle(Opal.mint).font(.footnote) }
                     TextField("", text: $city, prompt: Text("e.g. Toronto").foregroundStyle(.white.opacity(0.3)))
@@ -61,7 +61,7 @@ struct MyProfileView: View {
             }
 
             if saved {
-                Label("Saved", systemImage: "checkmark").font(.system(size: 13, weight: .semibold)).foregroundStyle(Opal.mint)
+                Label("Saved", systemImage: "checkmark").font(.aegyo(13, .semibold)).foregroundStyle(Opal.mint)
                     .frame(maxWidth: .infinity).transition(.opacity)
             }
         }
@@ -98,7 +98,7 @@ struct PartnerProfileView: View {
                     ZStack(alignment: .bottomTrailing) {
                         AvatarView(who: .partner, name: nickname.isEmpty ? "P" : nickname, size: 110)
                         if p == nil {
-                            Image(systemName: "camera.fill").font(.system(size: 12, weight: .bold)).foregroundStyle(.black)
+                            Image(systemName: "camera.fill").font(.aegyo(12, .bold)).foregroundStyle(.black)
                                 .frame(width: 32, height: 32).background(.white, in: Circle())
                         }
                     }
@@ -117,7 +117,7 @@ struct PartnerProfileView: View {
                 if p == nil {
                     DateRow(title: "Birthday", value: $birthday, range: ...Date.now)
                     HStack {
-                        Text("City").font(.system(size: 15, weight: .medium)).foregroundStyle(.white)
+                        Text("City").font(.aegyo(15, .medium)).foregroundStyle(.white)
                         Spacer()
                         if love.data.herPlace != nil { Image(systemName: "checkmark.circle.fill").foregroundStyle(Opal.mint).font(.footnote) }
                         TextField("", text: $city, prompt: Text("e.g. Vancouver").foregroundStyle(.white.opacity(0.3)))
@@ -153,7 +153,7 @@ struct FieldRow: View {
     var prompt: String
     var body: some View {
         HStack {
-            Text(title).font(.system(size: 15, weight: .medium)).foregroundStyle(.white)
+            Text(title).font(.aegyo(15, .medium)).foregroundStyle(.white)
             Spacer()
             TextField("", text: $text, prompt: Text(prompt).foregroundStyle(.white.opacity(0.3)))
                 .multilineTextAlignment(.trailing).foregroundStyle(.white.opacity(0.85))
@@ -171,7 +171,7 @@ struct DateRow: View {
     var futureRange: PartialRangeFrom<Date>? = nil
     var body: some View {
         HStack {
-            Text(title).font(.system(size: 15, weight: .medium)).foregroundStyle(.white)
+            Text(title).font(.aegyo(15, .medium)).foregroundStyle(.white)
             Spacer()
             let binding = Binding(get: { value > 0 ? Date(timeIntervalSince1970: value) : .now }, set: { value = $0.timeIntervalSince1970; Haptics.tick() })
             if let range {
@@ -192,9 +192,9 @@ struct InfoRow: View {
     var value: String
     var body: some View {
         HStack {
-            Text(title).font(.system(size: 15, weight: .medium)).foregroundStyle(.white)
+            Text(title).font(.aegyo(15, .medium)).foregroundStyle(.white)
             Spacer()
-            Text(value).font(.system(size: 14)).foregroundStyle(.white.opacity(0.55)).lineLimit(1)
+            Text(value).font(.aegyo(14)).foregroundStyle(.white.opacity(0.55)).lineLimit(1)
         }
         .padding(.horizontal, 14).frame(height: 52)
         .overlay(alignment: .bottom) { Rectangle().fill(.white.opacity(0.07)).frame(height: 1).padding(.leading, 14) }

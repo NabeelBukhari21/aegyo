@@ -28,7 +28,7 @@ struct MeetDatePicker: View {
             ScrollView {
                 VStack(spacing: 20) {
                     HStack {
-                        Text("When will you\nsee her?").font(.system(size: 30, weight: .semibold)).tracking(-1).foregroundStyle(.white)
+                        Text("When will you\nsee her?").font(.aegyo(30, .semibold)).tracking(-1).foregroundStyle(.white)
                         Spacer()
                     }
                     .padding(.top, 24)
@@ -49,7 +49,7 @@ struct MeetDatePicker: View {
                         Text("to").foregroundStyle(.white.opacity(0.5))
                         Text(target.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day())).underline()
                     }
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.aegyo(15, .semibold))
                     .foregroundStyle(.white)
                     .contentTransition(.interpolate)
                     .animation(.snappy, value: target)
@@ -59,8 +59,8 @@ struct MeetDatePicker: View {
                     HStack(spacing: 10) {
                         RealPhase(phase: phase, size: 26)
                         VStack(alignment: .leading, spacing: 1) {
-                            Text(Astro.phaseName(phase)).font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)
-                            Text("\(Int((Astro.illumination(target) * 100).rounded()))% lit that night").font(.system(size: 12)).foregroundStyle(.white.opacity(0.55))
+                            Text(Astro.phaseName(phase)).font(.aegyo(14, .semibold)).foregroundStyle(.white)
+                            Text("\(Int((Astro.illumination(target) * 100).rounded()))% lit that night").font(.aegyo(12)).foregroundStyle(.white.opacity(0.55))
                         }
                     }
                     .padding(.horizontal, 16).padding(.vertical, 10)
@@ -75,7 +75,7 @@ struct MeetDatePicker: View {
                         withAnimation(.spring) { exact.toggle() }
                     } label: {
                         Label(exact ? "Use the dial" : "Pick an exact date", systemImage: exact ? "dial.low" : "calendar")
-                            .font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.7))
+                            .font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.7))
                     }
                     if exact {
                         DatePicker("", selection: $exactDate, in: Date.now..., displayedComponents: .date)
@@ -122,8 +122,8 @@ struct MeetDatePicker: View {
                     withAnimation(.spring(response: 0.38, dampingFraction: 0.7)) { hour = h }
                 } label: {
                     VStack(spacing: 5) {
-                        Image(systemName: icon).font(.system(size: 16)).symbolEffect(.bounce, value: hour == h)
-                        Text(label).font(.system(size: 11.5, weight: .medium))
+                        Image(systemName: icon).font(.aegyo(16)).symbolEffect(.bounce, value: hour == h)
+                        Text(label).font(.aegyo(11.5, .medium))
                     }
                     .foregroundStyle(hour == h ? .black : .white.opacity(0.7))
                     .frame(maxWidth: .infinity).frame(height: 58)
@@ -170,9 +170,9 @@ private struct Dial: View {
                 Circle().fill(Color(white: 0.1)).frame(width: (r - 46) * 2, height: (r - 46) * 2)
                     .shadow(color: .black.opacity(0.5), radius: 10)
                 VStack(spacing: 0) {
-                    Text("\(amount)").font(.system(size: 64, weight: .bold)).monospacedDigit()
+                    Text("\(amount)").font(.aegyo(64, .bold)).monospacedDigit()
                         .contentTransition(.numericText(value: Double(amount)))
-                    Text(unitLabel).font(.system(size: 15, weight: .semibold)).foregroundStyle(.white.opacity(0.6))
+                    Text(unitLabel).font(.aegyo(15, .semibold)).foregroundStyle(.white.opacity(0.6))
                 }
                 .foregroundStyle(.white)
                 .animation(.snappy(duration: 0.2), value: amount)

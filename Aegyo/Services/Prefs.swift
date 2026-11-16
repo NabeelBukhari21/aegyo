@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 /// User preferences that other services read (sounds, haptics, effects, privacy, Doki's name).
 enum Prefs {
@@ -15,7 +16,7 @@ enum Prefs {
 
     static var soundsEnabled: Bool { d.object(forKey: soundsKey) as? Bool ?? true }
     static var hapticsEnabled: Bool { d.object(forKey: hapticsKey) as? Bool ?? true }
-    static var reduceEffects: Bool { d.bool(forKey: reduceEffectsKey) }
+    static var reduceEffects: Bool { d.bool(forKey: reduceEffectsKey) || UIAccessibility.isReduceMotionEnabled }
     static var shareCity: Bool { d.object(forKey: shareCityKey) as? Bool ?? true }
     static var shareMood: Bool { d.object(forKey: shareMoodKey) as? Bool ?? true }
     static var analytics: Bool { d.object(forKey: analyticsKey) as? Bool ?? false }

@@ -69,7 +69,7 @@ struct LoveProgressView: View {
                         HourHeatmap(hours: hours)
                         if let peak = love.peakHour {
                             Text("Your peak is around \(hourText(peak)). \(peak >= 21 || peak < 5 ? "Night owl." : peak < 11 ? "Morning person." : "Afternoons are for missing.")")
-                                .font(.system(size: 13)).foregroundStyle(.white.opacity(0.55))
+                                .font(.aegyo(13)).foregroundStyle(.white.opacity(0.55))
                         }
                     }
                 }
@@ -93,11 +93,11 @@ struct LoveProgressView: View {
         }()
         return VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text("\(total)").font(.system(size: 54, weight: .bold)).tracking(-2).monospacedDigit().contentTransition(.numericText(value: Double(total)))
-                Text("moments").font(.system(size: 16, weight: .medium)).foregroundStyle(.white.opacity(0.7))
+                Text("\(total)").font(.aegyo(54, .bold)).tracking(-2).monospacedDigit().contentTransition(.numericText(value: Double(total)))
+                Text("moments").font(.aegyo(16, .medium)).foregroundStyle(.white.opacity(0.7))
             }
-            Text(tone.1).font(.system(size: 20, weight: .semibold))
-            Text(tone.2).font(.system(size: 14)).foregroundStyle(.white.opacity(0.75)).fixedSize(horizontal: false, vertical: true)
+            Text(tone.1).font(.aegyo(20, .semibold))
+            Text(tone.2).font(.aegyo(14)).foregroundStyle(.white.opacity(0.75)).fixedSize(horizontal: false, vertical: true)
         }
         .foregroundStyle(.white)
         .padding(20)
@@ -112,14 +112,14 @@ struct LoveProgressView: View {
             HStack(spacing: 4) { Circle().fill(Love.pink).frame(width: 7, height: 7); Text("You") }
             HStack(spacing: 4) { Circle().fill(Love.violet).frame(width: 7, height: 7); Text("Them") }
         }
-        .font(.system(size: 11)).foregroundStyle(.white.opacity(0.55))
+        .font(.aegyo(11)).foregroundStyle(.white.opacity(0.55))
     }
 
     private func tile(_ v: String, _ label: String, _ icon: String, _ tint: Color) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Image(systemName: icon).font(.system(size: 14, weight: .semibold)).foregroundStyle(tint)
-            Text(v).font(.system(size: 22, weight: .bold)).monospacedDigit().foregroundStyle(.white)
-            Text(label).font(.system(size: 11)).foregroundStyle(.white.opacity(0.5))
+            Image(systemName: icon).font(.aegyo(14, .semibold)).foregroundStyle(tint)
+            Text(v).font(.aegyo(22, .bold)).monospacedDigit().foregroundStyle(.white)
+            Text(label).font(.aegyo(11)).foregroundStyle(.white.opacity(0.5))
         }
         .padding(14).frame(maxWidth: .infinity, alignment: .leading).glass(20)
     }
@@ -145,7 +145,7 @@ struct HourHeatmap: View {
             }
             HStack {
                 ForEach(["12am", "6am", "12pm", "6pm", "11pm"], id: \.self) { t in
-                    Text(t).font(.system(size: 10)).foregroundStyle(.white.opacity(0.4))
+                    Text(t).font(.aegyo(10)).foregroundStyle(.white.opacity(0.4))
                     if t != "11pm" { Spacer() }
                 }
             }

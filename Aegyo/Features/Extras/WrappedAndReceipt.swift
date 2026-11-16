@@ -43,7 +43,7 @@ struct WrappedCard: View {
                 StaticGem(width: 120, palette: stats.tier.palette).frame(maxWidth: .infinity)
                 Spacer()
                 Text("Our love,\nwrapped.")
-                    .font(.system(size: 40, weight: .semibold)).tracking(-1.5)
+                    .font(.aegyo(40, .semibold)).tracking(-1.5)
                     .lineSpacing(-4)
                 Spacer().frame(height: 22)
                 Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 16) {
@@ -58,9 +58,9 @@ struct WrappedCard: View {
                 }
                 Spacer().frame(height: 22)
                 HStack {
-                    Text("\(Doki.name): \(stats.tier.name)").font(.system(size: 13, weight: .semibold)).foregroundStyle(Opal.mint)
+                    Text("\(Doki.name): \(stats.tier.name)").font(.aegyo(13, .semibold)).foregroundStyle(Opal.mint)
                     Spacer()
-                    Text("aegyo.app").font(.system(size: 12)).foregroundStyle(.white.opacity(0.5))
+                    Text("aegyo.app").font(.aegyo(12)).foregroundStyle(.white.opacity(0.5))
                 }
             }
         }
@@ -68,8 +68,8 @@ struct WrappedCard: View {
 
     private func big(_ v: String, _ label: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(v).font(.system(size: 30, weight: .light)).tracking(-1).monospacedDigit()
-            Text(label.uppercased()).font(.system(size: 9.5, weight: .medium)).tracking(1).foregroundStyle(.white.opacity(0.55))
+            Text(v).font(.aegyo(30, .light)).tracking(-1).monospacedDigit()
+            Text(label.uppercased()).font(.aegyo(9.5, .medium)).tracking(1).foregroundStyle(.white.opacity(0.55))
         }
     }
 
@@ -94,7 +94,7 @@ struct ReceiptView: View {
             VStack {
                 HStack {
                     Button { dismiss() } label: {
-                        Image(systemName: "chevron.left").font(.system(size: 15, weight: .semibold)).foregroundStyle(.white)
+                        Image(systemName: "chevron.left").font(.aegyo(15, .semibold)).foregroundStyle(.white)
                             .frame(width: 40, height: 40).background(.white.opacity(0.1), in: Circle())
                     }
                     Spacer()
@@ -151,18 +151,18 @@ struct LovePass: View {
         VStack(spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(pass.from).font(.system(size: unfolded ? 44 : 30, weight: .bold, design: .monospaced))
-                    if unfolded { Text(pass.fromName).font(.system(size: 12)).foregroundStyle(.white.opacity(0.55)) }
+                    Text(pass.from).font(.aegyo(unfolded ? 44 : 30, .bold, .monospaced))
+                    if unfolded { Text(pass.fromName).font(.aegyo(12)).foregroundStyle(.white.opacity(0.55)) }
                 }
                 Spacer()
                 VStack(spacing: 2) {
-                    Image(systemName: "heart.fill").font(.system(size: unfolded ? 16 : 13)).foregroundStyle(Love.pink)
-                    if unfolded, let d = pass.daysLeft { Text("\(d)d").font(.system(size: 12, design: .monospaced)).foregroundStyle(.white.opacity(0.55)) }
+                    Image(systemName: "heart.fill").font(.aegyo(unfolded ? 16 : 13)).foregroundStyle(Love.pink)
+                    if unfolded, let d = pass.daysLeft { Text("\(d)d").font(.aegyo(12, design: .monospaced)).foregroundStyle(.white.opacity(0.55)) }
                 }
                 Spacer()
                 VStack(alignment: .trailing, spacing: 2) {
-                    Text(pass.to).font(.system(size: unfolded ? 44 : 30, weight: .bold, design: .monospaced))
-                    if unfolded { Text(pass.toName).font(.system(size: 12)).foregroundStyle(.white.opacity(0.55)) }
+                    Text(pass.to).font(.aegyo(unfolded ? 44 : 30, .bold, .monospaced))
+                    if unfolded { Text(pass.toName).font(.aegyo(12)).foregroundStyle(.white.opacity(0.55)) }
                 }
             }
             .foregroundStyle(.white)
@@ -202,8 +202,8 @@ struct LovePass: View {
 
     private func field(_ k: String, _ v: String, trailing: Bool = false) -> some View {
         VStack(alignment: trailing ? .trailing : .leading, spacing: 2) {
-            Text(k).font(.system(size: 11)).foregroundStyle(.white.opacity(0.5))
-            Text(v).font(.system(size: 14, weight: .semibold, design: .monospaced)).foregroundStyle(.white)
+            Text(k).font(.aegyo(11)).foregroundStyle(.white.opacity(0.5))
+            Text(v).font(.aegyo(14, .semibold, .monospaced)).foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity, alignment: trailing ? .trailing : .leading)
     }
@@ -251,8 +251,8 @@ private struct DotMap: View {
     }
     private func tag(_ t: String) -> some View {
         HStack(spacing: 4) {
-            Image(systemName: "heart.fill").font(.system(size: 9))
-            Text(t).font(.system(size: 12, weight: .bold, design: .monospaced))
+            Image(systemName: "heart.fill").font(.aegyo(9))
+            Text(t).font(.aegyo(12, .bold, .monospaced))
         }
         .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.4))
         .padding(.horizontal, 7).padding(.vertical, 4)
@@ -268,9 +268,9 @@ struct ReceiptCard: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text("AEGYO LOVE CO.").font(.system(size: 17, weight: .bold, design: .monospaced))
-            Text("Order for \(partner.uppercased())").font(.system(size: 12, design: .monospaced))
-            Text(Date.now.formatted(date: .abbreviated, time: .shortened)).font(.system(size: 12, design: .monospaced))
+            Text("AEGYO LOVE CO.").font(.aegyo(17, .bold, .monospaced))
+            Text("Order for \(partner.uppercased())").font(.aegyo(12, design: .monospaced))
+            Text(Date.now.formatted(date: .abbreviated, time: .shortened)).font(.aegyo(12, design: .monospaced))
             dashed
             if items.isEmpty {
                 row("Nothing yet today", "0")
@@ -281,15 +281,15 @@ struct ReceiptCard: View {
             row("SUBTOTAL", "\(items.reduce(0) { $0 + $1.1 }) moments")
             row("TAX", "0 (love is exempt)")
             HStack {
-                Text("TOTAL").font(.system(size: 18, weight: .bold, design: .monospaced))
+                Text("TOTAL").font(.aegyo(18, .bold, .monospaced))
                 Spacer()
-                Text("PRICELESS").font(.system(size: 18, weight: .bold, design: .monospaced))
+                Text("PRICELESS").font(.aegyo(18, .bold, .monospaced))
             }
             dashed
             Text("Thank you for loving.\nNo refunds. No returns. No one else.")
-                .font(.system(size: 11, design: .monospaced)).multilineTextAlignment(.center)
+                .font(.aegyo(11, design: .monospaced)).multilineTextAlignment(.center)
             Barcode().frame(height: 44).padding(.top, 6)
-            Text("aegyo.app").font(.system(size: 10, design: .monospaced))
+            Text("aegyo.app").font(.aegyo(10, design: .monospaced))
         }
         .foregroundStyle(ink)
         .padding(.horizontal, 22).padding(.vertical, 26)
@@ -303,7 +303,7 @@ struct ReceiptCard: View {
     }
 
     private func row(_ l: String, _ r: String) -> some View {
-        HStack { Text(l); Spacer(); Text(r) }.font(.system(size: 13, design: .monospaced))
+        HStack { Text(l); Spacer(); Text(r) }.font(.aegyo(13, design: .monospaced))
     }
 }
 

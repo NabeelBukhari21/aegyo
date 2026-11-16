@@ -40,7 +40,7 @@ struct SkyTab: View {
         }
         .overlay(alignment: .top) {
             if let toast {
-                Text(toast).font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)
+                Text(toast).font(.aegyo(14, .semibold)).foregroundStyle(.white)
                     .padding(.horizontal, 18).padding(.vertical, 12).glass(20)
                     .transition(.move(edge: .top).combined(with: .opacity))
             }
@@ -53,7 +53,7 @@ struct SkyTab: View {
                 .padding(.top, 8)
                 .contentTransition(.interpolate)
             Text(Astro.phaseName(phase))
-                .font(.system(size: 32, weight: .semibold)).tracking(-1)
+                .font(.aegyo(32, .semibold)).tracking(-1)
                 .foregroundStyle(.white)
                 .contentTransition(.interpolate)
                 .animation(.snappy, value: Astro.phaseName(phase))
@@ -73,7 +73,7 @@ struct SkyTab: View {
             }
             .padding(.horizontal, 4)
             Text("Drag the moon to spin it · tap it to send a moon kiss · scrub to see any night")
-                .font(.system(size: 12)).foregroundStyle(.white.opacity(0.4))
+                .font(.aegyo(12)).foregroundStyle(.white.opacity(0.4))
                 .multilineTextAlignment(.center)
         }
     }
@@ -99,7 +99,7 @@ private struct MoonSparkle: View {
         ZStack {
             ForEach(0..<14, id: \.self) { i in
                 Image(systemName: "sparkle")
-                    .font(.system(size: CGFloat(8 + i % 3 * 4)))
+                    .font(.aegyo(CGFloat(8 + i % 3 * 4)))
                     .foregroundStyle(i % 2 == 0 ? Color(red: 1, green: 0.85, blue: 0.5) : .white)
                     .offset(x: go ? cos(angles[i]) * 170 : 0, y: go ? sin(angles[i]) * 170 : 0)
                     .scaleEffect(go ? 0.3 : 1.2)
@@ -128,11 +128,11 @@ private struct MoonSection: View {
                             let p = Astro.moonPhase(date)
                             VStack(spacing: 8) {
                                 Text(d == 0 ? "TONIGHT" : date.formatted(.dateTime.weekday(.abbreviated)).uppercased())
-                                    .font(.system(size: 9, weight: .medium)).tracking(0.5)
+                                    .font(.aegyo(9, .medium)).tracking(0.5)
                                     .foregroundStyle(.white.opacity(d == 0 ? 0.9 : 0.5))
                                 RealPhase(phase: p, size: 26)
                                 Text("\(Int((Astro.illumination(date) * 100).rounded()))%")
-                                    .font(.system(size: 11, weight: .medium)).monospacedDigit()
+                                    .font(.aegyo(11, .medium)).monospacedDigit()
                                     .foregroundStyle(.white.opacity(0.7))
                             }
                             .frame(maxWidth: .infinity)
@@ -156,14 +156,14 @@ private struct MoonSection: View {
             CapsLabel(text: title)
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 if days == 0 {
-                    Text("Tonight").font(.system(size: 30, weight: .light))
+                    Text("Tonight").font(.aegyo(30, .light))
                 } else {
-                    Text("\(days)").font(.system(size: 34, weight: .light)).monospacedDigit()
-                    Text(days == 1 ? "day" : "days").font(.system(size: 14)).foregroundStyle(.white.opacity(0.6))
+                    Text("\(days)").font(.aegyo(34, .light)).monospacedDigit()
+                    Text(days == 1 ? "day" : "days").font(.aegyo(14)).foregroundStyle(.white.opacity(0.6))
                 }
             }
             .foregroundStyle(.white)
-            Text(line).font(.system(size: 12)).foregroundStyle(.white.opacity(0.5))
+            Text(line).font(.aegyo(12)).foregroundStyle(.white.opacity(0.5))
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -227,9 +227,9 @@ private struct StarsSection: View {
                         VStack(alignment: .leading, spacing: 4) {
                             CapsLabel(text: "\(mine.name) × \(hers.name)")
                             Text(mine.element == hers.element ? "Same element, same rhythm." : "Different elements, magnetic pull.")
-                                .font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                                .font(.aegyo(16, .semibold)).foregroundStyle(.white)
                             Text("\(mine.element.rawValue.capitalized) meets \(hers.element.rawValue)")
-                                .font(.system(size: 13)).foregroundStyle(.white.opacity(0.5))
+                                .font(.aegyo(13)).foregroundStyle(.white.opacity(0.5))
                         }
                     }
                 }
@@ -237,24 +237,24 @@ private struct StarsSection: View {
                     VStack(alignment: .leading, spacing: 10) {
                         CapsLabel(text: "Today's love forecast")
                         Text(LoveForecast.today(mine, hers))
-                            .font(.system(size: 19, weight: .semibold)).tracking(-0.3)
+                            .font(.aegyo(19, .semibold)).tracking(-0.3)
                             .foregroundStyle(.white)
                             .fixedSize(horizontal: false, vertical: true)
                         Text("Moon in \(Astro.moonSign().name) · \(Astro.phaseName(Astro.moonPhase()))")
-                            .font(.system(size: 13)).foregroundStyle(.white.opacity(0.5))
+                            .font(.aegyo(13)).foregroundStyle(.white.opacity(0.5))
                     }
                 }
                 Button { editing = true } label: {
-                    Text("Change birthdays").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.55))
+                    Text("Change birthdays").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.55))
                 }
             } else {
                 Card(padding: 22) {
                     VStack(alignment: .leading, spacing: 14) {
-                        Image(systemName: "sparkles").font(.system(size: 28)).foregroundStyle(Color(red: 1, green: 0.85, blue: 0.5))
+                        Image(systemName: "sparkles").font(.aegyo(28)).foregroundStyle(Color(red: 1, green: 0.85, blue: 0.5))
                             .symbolEffect(.variableColor.iterative, options: .repeating)
-                        Text("What do the stars say about you two?").font(.system(size: 22, weight: .semibold)).foregroundStyle(.white)
+                        Text("What do the stars say about you two?").font(.aegyo(22, .semibold)).foregroundStyle(.white)
                         Text("Add both birthdays for your signs, constellations, compatibility and a daily love forecast.")
-                            .font(.system(size: 14)).foregroundStyle(.white.opacity(0.6))
+                            .font(.aegyo(14)).foregroundStyle(.white.opacity(0.6))
                         Button { editing = true } label: {
                             WhitePill(title: "Add birthdays", systemImage: "gift", height: 50).frame(maxWidth: .infinity).background(.white, in: Capsule())
                         }
@@ -273,11 +273,11 @@ private struct StarsSection: View {
             ConstellationView(sign: z).frame(height: 110)
             CapsLabel(text: owner)
             HStack(spacing: 6) {
-                Text(z.symbol).font(.system(size: 18))
-                Text(z.name).font(.system(size: 20, weight: .semibold))
+                Text(z.symbol).font(.aegyo(18))
+                Text(z.name).font(.aegyo(20, .semibold))
             }
             .foregroundStyle(.white)
-            Text(z.trait).font(.system(size: 12)).foregroundStyle(.white.opacity(0.5)).lineLimit(2)
+            Text(z.trait).font(.aegyo(12)).foregroundStyle(.white.opacity(0.5)).lineLimit(2)
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -327,7 +327,7 @@ struct MatchRing: View {
                 .stroke(Love.glow, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                 .rotationEffect(.degrees(-90))
                 .shadow(color: Love.pink.opacity(0.5), radius: 8)
-            Text("\(Int(shown))%").font(.system(size: 20, weight: .semibold)).monospacedDigit()
+            Text("\(Int(shown))%").font(.aegyo(20, .semibold)).monospacedDigit()
                 .foregroundStyle(.white)
                 .contentTransition(.numericText(value: shown))
         }
@@ -355,7 +355,7 @@ private struct BirthdaySheet: View {
     }
     private func row(_ label: String, _ v: Binding<Double>) -> some View {
         HStack {
-            Text(label).font(.system(size: 16, weight: .medium)).foregroundStyle(.white)
+            Text(label).font(.aegyo(16, .medium)).foregroundStyle(.white)
             Spacer()
             DatePicker("", selection: Binding(get: { v.wrappedValue > 0 ? Date(timeIntervalSince1970: v.wrappedValue) : Calendar.current.date(byAdding: .year, value: -24, to: .now)! },
                                               set: { v.wrappedValue = $0.timeIntervalSince1970; Haptics.tick() }),

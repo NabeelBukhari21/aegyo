@@ -50,7 +50,7 @@ struct SettingsView: View {
                     }
 
                     Text("Aegyo \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") · made with love")
-                        .font(.system(size: 12)).foregroundStyle(.white.opacity(0.35))
+                        .font(.aegyo(12)).foregroundStyle(.white.opacity(0.35))
                         .padding(.top, 6)
                 }
                 .padding(.horizontal, 20)
@@ -116,10 +116,10 @@ struct SettingsView: View {
                 AvatarView(who: .partner, name: partnerDisplay, size: 60)
             }
             VStack(alignment: .leading, spacing: 3) {
-                Text("\(Profile.myName) & \(partnerDisplay)").font(.system(size: 20, weight: .semibold)).foregroundStyle(.white)
+                Text("\(Profile.myName) & \(partnerDisplay)").font(.aegyo(20, .semibold)).foregroundStyle(.white)
                 HStack(spacing: 6) {
                     if session.isPaired { PresenceDot() }
-                    Text(pairingValue).font(.system(size: 13)).foregroundStyle(.white.opacity(0.55))
+                    Text(pairingValue).font(.aegyo(13)).foregroundStyle(.white.opacity(0.55))
                 }
             }
             Spacer()
@@ -150,12 +150,12 @@ struct SettingsView: View {
 
     private func row(_ title: String, icon: String, tint: Color, value: String?) -> some View {
         HStack(spacing: 14) {
-            Image(systemName: icon).font(.system(size: 15, weight: .semibold)).foregroundStyle(tint)
+            Image(systemName: icon).font(.aegyo(15, .semibold)).foregroundStyle(tint)
                 .frame(width: 32, height: 32).background(tint.opacity(0.14), in: RoundedRectangle(cornerRadius: 9, style: .continuous))
-            Text(title).font(.system(size: 15, weight: .medium)).foregroundStyle(.white)
+            Text(title).font(.aegyo(15, .medium)).foregroundStyle(.white)
             Spacer()
-            if let value { Text(value).font(.system(size: 13)).foregroundStyle(.white.opacity(0.45)).lineLimit(1) }
-            Image(systemName: "chevron.right").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.3))
+            if let value { Text(value).font(.aegyo(13)).foregroundStyle(.white.opacity(0.45)).lineLimit(1) }
+            Image(systemName: "chevron.right").font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.3))
         }
         .padding(.horizontal, 14).frame(height: 54)
         .contentShape(Rectangle())
@@ -204,8 +204,8 @@ struct ToggleRow: View {
     var body: some View {
         Toggle(isOn: $on) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.system(size: 15, weight: .medium)).foregroundStyle(.white)
-                if let line { Text(line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5)) }
+                Text(title).font(.aegyo(15, .medium)).foregroundStyle(.white)
+                if let line { Text(line).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5)) }
             }
         }
         .tint(Love.pink)
@@ -233,7 +233,7 @@ struct SettingsGroup<Content: View, Footer: View>: View {
         VStack(alignment: .leading, spacing: 8) {
             if let title { CapsLabel(text: title).padding(.leading, 4) }
             VStack(spacing: 0) { content }.glass(22)
-            footer.font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.45)).padding(.horizontal, 4)
+            footer.font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.45)).padding(.horizontal, 4)
         }
     }
 }

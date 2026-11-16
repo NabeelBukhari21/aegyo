@@ -49,12 +49,12 @@ struct AchievementsView: View {
                                 Circle().trim(from: 0, to: b.progress).stroke(b.tint.opacity(0.6), style: StrokeStyle(lineWidth: 2, lineCap: .round))
                                     .rotationEffect(.degrees(-90)).frame(width: 54, height: 54)
                             }
-                            Image(systemName: b.unlocked ? b.icon : "lock.fill").font(.system(size: 20, weight: .semibold))
+                            Image(systemName: b.unlocked ? b.icon : "lock.fill").font(.aegyo(20, .semibold))
                                 .foregroundStyle(b.unlocked ? b.tint : .white.opacity(0.3))
                         }
                         .shadow(color: b.unlocked ? b.tint.opacity(0.5) : .clear, radius: 10)
-                        Text(b.title).font(.system(size: 12.5, weight: .semibold)).foregroundStyle(b.unlocked ? .white : .white.opacity(0.5)).multilineTextAlignment(.center).lineLimit(2)
-                        Text(b.line).font(.system(size: 10.5)).foregroundStyle(.white.opacity(0.4)).multilineTextAlignment(.center).lineLimit(2)
+                        Text(b.title).font(.aegyo(12.5, .semibold)).foregroundStyle(b.unlocked ? .white : .white.opacity(0.5)).multilineTextAlignment(.center).lineLimit(2)
+                        Text(b.line).font(.aegyo(10.5)).foregroundStyle(.white.opacity(0.4)).multilineTextAlignment(.center).lineLimit(2)
                     }
                     .frame(maxWidth: .infinity).frame(height: 136)
                     .padding(.horizontal, 6)

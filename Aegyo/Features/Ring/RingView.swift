@@ -23,10 +23,10 @@ struct RingView: View {
 
                 VStack(spacing: 8) {
                     Text(name.capitalized(with: nil))
-                        .font(.system(size: 34, weight: .semibold))
+                        .font(.aegyo(34, .semibold))
                         .tracking(-0.8)
                     Text(sentBack ? "Love sent back" : "rang just to say they miss you")
-                        .font(.system(size: 15))
+                        .font(.aegyo(15))
                         .foregroundStyle(.white.opacity(0.6))
                         .contentTransition(.opacity)
                 }

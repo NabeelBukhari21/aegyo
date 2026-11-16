@@ -113,7 +113,7 @@ struct OnboardingFlow: View {
         VStack(spacing: 0) {
             Spacer()
             Text(beats[storyBeat].0)
-                .font(.system(size: 22, weight: .semibold)).tracking(-0.3)
+                .font(.aegyo(22, .semibold)).tracking(-0.3)
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 36)
@@ -121,7 +121,7 @@ struct OnboardingFlow: View {
                 .transition(.opacity.combined(with: .offset(y: 8)))
             Spacer()
             Text(beats[storyBeat].1)
-                .font(.system(size: 11, weight: .semibold)).tracking(1.6)
+                .font(.aegyo(11, .semibold)).tracking(1.6)
                 .foregroundStyle(Opal.mint.opacity(0.9))
                 .padding(.bottom, 40)
         }
@@ -143,13 +143,13 @@ struct OnboardingFlow: View {
     private func question(_ prompt: String, _ title: String, @ViewBuilder content: () -> some View, canContinue: Bool, skip: Bool = false, onContinue: @escaping () -> Void) -> some View {
         VStack(alignment: .leading, spacing: 18) {
             FadeInText(prompt).padding(.top, 6)
-            Text(title).font(.system(size: 22, weight: .semibold)).foregroundStyle(.white)
+            Text(title).font(.aegyo(22, .semibold)).foregroundStyle(.white)
             content()
             Spacer(minLength: 0)
             ContinuePill(enabled: canContinue, loading: busy, action: onContinue)
             if skip {
                 Button { Haptics.tap(); advance() } label: {
-                    Text("Skip for now").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.55)).frame(maxWidth: .infinity)
+                    Text("Skip for now").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.55)).frame(maxWidth: .infinity)
                 }
                 .buttonStyle(PressStyle())
             }
@@ -170,7 +170,7 @@ struct OnboardingFlow: View {
         question("Nice to meet you, \(draft.name.isEmpty ? "you" : draft.name).", "And what do you call them?", content: {
             OnboardField(text: $draft.partnerName, placeholder: "Their name or nickname", capitalization: .words, keyboard: .default)
             Text("You can change this later. If you pair, their real name comes across.")
-                .font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.45))
+                .font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.45))
         }, canContinue: !draft.partnerName.trimmingCharacters(in: .whitespaces).isEmpty) {
             AppGroup.defaults.set(draft.partnerName.trimmingCharacters(in: .whitespaces), forKey: Profile.partnerNameKey)
             advance()
@@ -190,8 +190,8 @@ struct OnboardingFlow: View {
                             Image(uiImage: p).resizable().scaledToFill().frame(width: 140, height: 140).clipShape(Circle())
                         } else {
                             VStack(spacing: 6) {
-                                Image(systemName: "camera.fill").font(.system(size: 26)).foregroundStyle(.white.opacity(0.8))
-                                Text("Choose").font(.system(size: 13, weight: .medium)).foregroundStyle(.white.opacity(0.6))
+                                Image(systemName: "camera.fill").font(.aegyo(26)).foregroundStyle(.white.opacity(0.8))
+                                Text("Choose").font(.aegyo(13, .medium)).foregroundStyle(.white.opacity(0.6))
                             }
                         }
                     }
@@ -229,7 +229,7 @@ struct OnboardingFlow: View {
         question("So we can show the sky above you both.", "Where are you right now?", content: {
             OnboardField(text: $draft.city, placeholder: "City, e.g. Toronto", capitalization: .words, keyboard: .default)
             Text("Used for the distance between you and local time. Never shared beyond your partner.")
-                .font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.45))
+                .font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.45))
         }, canContinue: !draft.city.trimmingCharacters(in: .whitespaces).isEmpty, skip: true) {
             busy = true
             Task {
@@ -257,14 +257,14 @@ struct OnboardingFlow: View {
     private var notificationsStep: some View {
         VStack(alignment: .leading, spacing: 18) {
             FadeInText("One last thing before we begin.").padding(.top, 6)
-            Text("Let \(Doki.name) reach you").font(.system(size: 22, weight: .semibold)).foregroundStyle(.white)
+            Text("Let \(Doki.name) reach you").font(.aegyo(22, .semibold)).foregroundStyle(.white)
             VStack(spacing: 10) {
                 permissionRow("capsule.inset.filled", "Dynamic Island", "Their love shows up right at the top of your screen, with a soft chime.")
                 permissionRow("bell.badge.fill", "Gentle reminders", "One nudge a day if you haven't said it yet. Never spam.")
                 permissionRow("phone.fill", "Ring", "When they really need you, your phone rings like a call.")
             }
             Text("You can change all of this in Settings any time.")
-                .font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.45))
+                .font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.45))
             Spacer(minLength: 0)
             ContinuePill(title: "Allow notifications", loading: busy) {
                 busy = true
@@ -275,7 +275,7 @@ struct OnboardingFlow: View {
                 }
             }
             Button { Haptics.tap(); advance() } label: {
-                Text("Not now").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.55)).frame(maxWidth: .infinity)
+                Text("Not now").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.55)).frame(maxWidth: .infinity)
             }
             .buttonStyle(PressStyle())
         }
@@ -284,11 +284,11 @@ struct OnboardingFlow: View {
 
     private func permissionRow(_ icon: String, _ title: String, _ line: String) -> some View {
         HStack(alignment: .top, spacing: 14) {
-            Image(systemName: icon).font(.system(size: 18, weight: .semibold)).foregroundStyle(Love.pink)
+            Image(systemName: icon).font(.aegyo(18, .semibold)).foregroundStyle(Love.pink)
                 .frame(width: 42, height: 42).background(Love.pink.opacity(0.14), in: Circle())
             VStack(alignment: .leading, spacing: 3) {
-                Text(title).font(.system(size: 15, weight: .semibold)).foregroundStyle(.white)
-                Text(line).font(.system(size: 13)).foregroundStyle(.white.opacity(0.55)).fixedSize(horizontal: false, vertical: true)
+                Text(title).font(.aegyo(15, .semibold)).foregroundStyle(.white)
+                Text(line).font(.aegyo(13)).foregroundStyle(.white.opacity(0.55)).fixedSize(horizontal: false, vertical: true)
             }
         }
         .padding(14)
@@ -341,7 +341,7 @@ struct FadeInText: View {
     @State private var on = false
     init(_ text: String) { self.text = text }
     var body: some View {
-        Text(text).font(.system(size: 15)).foregroundStyle(.white.opacity(0.55))
+        Text(text).font(.aegyo(15)).foregroundStyle(.white.opacity(0.55))
             .opacity(on ? 1 : 0).offset(y: on ? 0 : 6)
             .onAppear { withAnimation(.easeOut(duration: 0.6).delay(0.15)) { on = true } }
     }
@@ -356,7 +356,7 @@ struct OnboardField: View {
 
     var body: some View {
         TextField("", text: $text, prompt: Text(placeholder).foregroundStyle(.white.opacity(0.3)))
-            .font(.system(size: 17))
+            .font(.aegyo(17))
             .foregroundStyle(.white)
             .textInputAutocapitalization(capitalization)
             .keyboardType(keyboard)
@@ -402,7 +402,7 @@ struct AvatarView: View {
                 Image(uiImage: image).resizable().scaledToFill()
             } else {
                 LinearGradient(colors: who == .me ? [Love.pink, Love.rose] : [Love.violet, Color(red: 0.4, green: 0.5, blue: 1)], startPoint: .topLeading, endPoint: .bottomTrailing)
-                Text(String(name.prefix(1)).uppercased()).font(.system(size: size * 0.42, weight: .semibold)).foregroundStyle(.white)
+                Text(String(name.prefix(1)).uppercased()).font(.aegyo(size * 0.42, .semibold)).foregroundStyle(.white)
             }
         }
         .frame(width: size, height: size).clipShape(Circle())

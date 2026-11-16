@@ -25,13 +25,13 @@ struct HelpView: View {
                     } label: {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack {
-                                Text(f.0).font(.system(size: 15, weight: .semibold)).foregroundStyle(.white).multilineTextAlignment(.leading)
+                                Text(f.0).font(.aegyo(15, .semibold)).foregroundStyle(.white).multilineTextAlignment(.leading)
                                 Spacer()
-                                Image(systemName: "chevron.down").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.4))
+                                Image(systemName: "chevron.down").font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.4))
                                     .rotationEffect(.degrees(open == i ? 180 : 0))
                             }
                             if open == i {
-                                Text(f.1).font(.system(size: 14)).foregroundStyle(.white.opacity(0.65)).fixedSize(horizontal: false, vertical: true)
+                                Text(f.1).font(.aegyo(14)).foregroundStyle(.white.opacity(0.65)).fixedSize(horizontal: false, vertical: true)
                                     .transition(.opacity.combined(with: .move(edge: .top)))
                             }
                         }
@@ -65,10 +65,10 @@ struct FeedbackView: View {
         SettingsPage(title: "Send feedback", subtitle: "Read by a person. Replies within a couple of days.") {
             PillSegmented(options: kinds.map { ($0, $0) }, selection: $kind)
             TextField("", text: $text, prompt: Text(prompt).foregroundStyle(.white.opacity(0.3)), axis: .vertical)
-                .lineLimit(5...10).font(.system(size: 16)).foregroundStyle(.white)
+                .lineLimit(5...10).font(.aegyo(16)).foregroundStyle(.white)
                 .padding(16).glass(22)
             Text("Device: \(UIDevice.current.model) · iOS \(UIDevice.current.systemVersion) · Aegyo \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")")
-                .font(.system(size: 12)).foregroundStyle(.white.opacity(0.4))
+                .font(.aegyo(12)).foregroundStyle(.white.opacity(0.4))
             if sent {
                 SuccessMoment(title: "Thanks", message: "We got it.").frame(maxWidth: .infinity).padding(.top, 10)
             } else {
@@ -142,9 +142,9 @@ struct AboutView: View {
                 .onTapGesture { Haptics.gemPress(); thump += 1 }
             VStack(alignment: .leading, spacing: 10) {
                 Text("Aegyo (애교) is the Korean word for the small, deliberately cute things you do to make someone you love smile.")
-                    .font(.system(size: 15)).foregroundStyle(.white.opacity(0.75))
+                    .font(.aegyo(15)).foregroundStyle(.white.opacity(0.75))
                 Text("This app exists because distance makes every “I miss you” louder. One tap, and it lands in the Dynamic Island of the person who matters.")
-                    .font(.system(size: 15)).foregroundStyle(.white.opacity(0.75))
+                    .font(.aegyo(15)).foregroundStyle(.white.opacity(0.75))
             }
             .padding(16).glass(22)
             SettingsGroup(title: "Version") {
@@ -171,8 +171,8 @@ struct LegalView: View {
             VStack(alignment: .leading, spacing: 18) {
                 ForEach(Array(sections.enumerated()), id: \.offset) { _, s in
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(s.0).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
-                        Text(s.1).font(.system(size: 14)).foregroundStyle(.white.opacity(0.7)).fixedSize(horizontal: false, vertical: true)
+                        Text(s.0).font(.aegyo(16, .semibold)).foregroundStyle(.white)
+                        Text(s.1).font(.aegyo(14)).foregroundStyle(.white.opacity(0.7)).fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }

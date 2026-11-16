@@ -88,18 +88,18 @@ struct TimelineRow: View {
                 if event.kind == .photo, let id = event.photoID, let img = love.photoImage(id) {
                     Image(uiImage: img).resizable().scaledToFill().frame(width: 40, height: 40).clipShape(Circle())
                 } else {
-                    Image(systemName: event.kind.symbol).font(.system(size: 15, weight: .semibold)).foregroundStyle(event.outgoing ? Love.pink : Love.violet)
+                    Image(systemName: event.kind.symbol).font(.aegyo(15, .semibold)).foregroundStyle(event.outgoing ? Love.pink : Love.violet)
                 }
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(event.kind.headline(from: who, detail: event.detail)).font(.system(size: 14.5, weight: .semibold)).foregroundStyle(.white).lineLimit(1)
-                Text(line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(1)
+                Text(event.kind.headline(from: who, detail: event.detail)).font(.aegyo(14.5, .semibold)).foregroundStyle(.white).lineLimit(1)
+                Text(line).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(1)
             }
             Spacer()
             if event.kind == .voice, let id = event.photoID {
                 VoicePlayButton(id: id, duration: parse(event.detail))
             }
-            Text(event.date.formatted(date: .omitted, time: .shortened)).font(.system(size: 12)).foregroundStyle(.white.opacity(0.4))
+            Text(event.date.formatted(date: .omitted, time: .shortened)).font(.aegyo(12)).foregroundStyle(.white.opacity(0.4))
         }
         .padding(.horizontal, 14).padding(.vertical, 11)
         .accessibilityElement(children: .combine)
@@ -129,11 +129,11 @@ struct SearchField: View {
     @FocusState private var focused: Bool
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: "magnifyingglass").font(.system(size: 14, weight: .semibold)).foregroundStyle(.white.opacity(0.5))
+            Image(systemName: "magnifyingglass").font(.aegyo(14, .semibold)).foregroundStyle(.white.opacity(0.5))
             TextField("", text: $text, prompt: Text(placeholder).foregroundStyle(.white.opacity(0.35)))
-                .font(.system(size: 15)).foregroundStyle(.white).focused($focused).autocorrectionDisabled()
+                .font(.aegyo(15)).foregroundStyle(.white).focused($focused).autocorrectionDisabled()
             if !text.isEmpty {
-                Button { Haptics.tick(); text = "" } label: { Image(systemName: "xmark.circle.fill").foregroundStyle(.white.opacity(0.4)) }
+                Button { Haptics.tick(); text = "" } label: { Image(systemName: "xmark.circle.fill").foregroundStyle(.white.opacity(0.4)) }.accessibilityLabel("Clear search")
                     .accessibilityLabel("Clear search")
             }
         }

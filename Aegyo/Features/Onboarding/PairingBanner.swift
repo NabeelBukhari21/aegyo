@@ -38,15 +38,15 @@ struct PairingBanner: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle().fill(tint.opacity(0.14)).frame(width: 40, height: 40)
-                    Image(systemName: icon).font(.system(size: 16, weight: .semibold)).foregroundStyle(tint)
+                    Image(systemName: icon).font(.aegyo(16, .semibold)).foregroundStyle(tint)
                     if pulse { PulseDot().offset(x: 15, y: -15) }
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title).font(.system(size: 14.5, weight: .semibold)).foregroundStyle(.white)
-                    Text(line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.55)).lineLimit(2)
+                    Text(title).font(.aegyo(14.5, .semibold)).foregroundStyle(.white)
+                    Text(line).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.55)).lineLimit(2)
                 }
                 Spacer(minLength: 6)
-                Text(cta).font(.system(size: 12.5, weight: .semibold)).foregroundStyle(.black)
+                Text(cta).font(.aegyo(12.5, .semibold)).foregroundStyle(.black)
                     .padding(.horizontal, 12).frame(height: 30).background(.white, in: Capsule())
             }
             .padding(12)

@@ -23,18 +23,18 @@ struct MoodCards: View {
                     HStack(alignment: .bottom) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(status?.mood.name ?? "—")
-                                .font(.system(size: 24, weight: .semibold)).tracking(-0.6)
+                                .font(.aegyo(24, .semibold)).tracking(-0.6)
                                 .foregroundStyle(.white)
                                 .contentTransition(.interpolate)
                             Text(status.map { "set \(agoText($0.at))" } ?? empty)
-                                .font(.system(size: 12)).foregroundStyle(.white.opacity(0.5))
+                                .font(.aegyo(12)).foregroundStyle(.white.opacity(0.5))
                         }
                         Spacer(minLength: 0)
                         if let s = status {
                             MoodCharacter(mood: s.mood, size: 58, react: poke)
                                 .transition(.scale.combined(with: .opacity))
                         } else {
-                            Image(systemName: "plus").font(.system(size: 18, weight: .semibold)).foregroundStyle(.white.opacity(0.5))
+                            Image(systemName: "plus").font(.aegyo(18, .semibold)).foregroundStyle(.white.opacity(0.5))
                                 .frame(width: 58, height: 58)
                         }
                     }
@@ -71,7 +71,7 @@ struct MoodPicker: View {
                             MoodCharacter(mood: mood, size: 56, react: pokes[mood, default: 0])
                                 .offset(y: flying && chosen == mood ? -700 : 0)
                                 .scaleEffect(flying && chosen == mood ? 0.4 : 1)
-                            Text(mood.name).font(.system(size: 12, weight: .medium))
+                            Text(mood.name).font(.aegyo(12, .medium))
                                 .foregroundStyle(chosen == mood ? .white : .white.opacity(0.6))
                         }
                         .frame(maxWidth: .infinity).padding(.vertical, 12)

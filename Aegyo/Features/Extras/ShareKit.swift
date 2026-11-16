@@ -43,7 +43,7 @@ struct FeatureSheet<Content: View>: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {
                     if let subtitle {
-                        Text(subtitle).font(.system(size: 15)).foregroundStyle(.white.opacity(0.55))
+                        Text(subtitle).font(.aegyo(15)).foregroundStyle(.white.opacity(0.55))
                     }
                     content
                 }
@@ -62,8 +62,9 @@ struct FeatureSheet<Content: View>: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { dismiss() } label: {
-                        Image(systemName: "xmark").font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)
+                        Image(systemName: "xmark").font(.aegyo(14, .semibold)).foregroundStyle(.white)
                     }
+                    .accessibilityLabel("Close")
                 }
             }
         }
@@ -77,7 +78,7 @@ struct Wordmark: View {
     var body: some View {
         HStack(spacing: 6) {
             StaticGem(width: size * 0.95)
-            Text("aegyo").font(.system(size: size, weight: .semibold)).tracking(-size * 0.04)
+            Text("aegyo").font(.aegyo(size, .semibold)).tracking(-size * 0.04)
         }
         .foregroundStyle(.white)
     }

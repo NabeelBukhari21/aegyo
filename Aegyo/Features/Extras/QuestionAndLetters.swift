@@ -55,7 +55,7 @@ struct DailyQuestionView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     CapsLabel(text: Date.now.formatted(.dateTime.weekday(.wide).month().day()))
                     Text(DailyQuestions.today)
-                        .font(.system(size: 26, weight: .semibold)).tracking(-0.6)
+                        .font(.aegyo(26, .semibold)).tracking(-0.6)
                         .foregroundStyle(.white)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -66,14 +66,14 @@ struct DailyQuestionView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .contextMenu { Button { draft = answered; editingAnswer = true; focused = true } label: { Label("Edit answer", systemImage: "pencil") } }
                 Button { Haptics.tick(); draft = answered; withAnimation { editingAnswer = true }; focused = true } label: {
-                    Label("Edit my answer", systemImage: "pencil").font(.system(size: 13, weight: .medium)).foregroundStyle(.white.opacity(0.6))
+                    Label("Edit my answer", systemImage: "pencil").font(.aegyo(13, .medium)).foregroundStyle(.white.opacity(0.6))
                 }
                 answerCard(title: Profile.partnerName.capitalized(with: nil),
                            text: "Her answer appears here the moment she answers. Until then, no peeking.", locked: true)
             } else {
                 TextField("", text: $draft, prompt: Text("Your answer…").foregroundStyle(.white.opacity(0.35)), axis: .vertical)
                     .lineLimit(3...8)
-                    .font(.system(size: 17))
+                    .font(.aegyo(17))
                     .foregroundStyle(.white)
                     .focused($focused)
                     .padding(18)
@@ -102,10 +102,10 @@ struct DailyQuestionView: View {
                 HStack {
                     CapsLabel(text: title)
                     Spacer()
-                    if locked { Image(systemName: "lock.fill").font(.system(size: 12)).foregroundStyle(.white.opacity(0.5)) }
+                    if locked { Image(systemName: "lock.fill").font(.aegyo(12)).foregroundStyle(.white.opacity(0.5)) }
                 }
                 Text(text)
-                    .font(.system(size: 16))
+                    .font(.aegyo(16))
                     .foregroundStyle(.white.opacity(locked ? 0.5 : 0.95))
                     .blur(radius: locked ? 0.3 : 0)
             }
@@ -132,7 +132,7 @@ struct LettersView: View {
 
             if love.data.letters.isEmpty {
                 Text("Write one for a hard night, a long flight, or your anniversary. It waits, sealed with \(Doki.name), until she needs it.")
-                    .font(.system(size: 14)).foregroundStyle(.white.opacity(0.5))
+                    .font(.aegyo(14)).foregroundStyle(.white.opacity(0.5))
             }
             ForEach(love.data.letters.reversed()) { letter in
                 Button { Haptics.tap(); opening = letter } label: { EnvelopeRow(letter: letter) }
@@ -163,13 +163,13 @@ private struct EnvelopeRow: View {
                 StaticGem(width: 18).offset(y: 2)
             }
             VStack(alignment: .leading, spacing: 3) {
-                Text(letter.trigger.title).font(.system(size: 15, weight: .semibold)).foregroundStyle(.white)
+                Text(letter.trigger.title).font(.aegyo(15, .semibold)).foregroundStyle(.white)
                 Text(letter.isLocked ? "Unlocks \(letter.unlockDate!.formatted(date: .abbreviated, time: .omitted))"
                      : letter.outgoing ? "Sealed for \(Profile.partnerName)" : "From \(Profile.partnerName)")
-                    .font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5))
+                    .font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5))
             }
             Spacer()
-            Image(systemName: letter.isLocked ? "lock.fill" : "chevron.right").font(.system(size: 13)).foregroundStyle(.white.opacity(0.4))
+            Image(systemName: letter.isLocked ? "lock.fill" : "chevron.right").font(.aegyo(13)).foregroundStyle(.white.opacity(0.4))
         }
         .padding(14)
         .glass(20)
@@ -205,7 +205,7 @@ private struct LetterComposer: View {
                         ForEach(Letter.Trigger.allCases) { t in
                             Button { withAnimation(.snappy) { trigger = t } } label: {
                                 Text(t.title.replacingOccurrences(of: "Open ", with: "").capitalizedFirst)
-                                    .font(.system(size: 13, weight: .medium))
+                                    .font(.aegyo(13, .medium))
                                     .foregroundStyle(trigger == t ? .black : .white)
                                     .padding(.horizontal, 14).frame(height: 36)
                                     .background(trigger == t ? AnyShapeStyle(.white) : AnyShapeStyle(.white.opacity(0.08)), in: Capsule())
@@ -219,7 +219,7 @@ private struct LetterComposer: View {
                 ZStack {
                     TextField("", text: $body_, prompt: Text("Dear \(Profile.partnerName),").foregroundStyle(.black.opacity(0.35)), axis: .vertical)
                         .lineLimit(10...20)
-                        .font(.system(size: 17, design: .serif))
+                        .font(.aegyo(17, design: .serif))
                         .foregroundStyle(.black)
                         .padding(22)
                         .frame(maxWidth: .infinity, minHeight: 320, alignment: .topLeading)
@@ -272,18 +272,18 @@ private struct LetterOpenView: View {
         ZStack {
             OpalBackground()
             VStack(spacing: 24) {
-                Text(letter.trigger.title).font(.system(size: 22, weight: .semibold)).foregroundStyle(.white)
+                Text(letter.trigger.title).font(.aegyo(22, .semibold)).foregroundStyle(.white)
                 if letter.isLocked {
                     VStack(spacing: 12) {
-                        Image(systemName: "lock.fill").font(.system(size: 34)).foregroundStyle(.white.opacity(0.7))
+                        Image(systemName: "lock.fill").font(.aegyo(34)).foregroundStyle(.white.opacity(0.7))
                         Text("Sealed until \(letter.unlockDate!.formatted(date: .long, time: .omitted))")
-                            .font(.system(size: 15)).foregroundStyle(.white.opacity(0.6))
+                            .font(.aegyo(15)).foregroundStyle(.white.opacity(0.6))
                     }
                     .padding(.top, 60)
                 } else {
                     ZStack(alignment: .top) {
                         Text(letter.body)
-                            .font(.system(size: 17, design: .serif))
+                            .font(.aegyo(17, design: .serif))
                             .foregroundStyle(.black)
                             .padding(24)
                             .frame(width: 300, height: 360, alignment: .topLeading)
@@ -306,7 +306,7 @@ private struct LetterOpenView: View {
                 HStack(spacing: 10) {
                     if !letter.isLocked { SaveButton(id: letter.id.uuidString).frame(width: 52, height: 52) }
                     Button { dismiss() } label: {
-                        Text("Close").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                        Text("Close").font(.aegyo(16, .semibold)).foregroundStyle(.white)
                             .frame(maxWidth: .infinity).frame(height: 52).background(.white.opacity(0.1), in: Capsule())
                     }
                 }

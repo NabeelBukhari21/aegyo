@@ -64,7 +64,7 @@ struct RootView: View {
 
             if let toast {
                 VStack {
-                    Text(toast).font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)
+                    Text(toast).font(.aegyo(14, .semibold)).foregroundStyle(.white)
                         .padding(.horizontal, 18).padding(.vertical, 12)
                         .glass(20)
                         .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .scale(scale: 0.85)).combined(with: .opacity),
@@ -201,7 +201,7 @@ struct MomentsTab: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                Text("Moments").font(.system(size: 32, weight: .semibold)).tracking(-1).foregroundStyle(.white)
+                Text("Moments").font(.aegyo(32, .semibold)).tracking(-1).foregroundStyle(.white)
                     .padding(.top, 8).stagger(appeared, 0)
                 MoodCards().stagger(appeared, 1)
                 PhotoCard().stagger(appeared, 2)
@@ -245,10 +245,10 @@ struct UsTab: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
-                    Text("Us").font(.system(size: 32, weight: .semibold)).tracking(-1).foregroundStyle(.white)
+                    Text("Us").font(.aegyo(32, .semibold)).tracking(-1).foregroundStyle(.white)
                     Spacer()
                     Button { open(.settings) } label: {
-                        Image(systemName: "gearshape.fill").font(.system(size: 17)).foregroundStyle(.white.opacity(0.8))
+                        Image(systemName: "gearshape.fill").font(.aegyo(17)).foregroundStyle(.white.opacity(0.8))
                             .frame(width: 40, height: 40).background(.white.opacity(0.08), in: Circle())
                     }
                     .buttonStyle(PressStyle())
@@ -260,18 +260,18 @@ struct UsTab: View {
                         Button { open(it.sheet) } label: {
                             VStack(alignment: .leading, spacing: 0) {
                                 HStack {
-                                    Image(systemName: it.icon).font(.system(size: 22)).foregroundStyle(it.tint)
+                                    Image(systemName: it.icon).font(.aegyo(22)).foregroundStyle(it.tint)
                                         .frame(width: 48, height: 48).background(it.tint.opacity(0.14), in: Circle())
                                         .symbolEffect(.bounce, value: appeared)
                                     Spacer()
                                     if it.plus && !store.isPlus {
-                                        Text("PLUS").font(.system(size: 9, weight: .bold)).tracking(0.8).foregroundStyle(.black)
+                                        Text("PLUS").font(.aegyo(9, .bold)).tracking(0.8).foregroundStyle(.black)
                                             .padding(.horizontal, 7).padding(.vertical, 4).background(Love.pink, in: Capsule())
                                     }
                                 }
                                 Spacer()
-                                Text(it.title).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
-                                Text(it.line).font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(1).padding(.top, 3)
+                                Text(it.title).font(.aegyo(16, .semibold)).foregroundStyle(.white)
+                                Text(it.line).font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5)).lineLimit(1).padding(.top, 3)
                             }
                             .padding(16)
                             .frame(maxWidth: .infinity, minHeight: 156, alignment: .leading)
@@ -309,15 +309,15 @@ struct HistoryRow: View {
                     Button { Haptics.tap(); open(it.0) } label: {
                         VStack(alignment: .leading, spacing: 10) {
                             HStack {
-                                Image(systemName: it.1).font(.system(size: 18, weight: .semibold)).foregroundStyle(it.3)
+                                Image(systemName: it.1).font(.aegyo(18, .semibold)).foregroundStyle(it.3)
                                     .frame(width: 40, height: 40).background(it.3.opacity(0.14), in: Circle())
                                 Spacer()
                                 if it.4 && !store.isPlus {
-                                    Text("PLUS").font(.system(size: 9, weight: .bold)).tracking(0.8).foregroundStyle(.black)
+                                    Text("PLUS").font(.aegyo(9, .bold)).tracking(0.8).foregroundStyle(.black)
                                         .padding(.horizontal, 7).padding(.vertical, 4).background(Love.pink, in: Capsule())
                                 }
                             }
-                            Text(it.2).font(.system(size: 15, weight: .semibold)).foregroundStyle(.white)
+                            Text(it.2).font(.aegyo(15, .semibold)).foregroundStyle(.white)
                         }
                         .padding(14).frame(width: 150, alignment: .leading).glass(22)
                     }

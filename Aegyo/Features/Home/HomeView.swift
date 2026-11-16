@@ -56,7 +56,7 @@ struct HomeTab: View {
                 .stagger(appeared, 1)
 
                 Text("Tap \(Doki.name) to tell \(partner) you miss her")
-                    .font(.system(size: 13)).foregroundStyle(.white.opacity(0.45))
+                    .font(.aegyo(13)).foregroundStyle(.white.opacity(0.45))
                     .stagger(appeared, 2)
 
                 stats.padding(.top, 14).stagger(appeared, 2)
@@ -107,28 +107,28 @@ struct HomeTab: View {
 
     private var header: some View {
         HStack {
-            Text("aegyo").font(.system(size: 27, weight: .semibold)).tracking(-1.1).foregroundStyle(.white)
+            Text("aegyo").font(.aegyo(27, .semibold)).tracking(-1.1).foregroundStyle(.white).lineLimit(1).fixedSize()
             Spacer()
             Button { open(.gem) } label: {
                 HStack(spacing: 5) {
-                    Image(systemName: "flame.fill").font(.system(size: 11, weight: .bold)).foregroundStyle(Love.pink)
+                    Image(systemName: "flame.fill").font(.aegyo(11, .bold)).foregroundStyle(Love.pink)
                         .symbolEffect(.breathe, options: .repeating)
                     Text("\(love.streakDays)").foregroundStyle(.white).contentTransition(.numericText())
                     Text(love.streakDays == 1 ? "day" : "days").foregroundStyle(.white.opacity(0.7))
                 }
-                .font(.system(size: 12.5, weight: .semibold))
+                .font(.aegyo(12.5, .semibold))
                 .padding(.horizontal, 11).frame(height: 30)
                 .background(.white.opacity(0.08), in: Capsule())
             }
             .buttonStyle(PressStyle())
             Button { open(.timeline) } label: {
-                Image(systemName: "clock.arrow.circlepath").font(.system(size: 18)).foregroundStyle(.white.opacity(0.85))
+                Image(systemName: "clock.arrow.circlepath").font(.aegyo(18)).foregroundStyle(.white.opacity(0.85))
                     .frame(width: 36, height: 36)
             }
             .buttonStyle(PressStyle())
             .accessibilityLabel("Timeline")
             Button { open(.settings) } label: {
-                Image(systemName: "person.crop.circle").font(.system(size: 20)).foregroundStyle(.white.opacity(0.85))
+                Image(systemName: "person.crop.circle").font(.aegyo(20)).foregroundStyle(.white.opacity(0.85))
                     .frame(width: 36, height: 36)
             }
             .buttonStyle(PressStyle())
@@ -155,9 +155,9 @@ struct HomeTab: View {
 
     private func stat(_ label: String, value: String, numeric: Double? = nil) -> some View {
         VStack(spacing: 5) {
-            Text(label).font(.system(size: 10, weight: .medium)).tracking(1).foregroundStyle(.white.opacity(0.5))
+            Text(label).font(.aegyo(10, .medium)).tracking(1).foregroundStyle(.white.opacity(0.5))
             Text(value)
-                .font(.system(size: 19, weight: .semibold)).monospacedDigit().foregroundStyle(.white)
+                .font(.aegyo(19, .semibold)).monospacedDigit().foregroundStyle(.white)
                 .contentTransition(numeric != nil ? .numericText(value: numeric!) : .interpolate)
                 .animation(.snappy(duration: 0.35), value: value)
         }
@@ -186,15 +186,15 @@ struct HomeTab: View {
     private var todayCard: some View {
         Button { open(.question) } label: {
             HStack(alignment: .top, spacing: 14) {
-                Image(systemName: "questionmark.bubble.fill").font(.system(size: 20)).foregroundStyle(Love.pink)
+                Image(systemName: "questionmark.bubble.fill").font(.aegyo(20)).foregroundStyle(Love.pink)
                     .frame(width: 44, height: 44).background(Love.pink.opacity(0.14), in: Circle())
                     .symbolEffect(.wiggle, options: .repeat(.periodic(delay: 4)))
                 VStack(alignment: .leading, spacing: 4) {
                     CapsLabel(text: "Today's question")
-                    Text(DailyQuestions.today).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                    Text(DailyQuestions.today).font(.aegyo(16, .semibold)).foregroundStyle(.white)
                         .multilineTextAlignment(.leading).fixedSize(horizontal: false, vertical: true)
                     Text(love.data.answers[DayKey.of(.now)] == nil ? "Tap to answer" : "Answered · waiting for her")
-                        .font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5))
+                        .font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5))
                 }
                 Spacer(minLength: 0)
             }
@@ -223,11 +223,11 @@ struct QuickChip: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) { withAnimation(.spring) { sent = false } }
         } label: {
             HStack(spacing: 6) {
-                Image(systemName: sent ? "checkmark" : kind.symbol).font(.system(size: 12, weight: .semibold))
+                Image(systemName: sent ? "checkmark" : kind.symbol).font(.aegyo(12, .semibold))
                     .contentTransition(.symbolEffect(.replace))
                 if !sent { Text(label).lineLimit(1).transition(.opacity.combined(with: .scale(scale: 0.8))) }
             }
-            .font(.system(size: 13, weight: .medium))
+            .font(.aegyo(13, .medium))
             .foregroundStyle(sent ? .black : .white.opacity(0.9))
             .frame(maxWidth: .infinity).frame(height: 40)
             .background {
@@ -247,7 +247,7 @@ struct FloatingHearts: View {
         ZStack {
             ForEach(0..<parts.count, id: \.self) { i in
                 Image(systemName: "heart.fill")
-                    .font(.system(size: parts[i].s))
+                    .font(.aegyo(parts[i].s))
                     .foregroundStyle(i % 2 == 0 ? Love.pink : Color(red: 1, green: 0.7, blue: 0.8))
                     .offset(x: go ? parts[i].x : 0, y: go ? -220 : 20)
                     .scaleEffect(go ? 1 : 0.2)

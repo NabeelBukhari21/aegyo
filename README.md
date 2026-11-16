@@ -1,6 +1,8 @@
 # Aegyo
 
-A private iOS app for two people in a long-distance relationship. Tap the heart and it shows up in your partner's Dynamic Island. Ring their phone with a singing-bowl ringtone. Share moods, photos, letters and heartbeats, and count down to the next time you meet.
+A private iOS app for two people in a long-distance relationship. Tap the heart and it shows up in your partner's Dynamic Island. Ring their phone with a singing-bowl ringtone. Share moods, photos, letters, voice notes and heartbeats, and count down to the next time you meet.
+
+A complete product end to end: onboarding and sign-up, pairing, account and settings, an Aegyo Plus subscription with StoreKit 2, history and charts, and every loading, empty, error and offline state. Everything runs on-device behind a `Backend` protocol, so a server can be plugged in without touching the UI.
 
 Built with SwiftUI, SceneKit, ActivityKit and Metal for iPhone (iOS 18+, Dynamic Island devices).
 
@@ -48,6 +50,29 @@ Notifications are reserved for reminders, such as a daily nudge that cancels its
 
 **Sound.** The chime, ringtone and send sound are synthesized in Python with NumPy and SciPy. The technique is modal synthesis of a crystal singing bowl, using detuned partial pairs for the beating, felt-mallet attacks and a stereo convolution reverb (`tools/make_sounds.py`).
 
+**Product.**
+- Opal-style onboarding: a Doki story, Sign in with Apple or email, profile setup one question per screen, permission screens with a privacy promise, pairing, guided tour.
+- Pairing with a 6-digit code, share link (`aegyo://pair/CODE`) and QR, with waiting, paired, partner-left and re-pair states.
+- Settings hub: profiles, reminders, sounds and haptics, Doki's name, dates, appearance and motion, privacy, help, feedback, legal, sign out, unpair, two-step account deletion.
+- Aegyo Plus: laurel paywall with Monthly, Annual (1-week trial) and Lifetime, restore, manage subscription, and feature gates across the app.
+- Timeline with search, progress charts (Swift Charts), achievements, calendar with anniversaries and full moons, saved items, voice notes, edit and delete with confirmation.
+- Skeleton loading, empty and error states, offline banner with an outbound queue, pull to refresh.
+- VoiceOver labels, Dynamic Type, Reduce Motion, privacy manifest, string catalog.
+
+<p align="center">
+  <img src="docs/screenshots/onboarding.jpg" width="160" alt="Onboarding story">
+  <img src="docs/screenshots/signup.jpg" width="160" alt="Sign up sheet">
+  <img src="docs/screenshots/pairing.jpg" width="160" alt="Pairing, waiting for partner">
+  <img src="docs/screenshots/paywall.jpg" width="160" alt="Aegyo Plus paywall">
+  <img src="docs/screenshots/settings.jpg" width="160" alt="Settings hub">
+</p>
+<p align="center">
+  <img src="docs/screenshots/timeline.jpg" width="160" alt="Timeline">
+  <img src="docs/screenshots/progress.jpg" width="160" alt="Progress charts">
+  <img src="docs/screenshots/calendar.jpg" width="160" alt="Calendar">
+  <img src="docs/screenshots/voice.jpg" width="160" alt="Voice note">
+</p>
+
 **Also included:**
 - Call-style ringing via CallKit and PushKit
 - Photos sent to the Dynamic Island
@@ -66,7 +91,9 @@ Notifications are reserved for reminders, such as a daily nudge that cancels its
 | 3D | SceneKit, procedural meshes, Metal shader modifiers, particle systems |
 | GPU effects | SwiftUI Metal shaders (`layerEffect`) for the ripple |
 | System | ActivityKit (Live Activities, Dynamic Island), WidgetKit, App Intents, CallKit, PushKit, UserNotifications, Core Haptics, Core Motion, Core Location (geocoding) |
-| Audio | AVFoundation; sounds generated with NumPy/SciPy |
+| Audio | AVFoundation (playback, voice-note recording with metering); sounds generated with NumPy/SciPy |
+| Accounts & commerce | AuthenticationServices (Sign in with Apple), StoreKit 2 with a local `.storekit` configuration |
+| Data | `Backend` protocol with an on-device `LocalBackend`, file store, outbound queue, NWPathMonitor reachability |
 | Project | XcodeGen (`project.yml`) |
 
 ## Project layout
@@ -74,12 +101,13 @@ Notifications are reserved for reminders, such as a daily nudge that cancels its
 ```
 Aegyo/                 App target (SwiftUI)
   App/                 Entry point, push and VoIP registration
-  Features/            Home, Sky, Moments, Root (tab bar, action stack), feature sheets
-  Services/            LoveService (state and stats), Astro, Reminders, haptics, CallKit
+  Features/            Onboarding, Home, Sky, Moments, History, Voice, Settings, Commerce, Root (tab bar, action stack)
+  Services/            Session, Backend (protocol + LocalBackend), Store (StoreKit 2), LoveService, Reminders, Reachability, haptics, CallKit
 AegyoWidgets/          Live Activities (Dynamic Island) and the Home Screen widget
 AegyoShared/           Code shared with the widget: models, island art, mood characters
 tools/                 Sound synthesis and icon generation scripts
 docs/screenshots/      Images used in this README
+docs/APP_STORE.md      Submission checklist (paid team, backend, App Store Connect, products, review notes)
 project.yml            XcodeGen spec
 ```
 
@@ -96,7 +124,7 @@ A free Apple account works for trying it out. Push notifications and the shared 
 
 ## Status
 
-The single-device experience is complete. Every interaction previews on the sender's phone exactly as the partner would see it. Next up is pairing two phones through a backend (Firebase Auth and Firestore, with Cloud Functions sending APNs Live Activity push-to-start and VoIP pushes).
+The app is feature-complete on a single device, including the account, pairing, subscription and history flows, and is prepared for submission (see `docs/APP_STORE.md`). Two phones talk through the `Backend` protocol; the on-device `LocalBackend` can be swapped for a server implementation (Firebase Auth, Firestore and Cloud Functions sending APNs Live Activity and VoIP pushes) without changing the UI.
 
 ## Author
 

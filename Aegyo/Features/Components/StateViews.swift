@@ -13,11 +13,11 @@ struct EmptyState: View {
         VStack(spacing: 14) {
             ZStack {
                 Circle().fill(Love.pink.opacity(0.12)).frame(width: 72, height: 72)
-                Image(systemName: icon).font(.system(size: 28, weight: .medium)).foregroundStyle(Love.pink)
+                Image(systemName: icon).font(.aegyo(28, .medium)).foregroundStyle(Love.pink)
                     .symbolEffect(.breathe, options: .repeating)
             }
-            Text(title).font(.system(size: 18, weight: .semibold)).foregroundStyle(.white).multilineTextAlignment(.center)
-            Text(message).font(.system(size: 14)).foregroundStyle(.white.opacity(0.55)).multilineTextAlignment(.center)
+            Text(title).font(.aegyo(18, .semibold)).foregroundStyle(.white).multilineTextAlignment(.center)
+            Text(message).font(.aegyo(14)).foregroundStyle(.white.opacity(0.55)).multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
             if let action {
                 Button { Haptics.tap(); action.run() } label: {
@@ -42,12 +42,12 @@ struct ErrorState: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle.fill").font(.system(size: 26)).foregroundStyle(Color(red: 1, green: 0.75, blue: 0.4))
-            Text(title).font(.system(size: 17, weight: .semibold)).foregroundStyle(.white)
-            Text(message).font(.system(size: 14)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center)
+            Image(systemName: "exclamationmark.triangle.fill").font(.aegyo(26)).foregroundStyle(Color(red: 1, green: 0.75, blue: 0.4))
+            Text(title).font(.aegyo(17, .semibold)).foregroundStyle(.white)
+            Text(message).font(.aegyo(14)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center)
             if let retry {
                 Button { Haptics.tap(); retry() } label: {
-                    Label("Try again", systemImage: "arrow.clockwise").font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)
+                    Label("Try again", systemImage: "arrow.clockwise").font(.aegyo(14, .semibold)).foregroundStyle(.white)
                         .padding(.horizontal, 16).frame(height: 40).background(.white.opacity(0.1), in: Capsule())
                 }
                 .buttonStyle(PressStyle())
@@ -114,8 +114,8 @@ struct SuccessMoment: View {
                     .frame(width: 30, height: 24)
             }
             .scaleEffect(drawn ? 1 : 0.6)
-            Text(title).font(.system(size: 22, weight: .semibold)).foregroundStyle(.white)
-            if let message { Text(message).font(.system(size: 14)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center) }
+            Text(title).font(.aegyo(22, .semibold)).foregroundStyle(.white)
+            if let message { Text(message).font(.aegyo(14)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center) }
         }
         .onAppear {
             Haptics.success()
@@ -148,22 +148,22 @@ struct ConfirmSheet: View {
         VStack(spacing: 18) {
             Capsule().fill(.white.opacity(0.25)).frame(width: 40, height: 5).padding(.top, 8)
             Image(systemName: destructive ? "exclamationmark.circle.fill" : "questionmark.circle.fill")
-                .font(.system(size: 36)).foregroundStyle(destructive ? Color(red: 1, green: 0.4, blue: 0.4) : Love.pink)
-            Text(title).font(.system(size: 22, weight: .semibold)).foregroundStyle(.white).multilineTextAlignment(.center)
-            Text(message).font(.system(size: 15)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center)
+                .font(.aegyo(36)).foregroundStyle(destructive ? Color(red: 1, green: 0.4, blue: 0.4) : Love.pink)
+            Text(title).font(.aegyo(22, .semibold)).foregroundStyle(.white).multilineTextAlignment(.center)
+            Text(message).font(.aegyo(15)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
             Button {
                 Haptics.gemPress()
                 dismiss()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: onConfirm)
             } label: {
-                Text(confirmTitle).font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                Text(confirmTitle).font(.aegyo(16, .semibold)).foregroundStyle(.white)
                     .frame(maxWidth: .infinity).frame(height: 54)
                     .background(destructive ? AnyShapeStyle(Color(red: 0.95, green: 0.25, blue: 0.3)) : AnyShapeStyle(Love.glow), in: Capsule())
             }
             .buttonStyle(PressStyle())
             Button { dismiss() } label: {
-                Text("Cancel").font(.system(size: 16, weight: .semibold)).foregroundStyle(.white.opacity(0.7))
+                Text("Cancel").font(.aegyo(16, .semibold)).foregroundStyle(.white.opacity(0.7))
                     .frame(maxWidth: .infinity).frame(height: 50)
             }
             .buttonStyle(PressStyle())
@@ -183,9 +183,9 @@ struct Headline: View {
     var subtitle: String? = nil
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.system(size: 30, weight: .bold)).tracking(-0.8).foregroundStyle(.white)
+            Text(title).font(.aegyo(30, .bold)).tracking(-0.8).foregroundStyle(.white)
                 .fixedSize(horizontal: false, vertical: true)
-            if let subtitle { Text(subtitle).font(.system(size: 15)).foregroundStyle(.white.opacity(0.55)).fixedSize(horizontal: false, vertical: true) }
+            if let subtitle { Text(subtitle).font(.aegyo(15)).foregroundStyle(.white.opacity(0.55)).fixedSize(horizontal: false, vertical: true) }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -207,7 +207,7 @@ struct ContinuePill: View {
                 if loading {
                     ProgressView().tint(.black)
                 } else {
-                    Text(title).font(.system(size: 16, weight: .semibold)).foregroundStyle(.black.opacity(enabled ? 0.9 : 0.5))
+                    Text(title).font(.aegyo(16, .semibold)).foregroundStyle(.black.opacity(enabled ? 0.9 : 0.5))
                 }
             }
             .frame(height: 54)
@@ -229,7 +229,7 @@ struct PinkPill: View {
                 if let systemImage { Image(systemName: systemImage) }
                 Text(title)
             }
-            .font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+            .font(.aegyo(16, .semibold)).foregroundStyle(.white)
             .frame(maxWidth: .infinity).frame(height: 54)
             .background(enabled ? AnyShapeStyle(Love.glow) : AnyShapeStyle(.white.opacity(0.12)), in: Capsule())
             .shadow(color: Love.pink.opacity(enabled ? 0.4 : 0), radius: 14, y: 4)

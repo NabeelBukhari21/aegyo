@@ -43,7 +43,7 @@ struct PaywallView: View {
                 HStack {
                     Spacer()
                     Button { Haptics.tap(); dismiss() } label: {
-                        Image(systemName: "xmark").font(.system(size: 13, weight: .bold)).foregroundStyle(.white)
+                        Image(systemName: "xmark").font(.aegyo(13, .bold)).foregroundStyle(.white)
                             .frame(width: 32, height: 32).background(.white.opacity(0.12), in: Circle())
                     }
                     .buttonStyle(PressStyle())
@@ -72,21 +72,21 @@ struct PaywallView: View {
                         .fill(LinearGradient(colors: [Color(red: 1, green: 0.8, blue: 0.74), Color(red: 1, green: 0.5, blue: 0.66), Color(red: 0.72, green: 0.6, blue: 1)], startPoint: .topLeading, endPoint: .bottomTrailing))
                         .frame(width: 96, height: 96)
                         .shadow(color: Love.pink.opacity(0.5), radius: 20)
-                    Image(systemName: "heart.fill").font(.system(size: 46)).foregroundStyle(.white.opacity(0.95))
+                    Image(systemName: "heart.fill").font(.aegyo(46)).foregroundStyle(.white.opacity(0.95))
                 }
                 Laurel(flipped: true)
             }
             .padding(.top, 36)
-            Text("Aegyo Plus").font(.system(size: 30, weight: .bold)).tracking(-0.8).foregroundStyle(.white)
+            Text("Aegyo Plus").font(.aegyo(30, .bold)).tracking(-0.8).foregroundStyle(.white)
             Text(highlight.map { "\($0.rawValue) is part of Plus. Everything else is too." } ?? "Every way to feel close. Because distance deserves more than a text.")
-                .font(.system(size: 14.5)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center).padding(.horizontal, 10)
+                .font(.aegyo(14.5)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center).padding(.horizontal, 10)
             HStack(spacing: 8) {
-                Image(systemName: "laurel.leading").font(.system(size: 14)).foregroundStyle(.white.opacity(0.6))
+                Image(systemName: "laurel.leading").font(.aegyo(14)).foregroundStyle(.white.opacity(0.6))
                 VStack(spacing: 1) {
-                    Text("Made with love by").font(.system(size: 10)).foregroundStyle(.white.opacity(0.5))
-                    Text("a long-distance couple").font(.system(size: 12, weight: .semibold)).foregroundStyle(.white.opacity(0.85))
+                    Text("Made with love by").font(.aegyo(10)).foregroundStyle(.white.opacity(0.5))
+                    Text("a long-distance couple").font(.aegyo(12, .semibold)).foregroundStyle(.white.opacity(0.85))
                 }
-                Image(systemName: "laurel.trailing").font(.system(size: 14)).foregroundStyle(.white.opacity(0.6))
+                Image(systemName: "laurel.trailing").font(.aegyo(14)).foregroundStyle(.white.opacity(0.6))
             }
             .padding(.horizontal, 16).padding(.vertical, 10)
             .glass(18)
@@ -98,10 +98,10 @@ struct PaywallView: View {
         VStack(spacing: 0) {
             ForEach(Array(features.enumerated()), id: \.offset) { i, f in
                 HStack(spacing: 12) {
-                    Image(systemName: f.0).font(.system(size: 14, weight: .semibold)).foregroundStyle(Love.pink).frame(width: 24)
-                    Text(f.1).font(.system(size: 14)).foregroundStyle(.white.opacity(0.85))
+                    Image(systemName: f.0).font(.aegyo(14, .semibold)).foregroundStyle(Love.pink).frame(width: 24)
+                    Text(f.1).font(.aegyo(14)).foregroundStyle(.white.opacity(0.85))
                     Spacer()
-                    Image(systemName: "checkmark").font(.system(size: 12, weight: .bold)).foregroundStyle(Opal.mint)
+                    Image(systemName: "checkmark").font(.aegyo(12, .bold)).foregroundStyle(Opal.mint)
                 }
                 .padding(.horizontal, 16).padding(.vertical, 11)
                 if i < features.count - 1 { Rectangle().fill(.white.opacity(0.06)).frame(height: 1).padding(.leading, 52) }
@@ -135,17 +135,17 @@ struct PaywallView: View {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) { selected = id }
         } label: {
             VStack(spacing: 6) {
-                Text(id == .monthly ? "Monthly" : id == .annual ? "Annual" : "Lifetime").font(.system(size: 13, weight: .semibold)).foregroundStyle(.white.opacity(0.75))
-                Text(p.displayPrice).font(.system(size: 19, weight: .bold)).foregroundStyle(.white).minimumScaleFactor(0.7)
-                Text(id == .monthly ? "/month" : id == .annual ? "/year" : "/once").font(.system(size: 11)).foregroundStyle(.white.opacity(0.5))
-                if let pm = store.perMonth(p) { Text("\(pm)/mo").font(.system(size: 10.5, weight: .medium)).foregroundStyle(Opal.mint) }
+                Text(id == .monthly ? "Monthly" : id == .annual ? "Annual" : "Lifetime").font(.aegyo(13, .semibold)).foregroundStyle(.white.opacity(0.75))
+                Text(p.displayPrice).font(.aegyo(19, .bold)).foregroundStyle(.white).minimumScaleFactor(0.7)
+                Text(id == .monthly ? "/month" : id == .annual ? "/year" : "/once").font(.aegyo(11)).foregroundStyle(.white.opacity(0.5))
+                if let pm = store.perMonth(p) { Text("\(pm)/mo").font(.aegyo(10.5, .medium)).foregroundStyle(Opal.mint) }
             }
             .frame(maxWidth: .infinity).frame(height: 118)
             .background(RoundedRectangle(cornerRadius: 18, style: .continuous).fill(on ? Color.white.opacity(0.12) : Color.white.opacity(0.05)))
             .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(on ? Love.pink : .white.opacity(0.12), lineWidth: on ? 2 : 1))
             .overlay(alignment: .top) {
                 if id == .annual {
-                    Text("BEST OFFER").font(.system(size: 9, weight: .bold)).tracking(0.8).foregroundStyle(.black)
+                    Text("BEST OFFER").font(.aegyo(9, .bold)).tracking(0.8).foregroundStyle(.black)
                         .padding(.horizontal, 8).padding(.vertical, 4).background(.white, in: Capsule()).offset(y: -10)
                 }
             }
@@ -171,7 +171,7 @@ struct PaywallView: View {
                     Capsule().fill(Love.glow).shadow(color: Love.pink.opacity(0.5), radius: 16, y: 4)
                     if store.purchasing { ProgressView().tint(.white) } else {
                         Text(trial ? "Start 1 week Free Trial" : selected == .lifetime ? "Get Plus forever" : "Continue")
-                            .font(.system(size: 16, weight: .semibold)).foregroundStyle(.white)
+                            .font(.aegyo(16, .semibold)).foregroundStyle(.white)
                     }
                 }
                 .frame(height: 56)
@@ -179,21 +179,21 @@ struct PaywallView: View {
             .buttonStyle(PressStyle())
             .disabled(product == nil || store.purchasing)
             Text(trial ? "Free for 7 days, then \(product?.displayPrice ?? "")\(selected == .monthly ? "/month" : "/year"). Cancel anytime." : selected == .lifetime ? "One payment. Yours for good." : "Cancel anytime.")
-                .font(.system(size: 12.5)).foregroundStyle(.white.opacity(0.5)).multilineTextAlignment(.center)
+                .font(.aegyo(12.5)).foregroundStyle(.white.opacity(0.5)).multilineTextAlignment(.center)
         }
     }
 
     private var footer: some View {
         VStack(spacing: 10) {
             Button { Haptics.tap(); Task { await store.restore() } } label: {
-                Text("Restore purchases").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.75))
+                Text("Restore purchases").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.75))
             }
             HStack(spacing: 16) {
-                NavigationLink { LegalView(document: .terms) } label: { Text("Terms").font(.system(size: 12)).foregroundStyle(.white.opacity(0.5)) }
-                NavigationLink { LegalView(document: .privacy) } label: { Text("Privacy").font(.system(size: 12)).foregroundStyle(.white.opacity(0.5)) }
+                NavigationLink { LegalView(document: .terms) } label: { Text("Terms").font(.aegyo(12)).foregroundStyle(.white.opacity(0.5)) }
+                NavigationLink { LegalView(document: .privacy) } label: { Text("Privacy").font(.aegyo(12)).foregroundStyle(.white.opacity(0.5)) }
             }
             Text("Subscriptions renew automatically unless cancelled at least 24 hours before the period ends. Manage them in iOS Settings → Apple ID → Subscriptions.")
-                .font(.system(size: 11)).foregroundStyle(.white.opacity(0.35)).multilineTextAlignment(.center)
+                .font(.aegyo(11)).foregroundStyle(.white.opacity(0.35)).multilineTextAlignment(.center)
         }
     }
 }
@@ -231,9 +231,9 @@ struct ThankYouView: View {
             VStack(spacing: 18) {
                 Spacer()
                 Heart3DView(tint: GemTier.aurora.heartTint, thump: thump, interactive: false).frame(height: 260)
-                Text("Welcome to Plus").font(.system(size: 28, weight: .bold)).tracking(-0.8).foregroundStyle(.white)
+                Text("Welcome to Plus").font(.aegyo(28, .bold)).tracking(-0.8).foregroundStyle(.white)
                 Text("Everything is unlocked. Go make \(AppGroup.defaults.string(forKey: Profile.partnerNameKey).flatMap { $0.isEmpty ? nil : $0 } ?? "them") smile.")
-                    .font(.system(size: 15)).foregroundStyle(.white.opacity(0.65)).multilineTextAlignment(.center)
+                    .font(.aegyo(15)).foregroundStyle(.white.opacity(0.65)).multilineTextAlignment(.center)
                 Spacer()
                 ContinuePill(title: "Let's go") { onDone() }.padding(.horizontal, 24).padding(.bottom, 24)
             }
@@ -267,7 +267,7 @@ struct SubscriptionView: View {
                 PinkPill(title: "See Plus plans", systemImage: "sparkles") { showPaywall = true }
             }
             Button { Haptics.tap(); Task { await store.restore() } } label: {
-                Text("Restore purchases").font(.system(size: 14, weight: .medium)).foregroundStyle(.white.opacity(0.7)).frame(maxWidth: .infinity)
+                Text("Restore purchases").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.7)).frame(maxWidth: .infinity)
             }
             .buttonStyle(PressStyle())
         }
