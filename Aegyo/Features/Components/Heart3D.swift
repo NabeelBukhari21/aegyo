@@ -73,6 +73,8 @@ struct Heart3DView: UIViewRepresentable {
         private var yaw: Double = 0
         private var tiltX: Double = 0, tiltY: Double = 0
         private var beatPhase: Double = 0
+        private var wobble: Double = 0, wobbleVel: Double = 0   // roll jelly after a tap
+        private var alive: Double = 1                            // 0 while it is still stone
         private var lastTime: TimeInterval = 0
         private var currentTint: UIColor?
 
@@ -101,6 +103,7 @@ struct Heart3DView: UIViewRepresentable {
             material.isDoubleSided = true
             material.shaderModifiers = [.surface: Self.opalShader]
             material.setValue(NSNumber(value: 0), forKey: "flare")
+            material.setValue(NSNumber(value: 0), forKey: "pulse")
             geo.materials = [material]
             currentTint = tint
 
@@ -117,7 +120,7 @@ struct Heart3DView: UIViewRepresentable {
             shellMaterial.setValue(NSNumber(value: 0), forKey: "crack")
             shellGeo.materials = [shellMaterial]
             shell.geometry = shellGeo
-            shell.scale = SCNVector3(1.07, 1.07, 1.2)
+            shell.scale = SCNVector3(1.04, 1.04, 1.06)
             shell.isHidden = true
             heart.addChildNode(shell)
             heart.eulerAngles.x = -0.12
@@ -164,10 +167,13 @@ struct Heart3DView: UIViewRepresentable {
             impulseVel += 9
             excitement = min(1, excitement + 0.35)
             spinVel += 2.4
+            wobbleVel += Bool.random() ? 7 : -7
+            flare = min(1, flare + 0.35)
         }
 
         func skipReveal() {
             revealEnabled = false
+            alive = 1
             shell.isHidden = true
             burstDone = true
             heart.removeAllParticleSystems()
@@ -176,8 +182,9 @@ struct Heart3DView: UIViewRepresentable {
         private func burst() {
             burstDone = true
             flare = 1
-            impulseVel += 12
-            spinVel += 3
+            impulseVel += 8
+            wobbleVel += 5
+            spinVel += 2.2
             let shards = SCNParticleSystem()
             shards.loops = false
             shards.birthRate = 520
@@ -251,25 +258,10 @@ struct Heart3DView: UIViewRepresentable {
             let dt = lastTime == 0 ? 1 / 60 : min(1 / 20, time - lastTime)
             lastTime = time
 
-            // heartbeat: rate rises with excitement, then calms down
-            excitement = max(0, excitement - dt * 0.12)
-            let rate = (bpm + 50 * excitement) / 60
-            beatPhase = (beatPhase + dt * rate).truncatingRemainder(dividingBy: 1)
-            func bump(_ c: Double, _ w: Double, _ a: Double) -> Double { a * exp(-pow((beatPhase - c) / w, 2)) }
-            let beat = bump(0.10, 0.045, 0.085) + bump(0.30, 0.05, 0.05)
-
-            // tap squash: damped spring
-            impulseVel += (-impulse * 160 - impulseVel * 12) * dt
-            impulse += impulseVel * dt
-
-            let sx = 1 + beat * 1.0 + impulse * 0.05
-            let sy = 1 + beat * 0.7 - impulse * 0.06
-            heart.scale = SCNVector3(sx, sy, 1 + beat * 1.1 + impulse * 0.04)
-
             // stone → crack → burst → opal
             var jitter: Float = 0
             if revealEnabled {
-                if revealStart == nil { revealStart = time + 1.3; shell.isHidden = false }
+                if revealStart == nil { revealStart = time + 1.3; shell.isHidden = false; alive = 0 }
                 let rt = time - (revealStart ?? time)
                 let crack = max(0, min(1, rt / 1.05))
                 if rt < 0 { shellMaterial.setValue(NSNumber(value: 0), forKey: "reveal") }
@@ -279,27 +271,59 @@ struct Heart3DView: UIViewRepresentable {
                     ticks += 1
                     DispatchQueue.main.async { Haptics.press() }
                 }
-                if rt > 0, !burstDone { jitter = Float(sin(time * 70) * 0.012 * crack) }
+                // the stone trembles harder as the seams light up
+                if rt > 0, !burstDone { jitter = Float(sin(time * 70) * 0.014 * crack * crack + sin(time * 23) * 0.006 * crack) }
                 if rt >= 1.15, !burstDone { burst() }
-                let r = max(0, min(1, (rt - 1.15) / 0.38))
-                shellMaterial.setValue(NSNumber(value: pow(r, 0.7)), forKey: "reveal")
-                if rt > 1.7 { shell.isHidden = true; revealEnabled = false }
+                let r = max(0, min(1, (rt - 1.15) / 0.5))
+                shellMaterial.setValue(NSNumber(value: r), forKey: "reveal")
+                // it comes alive as the stone burns away
+                alive = max(alive, pow(r, 0.6))
+                if rt > 1.85 { shell.isHidden = true; revealEnabled = false; alive = 1 }
             }
+
+            // heartbeat: a sharp lub, a softer dub, a tiny anticipatory dip. Rate rises with excitement, then calms.
+            excitement = max(0, excitement - dt * 0.12)
+            let rate = (bpm + 50 * excitement) / 60
+            beatPhase = (beatPhase + dt * rate * (0.2 + 0.8 * alive)).truncatingRemainder(dividingBy: 1)
+            func bump(_ c: Double, _ w: Double, _ a: Double) -> Double { a * exp(-pow((beatPhase - c) / w, 2)) }
+            let beat = (bump(0.10, 0.04, 0.09) + bump(0.28, 0.055, 0.05) - bump(0.04, 0.025, 0.018)) * alive
+            material.setValue(NSNumber(value: max(0, beat) * 7), forKey: "pulse")
+
+            // slow breathing under the beat
+            let breath = sin(time * 1.4) * 0.012 * alive
+
+            // tap squash: damped spring, plus a roll wobble that rings out like jelly
+            impulseVel += (-impulse * 160 - impulseVel * 12) * dt
+            impulse = max(-1.1, min(1.3, impulse + impulseVel * dt))
+            wobbleVel += (-wobble * 110 - wobbleVel * 7) * dt
+            wobble += wobbleVel * dt
+
+            let sx = 1 + beat * 1.0 + impulse * 0.06 + breath
+            let sy = 1 + beat * 0.72 - impulse * 0.07 + breath * 0.55
+            let sz = 1 + beat * 1.1 + impulse * 0.05 + breath
+            heart.scale = SCNVector3(sx, sy, sz)
+            heart.position = SCNVector3(0, Float(beat * 0.025 + max(0, impulse) * 0.05), 0)
+            heart.eulerAngles = SCNVector3(Float(-0.12 + impulse * 0.08), 0, Float(wobble * 0.11))
+
             flare = max(0, flare - dt * 0.8)
             material.setValue(NSNumber(value: flare), forKey: "flare")
 
-            // a slow, continuous turn (like a gem on display), plus drag inertia
+            // a slow turn like a gem on display, drag inertia, and a lazy sway so it never looks mechanical
             spinVel *= pow(0.12, dt)
-            yaw += (0.32 + spinVel) * dt
-            let sway = 0.0
+            yaw += (0.26 + spinVel) * dt
+            let sway = sin(time * 0.55) * 0.14 * alive
+            let nod = sin(time * 0.9 + 1.2) * 0.035 * alive
 
             // gyro parallax
             if let att = motion.deviceMotion?.attitude {
                 tiltX += (att.pitch * 0.35 - 0.25 - tiltX) * min(1, dt * 4)
                 tiltY += (att.roll * 0.35 - tiltY) * min(1, dt * 4)
             }
-            pivot.eulerAngles = SCNVector3(Float(-0.05 + tiltX * 0.5), Float(yaw + sway + tiltY * 0.6), 0)
-            pivot.position = SCNVector3(jitter, Float(sin(time * 1.1) * 0.05), 0)
+            pivot.eulerAngles = SCNVector3(Float(-0.05 + nod + tiltX * 0.5), Float(yaw + sway + tiltY * 0.6), 0)
+            // floating drift: a slow figure of eight
+            pivot.position = SCNVector3(jitter + Float(sin(time * 0.62) * 0.018 * alive),
+                                        Float(sin(time * 1.1) * 0.045 + cos(time * 0.5) * 0.015) * Float(0.3 + 0.7 * alive),
+                                        0)
         }
 
         /// Opal: a milky body whose "fire" patches flash and shift colour as it turns,
@@ -307,6 +331,7 @@ struct Heart3DView: UIViewRepresentable {
         static let opalShader = """
         #pragma arguments
         float flare;
+        float pulse;
         #pragma body
         #define OH(p) fract(sin(dot((p), float3(127.1, 311.7, 74.7))) * 43758.5453)
         float3 n = normalize(_surface.normal);
@@ -341,10 +366,11 @@ struct Heart3DView: UIViewRepresentable {
         float spec = pow(saturate(dot(rr, normalize(float3(-0.45, 0.65, 0.62)))), 70.0);
         _surface.emission.rgb += float3(spec * 1.3);
         _surface.emission.rgb *= (1.0 + flare * 1.5);
+        _surface.emission.rgb += base * pulse * 0.35 + fire * pulse * cell * 0.25;
         """
 
-        /// Stone shell: chunky faceted rock. `crack` lights the seams between chunks with opal fire;
-        /// `reveal` makes chunks vanish one by one (the burst particles carry them away).
+        /// Stone shell: fine-grained rock wrapped tight around the opal. `crack` lights hairline seams between
+        /// grains with opal fire; `reveal` burns the stone away from the cleft down with a glowing, noisy edge.
         static let rockShader = """
         #pragma arguments
         float reveal;
@@ -352,7 +378,7 @@ struct Heart3DView: UIViewRepresentable {
         #pragma body
         #define RH(p) fract(sin(dot((p), float3(127.1, 311.7, 74.7))) * 43758.5453)
         float3 op = (scn_node.inverseModelViewTransform * float4(_surface.position, 1.0)).xyz;
-        float3 q = op * 3.4;
+        float3 q = op * 7.5;
         float3 ip = floor(q);
         float3 fp = fract(q);
         float d1 = 8.0;
@@ -365,17 +391,27 @@ struct Heart3DView: UIViewRepresentable {
             float d = dot(r, r);
             if (d < d1) { d2 = d1; d1 = d; cid = c; } else if (d < d2) { d2 = d; }
         } } }
-        float chunk = RH(cid + 5.7);
-        if (chunk < reveal) { discard_fragment(); }
+        float grainId = RH(cid + 5.7);
+        // burn front: top (cleft) first, with grain-sized noise so the edge is ragged, not a straight line
+        float h = saturate((op.y + 1.0) * 0.5);
+        float cut = (1.0 - h) * 0.75 + grainId * 0.22 + RH(floor(op * 21.0)) * 0.08;
+        float burn = reveal * 1.12 - cut;
+        if (burn > 0.0) { discard_fragment(); }
         float edge = sqrt(d2) - sqrt(d1);
         float3 tilt = float3(RH(cid + 1.3), RH(cid + 2.9), RH(cid + 4.1)) - 0.5;
-        _surface.normal = normalize(_surface.normal + tilt * 0.9);
-        float grain = RH(floor(op * 90.0));
-        float shade = 0.5 + 0.35 * RH(cid + 8.8) + 0.12 * grain;
-        _surface.diffuse.rgb = float3(0.20, 0.195, 0.21) * shade;
-        float seam = smoothstep(0.05, 0.0, edge) * crack;
-        float3 fire = 0.5 + 0.5 * cos(6.28318 * (chunk * 2.0 + scn_frame.time * 0.3 + float3(0.0, 0.33, 0.67)));
-        _surface.emission.rgb = mix(float3(0.6, 1.0, 0.95), fire, 0.45) * seam * 2.2 + float3(0.6, 1.0, 0.95) * crack * crack * 0.06;
+        _surface.normal = normalize(_surface.normal + tilt * 0.28);
+        float grain = RH(floor(op * 120.0));
+        float shade = 0.62 + 0.3 * grainId + 0.1 * grain;
+        _surface.diffuse.rgb = float3(0.21, 0.2, 0.215) * shade;
+        // a few glassy flecks, like potch around an opal
+        float fleck = step(0.975, RH(floor(op * 40.0) + 2.2));
+        float3 fire = 0.5 + 0.5 * cos(6.28318 * (grainId * 2.0 + scn_frame.time * 0.3 + float3(0.0, 0.33, 0.67)));
+        float seam = smoothstep(0.035, 0.0, edge) * crack;
+        float rim = smoothstep(-0.14, 0.0, burn);
+        _surface.emission.rgb = mix(float3(0.6, 1.0, 0.95), fire, 0.45) * seam * 1.8
+                              + fire * rim * rim * 2.6
+                              + float3(0.6, 1.0, 0.95) * crack * crack * 0.05
+                              + float3(fleck * 0.25 * (0.3 + crack));
         """
 
         static let shardImage: UIImage = UIGraphicsImageRenderer(size: CGSize(width: 32, height: 32)).image { ctx in
