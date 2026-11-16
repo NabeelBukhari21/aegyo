@@ -95,9 +95,9 @@ struct PlusTeaserCard: View {
     var body: some View {
         Group {
             if store.isPlus {
-                NavigationLink { SubscriptionView() } label: { card(title: "Aegyo Plus · \(store.activePlanName)", line: "You're all in. Manage your plan.") }
+                NavigationLink { SubscriptionView() } label: { card(title: "Clingy · \(store.activePlanName)", line: "You're all in. Manage your plan.") }
             } else {
-                Button { Haptics.tap(); showPaywall = true } label: { card(title: "Aegyo Plus", line: "Letters, voice notes, \(Doki.name)'s forms and more.") }
+                Button { Haptics.tap(); showPaywall = true } label: { card(title: "Go Clingy", line: "Letters, voice notes, \(Doki.name)'s forms and more.") }
             }
         }
         .buttonStyle(PressStyle(scale: 0.98))

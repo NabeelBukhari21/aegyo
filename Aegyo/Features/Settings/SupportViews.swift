@@ -11,7 +11,7 @@ struct HelpView: View {
         ("The Ring doesn't ring.", "Ring behaves like a phone call. Check that Aegyo is allowed in iOS Settings → Phone → Call Blocking & Identification, and that a Focus mode isn't silencing calls."),
         ("I don't hear the chime.", "The chime follows the silent switch and Focus. Flip the switch, or allow Aegyo under Focus → Allowed Apps."),
         ("Can I change Doki's name?", "Yes: Settings → Doki's name. Pick one of the ideas or type your own."),
-        ("What does Aegyo Plus include?", "Unlimited photos and the photo widget, Open-When letters, voice notes, heartbeats, share cards, Doki's forms, star signs, Same Sky, your timeline and milestones."),
+        ("What does Clingy include?", "Unlimited photos and the photo widget, Open-When letters, voice notes, heartbeats, share cards, Doki's forms, star signs, Same Sky, your timeline and milestones."),
         ("How do I delete my account?", "Settings → Account → Delete account. It removes everything on this phone and unpairs you. It can't be undone."),
     ]
 
@@ -199,7 +199,7 @@ struct LegalView: View {
             return [
                 ("Using Aegyo", "Aegyo is a personal app for two people in a relationship. Use it kindly. Don't use it to harass, impersonate or spam anyone, and don't pair with someone who hasn't agreed to it."),
                 ("Your content", "What you send stays yours. By sending it, you let Aegyo deliver it to your partner's phone and show it there."),
-                ("Aegyo Plus", "Aegyo Plus is an auto-renewing subscription (monthly or yearly) or a one-time lifetime purchase, billed through your Apple ID. Subscriptions renew unless cancelled at least 24 hours before the end of the period. Manage or cancel them in iOS Settings → Apple ID → Subscriptions. Free trials convert to a paid subscription unless cancelled before they end."),
+                ("Clingy", "Clingy is an auto-renewing subscription (monthly or yearly) or a one-time lifetime purchase, billed through your Apple ID. Subscriptions renew unless cancelled at least 24 hours before the end of the period. Manage or cancel them in iOS Settings → Apple ID → Subscriptions. Free trials convert to a paid subscription unless cancelled before they end."),
                 ("No medical or safety use", "Aegyo is not a safety, emergency or health tool. The Ring is not a replacement for a phone call in an emergency."),
                 ("Availability", "We do our best to keep Aegyo running, but it's provided as is, without warranties. Features may change."),
                 ("Ending things", "You can delete your account at any time. We may suspend accounts that break these terms."),

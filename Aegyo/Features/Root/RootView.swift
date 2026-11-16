@@ -265,7 +265,7 @@ struct UsTab: View {
                                         .symbolEffect(.bounce, value: appeared)
                                     Spacer()
                                     if it.plus && !store.isPlus {
-                                        Text("PLUS").font(.aegyo(9, .bold)).tracking(0.8).foregroundStyle(.black)
+                                        Text("CLINGY").font(.aegyo(9, .bold)).tracking(0.8).foregroundStyle(.black)
                                             .padding(.horizontal, 7).padding(.vertical, 4).background(Love.pink, in: Capsule())
                                     }
                                 }
@@ -313,7 +313,7 @@ struct HistoryRow: View {
                                     .frame(width: 40, height: 40).background(it.3.opacity(0.14), in: Circle())
                                 Spacer()
                                 if it.4 && !store.isPlus {
-                                    Text("PLUS").font(.aegyo(9, .bold)).tracking(0.8).foregroundStyle(.black)
+                                    Text("CLINGY").font(.aegyo(9, .bold)).tracking(0.8).foregroundStyle(.black)
                                         .padding(.horizontal, 7).padding(.vertical, 4).background(Love.pink, in: Capsule())
                                 }
                             }

@@ -2,7 +2,7 @@
 
 A private iOS app for two people in a long-distance relationship. Tap the heart and it shows up in your partner's Dynamic Island. Ring their phone with a singing-bowl ringtone. Share moods, photos, letters, voice notes and heartbeats, and count down to the next time you meet.
 
-A complete product end to end: onboarding and sign-up, pairing, account and settings, an Aegyo Plus subscription with StoreKit 2, history and charts, and every loading, empty, error and offline state. Everything runs on-device behind a `Backend` protocol, so a server can be plugged in without touching the UI.
+A complete product end to end: onboarding and sign-up, pairing, account and settings, an Clingy subscription with StoreKit 2, history and charts, and every loading, empty, error and offline state. Everything runs on-device behind a `Backend` protocol, so a server can be plugged in without touching the UI.
 
 Built with SwiftUI, SceneKit, ActivityKit and Metal for iPhone (iOS 18+, Dynamic Island devices).
 
@@ -54,7 +54,7 @@ Notifications are reserved for reminders, such as a daily nudge that cancels its
 - Opal-style onboarding: a Doki story, Sign in with Apple or email, profile setup one question per screen, permission screens with a privacy promise, pairing, guided tour.
 - Pairing with a 6-digit code, share link (`aegyo://pair/CODE`) and QR, with waiting, paired, partner-left and re-pair states.
 - Settings hub: profiles, reminders, sounds and haptics, Doki's name, dates, appearance and motion, privacy, help, feedback, legal, sign out, unpair, two-step account deletion.
-- Aegyo Plus: laurel paywall with Monthly, Annual (1-week trial) and Lifetime, restore, manage subscription, and feature gates across the app.
+- Clingy: laurel paywall with Monthly, Annual (1-week trial) and Lifetime, restore, manage subscription, and feature gates across the app.
 - Timeline with search, progress charts (Swift Charts), achievements, calendar with anniversaries and full moons, saved items, voice notes, edit and delete with confirmation.
 - Skeleton loading, empty and error states, offline banner with an outbound queue, pull to refresh.
 - VoiceOver labels, Dynamic Type, Reduce Motion, privacy manifest, string catalog.
@@ -63,7 +63,7 @@ Notifications are reserved for reminders, such as a daily nudge that cancels its
   <img src="docs/screenshots/onboarding.jpg" width="160" alt="Onboarding story">
   <img src="docs/screenshots/signup.jpg" width="160" alt="Sign up sheet">
   <img src="docs/screenshots/pairing.jpg" width="160" alt="Pairing, waiting for partner">
-  <img src="docs/screenshots/paywall.jpg" width="160" alt="Aegyo Plus paywall">
+  <img src="docs/screenshots/paywall.jpg" width="160" alt="Clingy paywall">
   <img src="docs/screenshots/settings.jpg" width="160" alt="Settings hub">
 </p>
 <p align="center">

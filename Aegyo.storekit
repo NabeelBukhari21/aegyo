@@ -8,13 +8,13 @@
       "internalID" : "LIFETIME-1",
       "localizations" : [
         {
-          "description" : "Every Aegyo Plus feature, forever.",
-          "displayName" : "Aegyo Plus Lifetime",
+          "description" : "Every Clingy feature, forever.",
+          "displayName" : "Clingy Lifetime",
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.nabeelbukhari.aegyo.plus.lifetime",
-      "referenceName" : "Plus Lifetime",
+      "productID" : "com.nabeelbukhari.aegyo.clingy.lifetime",
+      "referenceName" : "Clingy Lifetime",
       "type" : "NonConsumable"
     }
   ],
@@ -33,11 +33,11 @@
       "localizations" : [
         {
           "description" : "More ways to feel close.",
-          "displayName" : "Aegyo Plus",
+          "displayName" : "Clingy",
           "locale" : "en_US"
         }
       ],
-      "name" : "Aegyo Plus",
+      "name" : "Clingy",
       "subscriptions" : [
         {
           "adHocOffers" : [],
@@ -54,13 +54,13 @@
           "localizations" : [
             {
               "description" : "Billed monthly. Cancel anytime.",
-              "displayName" : "Plus Monthly",
+              "displayName" : "Clingy Monthly",
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.nabeelbukhari.aegyo.plus.monthly",
+          "productID" : "com.nabeelbukhari.aegyo.clingy.monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Plus Monthly",
+          "referenceName" : "Clingy Monthly",
           "subscriptionGroupID" : "21500001",
           "type" : "RecurringSubscription"
         },
@@ -79,13 +79,13 @@
           "localizations" : [
             {
               "description" : "Billed yearly. Cancel anytime.",
-              "displayName" : "Plus Annual",
+              "displayName" : "Clingy Annual",
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.nabeelbukhari.aegyo.plus.annual",
+          "productID" : "com.nabeelbukhari.aegyo.clingy.annual",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Plus Annual",
+          "referenceName" : "Clingy Annual",
           "subscriptionGroupID" : "21500001",
           "type" : "RecurringSubscription"
         }

@@ -77,8 +77,8 @@ struct PaywallView: View {
                 Laurel(flipped: true)
             }
             .padding(.top, 36)
-            Text("Aegyo Plus").font(.aegyo(30, .bold)).tracking(-0.8).foregroundStyle(.white)
-            Text(highlight.map { "\($0.rawValue) is part of Plus. Everything else is too." } ?? "Every way to feel close. Because distance deserves more than a text.")
+            Text("Clingy").font(.aegyo(30, .bold)).tracking(-0.8).foregroundStyle(.white)
+            Text(highlight.map { "\($0.rawValue) is part of Clingy. Everything else is too." } ?? "Every way to feel close. Because distance deserves more than a text.")
                 .font(.aegyo(14.5)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center).padding(.horizontal, 10)
             HStack(spacing: 8) {
                 Image(systemName: "laurel.leading").font(.aegyo(14)).foregroundStyle(.white.opacity(0.6))
@@ -170,7 +170,7 @@ struct PaywallView: View {
                 ZStack {
                     Capsule().fill(Love.glow).shadow(color: Love.pink.opacity(0.5), radius: 16, y: 4)
                     if store.purchasing { ProgressView().tint(.white) } else {
-                        Text(trial ? "Start 1 week Free Trial" : selected == .lifetime ? "Get Plus forever" : "Continue")
+                        Text(trial ? "Start 1 week Free Trial" : selected == .lifetime ? "Stay Clingy forever" : "Continue")
                             .font(.aegyo(16, .semibold)).foregroundStyle(.white)
                     }
                 }
@@ -231,7 +231,7 @@ struct ThankYouView: View {
             VStack(spacing: 18) {
                 Spacer()
                 Heart3DView(tint: GemTier.aurora.heartTint, thump: thump, interactive: false).frame(height: 260)
-                Text("Welcome to Plus").font(.aegyo(28, .bold)).tracking(-0.8).foregroundStyle(.white)
+                Text("You're Clingy now").font(.aegyo(28, .bold)).tracking(-0.8).foregroundStyle(.white)
                 Text("Everything is unlocked. Go make \(AppGroup.defaults.string(forKey: Profile.partnerNameKey).flatMap { $0.isEmpty ? nil : $0 } ?? "them") smile.")
                     .font(.aegyo(15)).foregroundStyle(.white.opacity(0.65)).multilineTextAlignment(.center)
                 Spacer()
@@ -249,7 +249,7 @@ struct SubscriptionView: View {
     @State private var showPaywall = false
 
     var body: some View {
-        SettingsPage(title: "Aegyo Plus", subtitle: store.isPlus ? "Thank you for supporting a tiny app." : "More ways to feel close.") {
+        SettingsPage(title: "Clingy", subtitle: store.isPlus ? "Thank you for supporting a tiny app." : "More ways to feel close.") {
             SettingsGroup(title: "Your plan") {
                 InfoRow(title: "Plan", value: store.activePlanName)
                 if store.isPlus, let d = store.renewalDate, store.activeProductID != Store.ProductID.lifetime.rawValue {
@@ -264,7 +264,7 @@ struct SubscriptionView: View {
                     if let u = URL(string: "https://apps.apple.com/account/subscriptions") { openURL(u) }
                 }
             } else {
-                PinkPill(title: "See Plus plans", systemImage: "sparkles") { showPaywall = true }
+                PinkPill(title: "See Clingy plans", systemImage: "sparkles") { showPaywall = true }
             }
             Button { Haptics.tap(); Task { await store.restore() } } label: {
                 Text("Restore purchases").font(.aegyo(14, .medium)).foregroundStyle(.white.opacity(0.7)).frame(maxWidth: .infinity)

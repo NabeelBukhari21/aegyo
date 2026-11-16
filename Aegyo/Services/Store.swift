@@ -1,16 +1,16 @@
 import StoreKit
 import SwiftUI
 
-/// Aegyo Plus through StoreKit 2. Products come from App Store Connect in production and from
+/// Clingy through StoreKit 2. Products come from App Store Connect in production and from
 /// `Aegyo.storekit` while testing, so the whole purchase flow works without a server.
 @MainActor
 final class Store: ObservableObject {
     static let shared = Store()
 
     enum ProductID: String, CaseIterable {
-        case monthly = "com.nabeelbukhari.aegyo.plus.monthly"
-        case annual = "com.nabeelbukhari.aegyo.plus.annual"
-        case lifetime = "com.nabeelbukhari.aegyo.plus.lifetime"
+        case monthly = "com.nabeelbukhari.aegyo.clingy.monthly"
+        case annual = "com.nabeelbukhari.aegyo.clingy.annual"
+        case lifetime = "com.nabeelbukhari.aegyo.clingy.lifetime"
     }
 
     enum State: Equatable { case loading, ready, unavailable }
@@ -93,7 +93,7 @@ final class Store: ObservableObject {
         defer { purchasing = false }
         do { try await AppStore.sync() } catch { lastError = error.localizedDescription }
         await refreshEntitlements()
-        if !isPlus { lastError = "No Aegyo Plus purchase found for this Apple ID." }
+        if !isPlus { lastError = "No Clingy purchase found for this Apple ID." }
     }
 
     func refreshEntitlements() async {
@@ -126,9 +126,9 @@ final class Store: ObservableObject {
 
     var activePlanName: String {
         switch ProductID(rawValue: activeProductID ?? "") {
-        case .monthly: "Plus Monthly"
-        case .annual: "Plus Annual"
-        case .lifetime: "Plus Lifetime"
+        case .monthly: "Clingy Monthly"
+        case .annual: "Clingy Annual"
+        case .lifetime: "Clingy Lifetime"
         case nil: isPlus ? "Plus" : "Free"
         }
     }
@@ -144,7 +144,7 @@ final class Store: ObservableObject {
 
 // MARK: - Gate
 
-/// Features that need Aegyo Plus. The free tier keeps the daily habit; Plus is memory and depth.
+/// Features that need Clingy. The free tier keeps the daily habit; Clingy is memory and depth.
 enum PlusFeature: String {
     case letters = "Open-When letters"
     case voiceNotes = "Voice notes"
@@ -188,7 +188,7 @@ private struct PlusInlineGate: ViewModifier {
                 VStack(spacing: 12) {
                     Image(systemName: "sparkles").font(.aegyo(26)).foregroundStyle(Love.pink)
                     Text(feature.rawValue).font(.aegyo(18, .semibold)).foregroundStyle(.white)
-                    Text("Part of Aegyo Plus. Tap to see what's inside.").font(.aegyo(13)).foregroundStyle(.white.opacity(0.55))
+                    Text("Part of Clingy. Tap to see what's inside.").font(.aegyo(13)).foregroundStyle(.white.opacity(0.55))
                     WhitePill(title: "Unlock", height: 40)
                 }
                 .padding(24).frame(maxWidth: .infinity).glass(24)

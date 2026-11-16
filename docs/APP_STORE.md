@@ -40,11 +40,11 @@ What the server must do:
 
   | Product ID | Type | Price | Offer |
   |---|---|---|---|
-  | `com.nabeelbukhari.aegyo.plus.monthly` | Auto-renewable, group "Aegyo Plus" | $4.99 / month | 1-week free trial |
-  | `com.nabeelbukhari.aegyo.plus.annual` | Auto-renewable, group "Aegyo Plus" | $29.99 / year | 1-week free trial |
-  | `com.nabeelbukhari.aegyo.plus.lifetime` | Non-consumable | $59.99 | none |
+  | `com.nabeelbukhari.aegyo.clingy.monthly` | Auto-renewable, group "Clingy" | $4.99 / month | 1-week free trial |
+  | `com.nabeelbukhari.aegyo.clingy.annual` | Auto-renewable, group "Clingy" | $29.99 / year | 1-week free trial |
+  | `com.nabeelbukhari.aegyo.clingy.lifetime` | Non-consumable | $59.99 | none |
 
-  Attach the subscription group's localized display name "Aegyo Plus". Submit the products with the first build.
+  Attach the subscription group's localized display name "Clingy". Submit the products with the first build.
 - Paid Apps agreement, tax and banking must be signed before purchases work in TestFlight.
 - App Privacy questionnaire: declare **Name**, **Email**, **Photos or Videos**, **Audio Data**, **User Content**
   and **Coarse Location** (city) as collected, linked to the user, not used for tracking. Update
@@ -69,7 +69,7 @@ Paste something like this into App Review Information:
 > Aegyo is a private app for two partners. Create an account with Sign in with Apple or email, then pair with a
 > second device using the 6-digit code shown on the Pairing screen (Settings › Pairing). A demo pairing can be
 > reviewed on one device: the Dynamic Island, timeline, letters and voice notes preview on the sender's phone.
-> Aegyo Plus is a subscription with a 1-week free trial; sandbox purchases work on the Paywall (Us tab › Aegyo Plus).
+> Clingy is a subscription with a 1-week free trial; sandbox purchases work on the Paywall (Us tab › Clingy).
 > Account deletion is in Settings › Account › Delete account.
 
 Provide a demo account (email + password) if the backend requires one.
